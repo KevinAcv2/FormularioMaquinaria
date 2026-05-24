@@ -23,6 +23,6 @@ namespace Maquinarias.Models
 
         public string? Observaciones { get; set; }
 
-        public DateTime Fecha { get; set; } = DateTime.Now;
+        public DateTime Fecha { get; set; } = DateTime.UtcNow;
     }
 }

@@ -13,6 +13,7 @@ namespace Maquinarias.Controllers
             _context = context;
         }
 
+        [HttpGet]
         public IActionResult Crear()
         {
             return View();
@@ -23,14 +24,29 @@ namespace Maquinarias.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.ReportesMaquinaria.Add(reporte);
+                try
+                {
+                    // Asignar fecha en UTC para PostgreSQL
+                    reporte.Fecha = DateTime.UtcNow;
 
-                await _context.SaveChangesAsync();
+                    _context.ReportesMaquinaria.Add(reporte);
 
-                ViewBag.Mensaje = "Reporte enviado correctamente";
+                    await _context.SaveChangesAsync();
+
+                    ViewBag.Mensaje = "Reporte enviado correctamente";
+
+                    // Limpiar formulario
+                    ModelState.Clear();
+
+                    return View(new ReporteMaquinaria());
+                }
+                catch (Exception ex)
+                {
+                    ViewBag.Error = ex.Message;
+                }
             }
 
-            return View();
+            return View(reporte);
         }
     }
 }
