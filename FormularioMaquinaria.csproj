@@ -16,6 +16,12 @@
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.8" />
 
 		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.1" />
+
+		<PackageReference Include="Tesseract" Version="5.2.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="wwwroot\uploads\" />
 	</ItemGroup>
 
 </Project>

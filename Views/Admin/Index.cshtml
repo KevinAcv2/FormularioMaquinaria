@@ -194,10 +194,20 @@
                         <th>Operador</th>
                         <th>Máquina</th>
                         <th>Tipo</th>
+
                         <th>Horómetro Inicial</th>
                         <th>Horómetro Final</th>
+
+                        <th>Horas Trabajadas</th>
+
+                        <th>Foto Inicial</th>
+                        <th>Foto Final</th>
+
                         <th>Fecha</th>
+
                         <th>Observaciones</th>
+
+                        <th>Acciones</th>
 
                     </tr>
 
@@ -210,9 +220,7 @@
                         <tr>
 
                             <td>
-                                <strong>
-                                    @item.NombreOperador
-                                </strong>
+                                <strong>@item.NombreOperador</strong>
                             </td>
 
                             <td>
@@ -220,11 +228,9 @@
                             </td>
 
                             <td>
-
                                 <span class="badge-industrial">
                                     @item.TipoMaquina
                                 </span>
-
                             </td>
 
                             <td class="horometro">
@@ -236,11 +242,75 @@
                             </td>
 
                             <td>
+
+                                @{
+                                    var horas =
+                                    item.HorometroFinal -
+                                    item.HorometroInicial;
+                                }
+
+                                <span class="badge bg-success">
+                                    @horas hrs
+                                </span>
+
+                            </td>
+
+                            <td>
+
+                                @if (!string.IsNullOrEmpty(item.FotoHorometroInicial))
+                                {
+                                    <a href="@item.FotoHorometroInicial"
+                                       target="_blank"
+                                       class="btn btn-primary btn-sm">
+
+                                        Ver Foto
+
+                                    </a>
+                                }
+
+                            </td>
+
+                            <td>
+
+                                @if (!string.IsNullOrEmpty(item.FotoHorometroFinal))
+                                {
+                                    <a href="@item.FotoHorometroFinal"
+                                       target="_blank"
+                                       class="btn btn-primary btn-sm">
+
+                                        Ver Foto
+
+                                    </a>
+                                }
+
+                            </td>
+
+                            <td>
                                 @item.Fecha.ToString("dd/MM/yyyy HH:mm")
                             </td>
 
                             <td>
                                 @item.Observaciones
+                            </td>
+
+                            <td>
+
+                                <a asp-action="Editar"
+                                   asp-route-id="@item.Id"
+                                   class="btn btn-warning btn-sm">
+
+                                    Editar
+
+                                </a>
+
+                                <a asp-action="Eliminar"
+                                   asp-route-id="@item.Id"
+                                   class="btn btn-danger btn-sm">
+
+                                    Eliminar
+
+                                </a>
+
                             </td>
 
                         </tr>

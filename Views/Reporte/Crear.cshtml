@@ -124,7 +124,9 @@
                         </div>
                     }
 
-                    <form asp-action="Crear" method="post">
+                    <form asp-action="Crear"
+                          method="post"
+                          enctype="multipart/form-data">
 
                         <div class="mb-4">
 
@@ -179,7 +181,9 @@
                                 </label>
 
                                 <input asp-for="HorometroInicial"
-                                       class="form-control form-control-lg" />
+                                       id="horometroInicial"
+                                       class="form-control form-control-lg"
+                                       readonly />
 
                             </div>
 
@@ -190,7 +194,44 @@
                                 </label>
 
                                 <input asp-for="HorometroFinal"
-                                       class="form-control form-control-lg" />
+                                       id="horometroFinal"
+                                       class="form-control form-control-lg"
+                                       readonly />
+
+                            </div>
+
+
+                        </div>
+
+                        <hr />
+
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label fw-bold">
+                                    Foto Horómetro Inicial
+                                </label>
+
+                                <input type="file"
+                                       id="fotoInicial"
+                                       name="fotoInicial"
+                                       class="form-control"
+                                       accept="image/*" />
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label fw-bold">
+                                    Foto Horómetro Final
+                                </label>
+
+                                <input type="file"
+                                       id="fotoFinal"
+                                       name="fotoFinal"
+                                       class="form-control"
+                                       accept="image/*" />
 
                             </div>
 
@@ -208,6 +249,7 @@
 
                         </div>
 
+
                         <button type="submit"
                                 class="btn btn-industrial w-100">
 
@@ -224,5 +266,66 @@
         </div>
 
     </div>
+    <script>
+
+        document
+        .getElementById("fotoInicial")
+        .addEventListener("change", async function () {
+
+            let archivo = this.files[0];
+
+            if (!archivo)
+                return;
+
+            let formData = new FormData();
+
+            formData.append("imagen", archivo);
+
+            let respuesta = await fetch('/Reporte/LeerHorometro',
+            {
+                method: 'POST',
+                body: formData
+            });
+
+            let datos = await respuesta.json();
+
+            if (datos.exito)
+            {
+                document
+                    .getElementById("horometroInicial")
+                    .value = datos.valor;
+            }
+        });
+
+        document
+        .getElementById("fotoFinal")
+        .addEventListener("change", async function () {
+
+            let archivo = this.files[0];
+
+            if (!archivo)
+                return;
+
+            let formData = new FormData();
+
+            formData.append("imagen", archivo);
+
+            let respuesta = await fetch('/Reporte/LeerHorometro',
+            {
+                method: 'POST',
+                body: formData
+            });
+
+            let datos = await respuesta.json();
+
+            if (datos.exito)
+            {
+                document
+                    .getElementById("horometroFinal")
+                    .value = datos.valor;
+            }
+        });
+
+    </script>
 
 </div>

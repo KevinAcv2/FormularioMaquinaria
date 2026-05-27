@@ -24,5 +24,9 @@ namespace Maquinarias.Models
         public string? Observaciones { get; set; }
 
         public DateTime Fecha { get; set; } = DateTime.UtcNow;
+
+        public string? FotoHorometroInicial { get; set; }
+
+        public string? FotoHorometroFinal { get; set; }
     }
 }
