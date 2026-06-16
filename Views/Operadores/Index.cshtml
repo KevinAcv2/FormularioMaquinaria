@@ -1,0 +1,212 @@
+﻿@model IEnumerable<Maquinarias.Models.Operador>
+
+@{
+    ViewData["Title"] = "Gestión de Operadores";
+}
+
+<style>
+
+
+    body {
+        background: #eef2f6;
+    }
+
+    .header-card {
+        background: linear-gradient(135deg,#0f2f44,#174d6d);
+        color: white;
+        border-radius: 20px;
+        padding: 25px;
+        margin-bottom: 25px;
+        box-shadow: 0 10px 20px rgba(0,0,0,.15);
+    }
+
+    .card-custom {
+        background: white;
+        border: none;
+        border-radius: 20px;
+        padding: 25px;
+        box-shadow: 0 5px 15px rgba(0,0,0,.08);
+        margin-bottom: 25px;
+    }
+
+    .btn-guardar {
+        background: #f0ad00;
+        border: none;
+        color: black;
+        font-weight: bold;
+    }
+
+        .btn-guardar:hover {
+            background: #d89b00;
+        }
+
+    .table thead {
+        background: #0f2f44;
+        color: white;
+    }
+
+    /* RESPONSIVE */
+
+    @@media (max-width: 768px) {
+
+        .header-card {
+            text-align: center;
+            padding: 20px;
+        }
+
+            .header-card h2 {
+                font-size: 24px;
+            }
+
+        .card-custom {
+            padding: 15px;
+        }
+
+        .btn {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .table {
+            font-size: 14px;
+        }
+    }
+
+</style>
+
+<div class="container mt-4">
+
+    <div class="header-card">
+
+        <h2>👷 Gestión de Operadores</h2>
+
+        <p class="mb-0">
+            Administración de operadores autorizados
+        </p>
+
+    </div>
+
+    <!-- ESTADÍSTICAS -->
+    <div class="row mb-4">
+
+        <div class="col-md-4">
+
+            <div class="card-custom text-center">
+
+                <h5>Total Operadores</h5>
+
+                <h2>@Model.Count()</h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="card-custom">
+
+        <h4 class="mb-3">
+            Nuevo Operador
+        </h4>
+
+        <form asp-action="Crear" method="post">
+
+            <div class="row">
+
+                <div class="col-12 col-md-10 mb-2 mb-md-0">
+
+                    <input type="text"
+                           name="Nombre"
+                           class="form-control"
+                           placeholder="Nombre del operador"
+                           required />
+
+                </div>
+
+                <div class="col-12 col-md-2">
+
+                    <button type="submit"
+                            class="btn btn-guardar w-100">
+
+                        Guardar
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+    <div class="card-custom">
+
+        <h4 class="mb-3">
+            Lista de Operadores
+        </h4>
+
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+
+            <thead>
+
+                <tr>
+
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Acciones</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+
+                        <td>@item.Id</td>
+
+                        <td>
+                            <strong>@item.Nombre</strong>
+                        </td>
+
+                        <td>
+
+                                <a asp-action="Editar"
+                                   asp-route-id="@item.Id"
+                                   class="btn btn-warning btn-sm">
+
+                                    Editar
+
+                                </a>
+
+                                <a asp-action="Eliminar"
+                                   asp-route-id="@item.Id"
+                                   class="btn btn-danger btn-sm">
+
+                                    Eliminar
+
+                                </a>
+
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <a href="/Admin/Index"
+       class="btn btn-secondary mt-3">
+
+        ← Volver al Dashboard
+
+    </a>
+
+</div>

@@ -3,6 +3,7 @@ using System;
 using Maquinarias.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FormularioMaquinaria.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260616005537_AgregarEvaluacionOperador")]
+    partial class AgregarEvaluacionOperador
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,7 +43,7 @@ namespace FormularioMaquinaria.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Maquinas", (string)null);
+                    b.ToTable("Maquinas");
                 });
 
             modelBuilder.Entity("Maquinarias.Models.Operador", b =>
@@ -57,7 +60,7 @@ namespace FormularioMaquinaria.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Operadores", (string)null);
+                    b.ToTable("Operadores");
                 });
 
             modelBuilder.Entity("Maquinarias.Models.ReporteMaquinaria", b =>
@@ -121,7 +124,7 @@ namespace FormularioMaquinaria.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ReportesMaquinaria", (string)null);
+                    b.ToTable("ReportesMaquinaria");
                 });
 #pragma warning restore 612, 618
         }

@@ -90,6 +90,7 @@
         padding: 50px;
     }
 
+
 </style>
 
 <div class="container py-5">
@@ -135,43 +136,35 @@
                                 Nombre del Operador
                             </label>
 
-                            <input asp-for="NombreOperador"
-                                   class="form-control form-control-lg" />
+                            <select asp-for="NombreOperador"
+                                    asp-items="ViewBag.Operadores"
+                                    class="form-select">
+                                <option value="">Seleccione un operador</option>
+                            </select>
 
-                        </div>
-
-                        <div class="mb-4">
-
-                            <label class="form-label">
-                                Nombre o Código de la Máquina
-                            </label>
-
-                            <input asp-for="NombreMaquina"
-                                   class="form-control form-control-lg" />
-
-                        </div>
+                        </div>                          
 
                         <div class="mb-4">
 
                             <label class="form-label">
-                                Tipo de Maquinaria
+                                Máquina
                             </label>
 
-                            <select asp-for="TipoMaquina"
-                                    class="form-select form-select-lg">
+                            <select asp-for="NombreMaquina"
+                                    asp-items="ViewBag.Maquinas"
+                                    class="form-select">
 
-                                <option value="">Seleccione</option>
-
-                                <option>Motoniveladora</option>
-                                <option>Bulldozer</option>
-                                <option>Retroexcavadora</option>
-                                <option>Excavadora</option>
-                                <option>Vibrocompactador</option>
-                                <option>Cargador</option>
+                                <option value="">
+                                    Seleccione una máquina
+                                </option>
 
                             </select>
 
                         </div>
+
+                        <input type="hidden"
+                               asp-for="TipoMaquina"
+                               value="N/A" />
 
                         <div class="row">
 

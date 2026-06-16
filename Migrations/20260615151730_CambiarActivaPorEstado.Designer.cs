@@ -3,6 +3,7 @@ using System;
 using Maquinarias.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FormularioMaquinaria.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260615151730_CambiarActivaPorEstado")]
+    partial class CambiarActivaPorEstado
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,7 +43,7 @@ namespace FormularioMaquinaria.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Maquinas", (string)null);
+                    b.ToTable("Maquinas");
                 });
 
             modelBuilder.Entity("Maquinarias.Models.Operador", b =>
@@ -57,7 +60,7 @@ namespace FormularioMaquinaria.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Operadores", (string)null);
+                    b.ToTable("Operadores");
                 });
 
             modelBuilder.Entity("Maquinarias.Models.ReporteMaquinaria", b =>
@@ -68,9 +71,6 @@ namespace FormularioMaquinaria.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CuidadoEquipo")
-                        .HasColumnType("integer");
-
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("timestamp with time zone");
 
@@ -80,17 +80,11 @@ namespace FormularioMaquinaria.Migrations
                     b.Property<string>("FotoHorometroInicial")
                         .HasColumnType("text");
 
-                    b.Property<int>("Horario")
-                        .HasColumnType("integer");
-
                     b.Property<decimal>("HorometroFinal")
                         .HasColumnType("numeric");
 
                     b.Property<decimal>("HorometroInicial")
                         .HasColumnType("numeric");
-
-                    b.Property<int>("ManejoMaquinaria")
-                        .HasColumnType("integer");
 
                     b.Property<string>("NombreMaquina")
                         .IsRequired()
@@ -100,20 +94,8 @@ namespace FormularioMaquinaria.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("ObservacionSupervisor")
-                        .HasColumnType("text");
-
                     b.Property<string>("Observaciones")
                         .HasColumnType("text");
-
-                    b.Property<int>("Productividad")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ReporteNovedades")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("SeguridadIndustrial")
-                        .HasColumnType("integer");
 
                     b.Property<string>("TipoMaquina")
                         .IsRequired()
@@ -121,7 +103,7 @@ namespace FormularioMaquinaria.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ReportesMaquinaria", (string)null);
+                    b.ToTable("ReportesMaquinaria");
                 });
 #pragma warning restore 612, 618
         }

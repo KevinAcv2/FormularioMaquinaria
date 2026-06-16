@@ -1,8 +1,9 @@
 ﻿using Maquinarias.Data;
 using Maquinarias.Models;
 using Maquinarias.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using System.Text.RegularExpressions;
 
 namespace Maquinarias.Controllers
@@ -24,8 +25,10 @@ namespace Maquinarias.Controllers
         }
 
         [HttpGet]
-        public IActionResult Crear()
+        public async Task<IActionResult> Crear()
         {
+            await CargarCombos();
+
             return View();
         }
 
@@ -48,6 +51,8 @@ namespace Maquinarias.Controllers
                         Directory.CreateDirectory(uploadsFolder);
                     }
 
+                    // FOTO INICIAL
+
                     if (fotoInicial != null)
                     {
                         string nombreArchivo =
@@ -67,6 +72,8 @@ namespace Maquinarias.Controllers
                         reporte.FotoHorometroInicial =
                             "/uploads/" + nombreArchivo;
                     }
+
+                    // FOTO FINAL
 
                     if (fotoFinal != null)
                     {
@@ -94,16 +101,18 @@ namespace Maquinarias.Controllers
 
                     await _context.SaveChangesAsync();
 
-                    ViewBag.Mensaje =
+                    TempData["Mensaje"] =
                         "Reporte enviado correctamente";
 
-                    return View(new ReporteMaquinaria());
+                    return RedirectToAction(nameof(Crear));
                 }
                 catch (Exception ex)
                 {
                     ViewBag.Error = ex.Message;
                 }
             }
+
+            await CargarCombos();
 
             return View(reporte);
         }
@@ -160,6 +169,25 @@ namespace Maquinarias.Controllers
                     mensaje = ex.Message
                 });
             }
+        }
+
+        private async Task CargarCombos()
+        {
+            ViewBag.Operadores = new SelectList(
+            await _context.Operadores
+            .OrderBy(o => o.Nombre)
+            .ToListAsync(),
+            "Nombre",
+            "Nombre");
+
+            ViewBag.Maquinas = new SelectList(
+                await _context.Maquinas
+                    .Where(m => m.Estado == "Operativa")
+                    .OrderBy(m => m.Nombre)
+                    .ToListAsync(),
+                "Nombre",
+                "Nombre");
+
         }
     }
 }

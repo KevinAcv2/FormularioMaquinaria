@@ -8,7 +8,6 @@ namespace Maquinarias.Models
 
         [Required]
         public string NombreOperador { get; set; }
-
         [Required]
         public string NombreMaquina { get; set; }
 
@@ -28,5 +27,21 @@ namespace Maquinarias.Models
         public string? FotoHorometroInicial { get; set; }
 
         public string? FotoHorometroFinal { get; set; }
+
+
+        public int Horario { get; set; }
+
+        public int ManejoMaquinaria { get; set; }
+
+        public int CuidadoEquipo { get; set; }
+
+        public int SeguridadIndustrial { get; set; }
+
+        public int Productividad { get; set; }
+
+        public int ReporteNovedades { get; set; }
+
+        public string? ObservacionSupervisor { get; set; }
+
     }
 }

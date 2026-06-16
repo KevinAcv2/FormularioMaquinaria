@@ -1,4 +1,5 @@
-﻿using Maquinarias.Models;
+﻿using FormularioMaquinaria.Models;
+using Maquinarias.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Maquinarias.Data
@@ -11,5 +12,9 @@ namespace Maquinarias.Data
         }
 
         public DbSet<ReporteMaquinaria> ReportesMaquinaria { get; set; }
+        public DbSet<Operador> Operadores { get; set; }
+
+        public DbSet<Maquina> Maquinas { get; set; }
+
     }
 }

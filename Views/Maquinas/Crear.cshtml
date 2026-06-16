@@ -1,0 +1,26 @@
+﻿@model Maquinarias.Models.Maquina
+
+<div class="mb-3">
+    <label class="form-label">
+        Máquina
+    </label>
+
+    <input asp-for="Nombre"
+           class="form-control"
+           placeholder="Ej: CAT 829L - Cargador Frontal" />
+</div>
+
+<div class="mb-3">
+    <label class="form-label">
+        Estado
+    </label>
+
+    <select asp-for="Estado"
+            class="form-select">
+
+        <option value="">Seleccione</option>
+        <option value="Operativa">Operativa</option>
+        <option value="No Operativa">No Operativa</option>
+
+    </select>
+</div>

@@ -1,0 +1,43 @@
+﻿@model Maquinarias.Models.Operador
+
+<div class="container mt-4">
+
+    <div class="card shadow p-4">
+
+        <h2>Editar Operador</h2>
+
+        <form asp-action="Editar">
+
+            <input type="hidden"
+                   asp-for="Id" />
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Nombre
+                </label>
+
+                <input asp-for="Nombre"
+                       class="form-control" />
+
+            </div>
+
+            <button type="submit"
+                    class="btn btn-warning">
+
+                Guardar Cambios
+
+            </button>
+
+            <a asp-action="Index"
+               class="btn btn-secondary">
+
+                Volver
+
+            </a>
+
+        </form>
+
+    </div>
+
+</div>

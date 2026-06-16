@@ -50,8 +50,13 @@
                             Máquina
                         </label>
 
-                        <input asp-for="NombreMaquina"
-                               class="form-control" />
+                        <select asp-for="NombreMaquina"
+                                asp-items="ViewBag.Maquinas"
+                                class="form-select">
+                            <option value="">
+                                Seleccione una máquina
+                            </option>
+                        </select>
 
                     </div>
 
@@ -62,18 +67,6 @@
                     <label class="form-label">
                         Tipo de Máquina
                     </label>
-
-                    <select asp-for="TipoMaquina"
-                            class="form-select">
-
-                        <option>Motoniveladora</option>
-                        <option>Bulldozer</option>
-                        <option>Retroexcavadora</option>
-                        <option>Excavadora</option>
-                        <option>Vibrocompactador</option>
-                        <option>Cargador</option>
-
-                    </select>
 
                 </div>
 
@@ -112,6 +105,96 @@
                     <textarea asp-for="Observaciones"
                               class="form-control"
                               rows="4"></textarea>
+
+                    <hr />
+
+                    <h4 class="mt-4 mb-3">
+                        ⭐ Evaluación del Operador
+                    </h4>
+
+                    <div class="row">
+
+                        <div class="col-md-4 mb-3">
+                            <label>Horario</label>
+                            <select asp-for="Horario" class="form-select">
+                                <option value="1">1 - Malo</option>
+                                <option value="2">2 - Regular</option>
+                                <option value="3">3 - Bueno</option>
+                                <option value="4">4 - Muy Bueno</option>
+                                <option value="5">5 - Excelente</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label>Manejo de Maquinaria</label>
+                            <select asp-for="ManejoMaquinaria" class="form-select">
+                                <option value="1">1 - Malo</option>
+                                <option value="2">2 - Regular</option>
+                                <option value="3">3 - Bueno</option>
+                                <option value="4">4 - Muy Bueno</option>
+                                <option value="5">5 - Excelente</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label>Cuidado del Equipo</label>
+                            <select asp-for="CuidadoEquipo" class="form-select">
+                                <option value="1">1 - Malo</option>
+                                <option value="2">2 - Regular</option>
+                                <option value="3">3 - Bueno</option>
+                                <option value="4">4 - Muy Bueno</option>
+                                <option value="5">5 - Excelente</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-4 mb-3">
+                            <label>Seguridad Industrial</label>
+                            <select asp-for="SeguridadIndustrial" class="form-select">
+                                <option value="1">1 - Malo</option>
+                                <option value="2">2 - Regular</option>
+                                <option value="3">3 - Bueno</option>
+                                <option value="4">4 - Muy Bueno</option>
+                                <option value="5">5 - Excelente</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label>Productividad</label>
+                            <select asp-for="Productividad" class="form-select">
+                                <option value="1">1 - Malo</option>
+                                <option value="2">2 - Regular</option>
+                                <option value="3">3 - Bueno</option>
+                                <option value="4">4 - Muy Bueno</option>
+                                <option value="5">5 - Excelente</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label>Reporte de Novedades</label>
+                            <select asp-for="ReporteNovedades" class="form-select">
+                                <option value="1">1 - Malo</option>
+                                <option value="2">2 - Regular</option>
+                                <option value="3">3 - Bueno</option>
+                                <option value="4">4 - Muy Bueno</option>
+                                <option value="5">5 - Excelente</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label>Observación del Supervisor</label>
+
+                        <textarea asp-for="ObservacionSupervisor"
+                                  class="form-control"
+                                  rows="4"></textarea>
+
+                    </div>
 
                 </div>
 

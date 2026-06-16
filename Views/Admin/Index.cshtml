@@ -126,6 +126,172 @@
 
     </div>
 
+    <div class="row mb-4">
+
+        <div class="col-md-3">
+            <div class="card shadow border-0 text-center">
+                <div class="card-body">
+                    <h5>📄 Reportes</h5>
+                    <h2>@ViewBag.TotalReportes</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow border-0 text-center">
+                <div class="card-body">
+                    <h5>👷 Operadores</h5>
+                    <h2>@ViewBag.TotalOperadores</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow border-0 text-center">
+                <div class="card-body">
+                    <h5>🚜 Máquinas</h5>
+                    <h2>@ViewBag.TotalMaquinas</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow border-0 text-center">
+                <div class="card-body">
+                    <h5>⏱ Horas Totales</h5>
+                    <h2>@ViewBag.HorasTotales</h2>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="card card-filtro mb-4">
+        <div class="card card-filtro mb-4">
+
+            <h3 class="mb-4">
+                🏆 Evaluación de Operadores
+            </h3>
+
+            <div class="row">
+
+                @foreach (var op in ViewBag.RankingOperadores)
+                {
+                    var puntuacion =
+                    (op.TotalReportes * 5) +
+                    (int)op.HorasTrabajadas +
+                    (op.Observaciones * 2);
+
+                    if (puntuacion > 100)
+                    {
+                        puntuacion = 100;
+                    }
+
+                    <div class="col-md-4 mb-4">
+
+                        <div class="card border-0 shadow-sm">
+
+                            <div class="card-body">
+
+                                <h5 class="fw-bold">
+                                    👷 @op.Operador
+                                </h5>
+
+                                <hr />
+
+                                <p>
+                                    📄 Reportes:
+                                    <strong>@op.TotalReportes</strong>
+                                </p>
+
+                                <p>
+                                    ⏱ Horas:
+                                    <strong>@op.HorasTrabajadas</strong>
+                                </p>
+
+                                <p>
+                                    📝 Observaciones:
+                                    <strong>@op.Observaciones</strong>
+                                </p>
+
+                                <div class="progress mb-2"
+                                     style="height:25px;">
+
+                                    <div class="progress-bar
+                        @(puntuacion >= 90 ? "bg-success"
+                                                             : puntuacion >= 70 ? "bg-warning"
+                                                             : "bg-danger")"
+                                         role="progressbar"
+                                         style="width:@puntuacion%">
+
+                                        @puntuacion%
+
+                                    </div>
+
+                                </div>
+
+                                @if (puntuacion >= 90)
+                                {
+                                    <span class="badge bg-success">
+                                        Excelente
+                                    </span>
+                                }
+                                else if (puntuacion >= 70)
+                                {
+                                    <span class="badge bg-warning text-dark">
+                                        Bueno
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">
+                                        Requiere Mejora
+                                    </span>
+                                }
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-6">
+
+                <h4>👷 Operadores</h4>
+
+                <a href="/Operadores/Index"
+                   class="btn btn-primary">
+
+                    Administrar Operadores
+
+                </a>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <h4>🚜 Máquinas</h4>
+
+                <a href="/Maquinas/Index"
+                   class="btn btn-success">
+
+                    Administrar Máquinas
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
     <!-- FILTROS -->
 
     <div class="card card-filtro">
@@ -179,6 +345,26 @@
 
     </div>
 
+    <div class="mb-3">
+
+    <a asp-action="ExportarExcel"
+       class="btn btn-success">
+
+        DESCARGAR EXCEL
+
+    </a>
+
+        <a asp-action="ExportarPdf"
+           class="btn btn-danger">
+
+            DESCARGAR PDF
+
+        </a>
+
+</div>
+
+    
+
     <!-- TABLA -->
 
     <div class="card table-card">
@@ -193,7 +379,6 @@
 
                         <th>Operador</th>
                         <th>Máquina</th>
-                        <th>Tipo</th>
 
                         <th>Horómetro Inicial</th>
                         <th>Horómetro Final</th>
@@ -227,11 +412,7 @@
                                 @item.NombreMaquina
                             </td>
 
-                            <td>
-                                <span class="badge-industrial">
-                                    @item.TipoMaquina
-                                </span>
-                            </td>
+                            
 
                             <td class="horometro">
                                 @item.HorometroInicial

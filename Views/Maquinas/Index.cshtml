@@ -1,0 +1,267 @@
+﻿@model IEnumerable<Maquinarias.Models.Maquina>
+
+@{
+    ViewData["Title"] = "Gestión de Maquinaria";
+}
+
+<style>
+
+    body {
+        background: #eef2f6;
+    }
+
+    .header-card {
+        background: linear-gradient(135deg,#0f2f44,#174d6d);
+        color: white;
+        border-radius: 20px;
+        padding: 25px;
+        margin-bottom: 25px;
+        box-shadow: 0 10px 20px rgba(0,0,0,.15);
+    }
+
+    .card-custom {
+        background: white;
+        border: none;
+        border-radius: 20px;
+        padding: 25px;
+        box-shadow: 0 5px 15px rgba(0,0,0,.08);
+        margin-bottom: 25px;
+    }
+
+    .btn-guardar {
+        background: #f0ad00;
+        border: none;
+        color: black;
+        font-weight: bold;
+    }
+
+        .btn-guardar:hover {
+            background: #d89b00;
+        }
+
+    .table thead {
+        background: #0f2f44;
+        color: white;
+    }
+
+    .badge-activa {
+        background: #198754;
+        color: white;
+        padding: 8px 12px;
+        border-radius: 10px;
+    }
+
+    @@media (max-width:768px) {
+
+        .header-card {
+            text-align: center;
+        }
+
+        .card-custom {
+            padding: 15px;
+        }
+
+        .btn {
+            width: 100%;
+            margin-bottom: 8px;
+        }
+
+        .table {
+            font-size: 14px;
+        }
+    }
+
+</style>
+
+<div class="container mt-4">
+
+    <div class="header-card">
+
+        <h2>🚜 Gestión de Maquinaria</h2>
+
+        <p class="mb-0">
+            Administración de maquinaria registrada
+        </p>
+
+    </div>
+
+    <!-- ESTADÍSTICAS -->
+
+    <div class="row mb-4">
+
+        <div class="col-md-4">
+
+            <div class="card-custom text-center">
+
+                <h5>Total Máquinas</h5>
+
+                <h2>@Model.Count()</h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- FORMULARIO -->
+
+    <div class="card-custom">
+
+        <h4 class="mb-4">
+            Nueva Máquina
+        </h4>
+
+        <form asp-action="Crear" method="post">
+
+            <div class="row align-items-end">
+
+                <div class="col-md-5 mb-3">
+
+                    <label class="form-label fw-bold">
+                        Nombre / Tipo Maquinaria
+                    </label>
+
+                    <input type="text"
+                           name="Nombre"
+                           class="form-control"
+                           placeholder="Ej: RetroExcavadora KAT120"
+                           required />
+
+                </div>
+
+                <div class="col-md-5 mb-3">
+
+                    <label class="form-label fw-bold">
+                        Estado Maquinaria
+                    </label>
+
+                    <select name="Estado"
+                            class="form-select"
+                            required>
+
+                        <option value="">
+                            Seleccione...
+                        </option>
+
+                        <option value="Operativa">
+                            Operativa
+                        </option>
+
+                        <option value="No Operativa">
+                            No Operativa
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div class="col-md-2 mb-3">
+
+                    <button type="submit"
+                            class="btn btn-guardar w-100">
+
+                        Guardar
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+    <!-- TABLA -->
+
+    <div class="card-custom">
+
+        <h4 class="mb-3">
+
+            Máquinas Registradas
+
+        </h4>
+
+        <div class="table-responsive">
+
+            <table class="table table-hover align-middle">
+
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Máquina</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+
+                            <td>@item.Id</td>
+
+                            <td>
+                                <strong>@item.Nombre</strong>
+                            </td>
+
+                            <td>@item.Estado</td>
+
+                            <td>
+
+                                @if (item.Estado == "Operativa")
+                                {
+                                    <span class="badge bg-success">
+                                        Operativa
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">
+                                        No Operativa
+                                    </span>
+                                }
+
+                            </td>
+
+                            <td>
+
+                                <a asp-action="Editar"
+                                   asp-route-id="@item.Id"
+                                   class="btn btn-warning btn-sm">
+
+                                    Editar
+
+                                </a>
+
+                                <a asp-action="Eliminar"
+                                   asp-route-id="@item.Id"
+                                   class="btn btn-danger btn-sm">
+
+                                    Eliminar
+
+                                </a>
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    <a href="/Admin/Index"
+       class="btn btn-secondary">
+
+        ← Volver al Dashboard
+
+    </a>
+
+</div>
