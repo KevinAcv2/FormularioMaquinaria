@@ -29,3 +29,151 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+
+/*PANEL ADMINISTRATIVO*/
+body {
+    margin: 0;
+    background: #eef2f6;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* SIDEBAR */
+
+aside {
+    background: linear-gradient(180deg,#0f2f44,#174d6d);
+    box-shadow: 4px 0 15px rgba(0,0,0,.15);
+}
+
+    aside h3 {
+        font-weight: bold;
+        letter-spacing: 1px;
+    }
+
+    aside small {
+        color: #d7d7d7;
+    }
+
+    /* LINKS */
+
+    aside .nav-link {
+        color: white !important;
+        padding: 10px 14px;
+        border-radius: 10px;
+        transition: .25s;
+        font-size: 14px;
+        font-weight: 500;
+        margin-bottom: 4px;
+    }
+
+        aside .nav-link:hover {
+            background: #f0ad00;
+            color: #000 !important;
+            transform: translateX(6px);
+        }
+
+        aside .nav-link i {
+            width: 22px;
+            text-align: center;
+            font-size: 15px;
+        }
+
+/* NAVBAR */
+
+.navbar {
+    background: white !important;
+    height: 70px;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+/* CONTENIDO */
+
+main {
+    background: #eef2f6;
+    min-height: calc(100vh - 70px);
+}
+
+/* TARJETAS */
+
+.card {
+    border: none;
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0,0,0,.08);
+}
+
+/* BOTONES */
+
+.btn-primary {
+    background: #0f2f44;
+    border: none;
+}
+
+    .btn-primary:hover {
+        background: #174d6d;
+    }
+
+/* TABLAS */
+
+.table {
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+    .table thead {
+        background: #0f2f44;
+        color: white;
+    }
+
+.dashboard-header{
+    background:white;
+    border-radius:20px;
+    padding:30px;
+    box-shadow: 0 10px 25px  rgba(0,0,0,.08)
+}
+
+.dashboard-header h2 {
+    color: #0f2f44;
+}
+
+.dashboard-header .card {
+    border-radius: 15px;
+        background: #f8fafc;
+
+}
+
+
+/* FONDO GLOBAL DEL SISTEMA */
+body {
+    background: linear-gradient(rgba(0,0,0,.75), rgba(0,0,0,.75)), url('/img/fondo-maquinaria.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    min-height: 100vh;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* COLORES PRINCIPALES */
+:root {
+    --primary-dark: #0f2f44;
+    --accent: #f0ad00;
+    --light: #ffffff;
+}
+
+/* BOTONES UNIFICADOS */
+.btn-primary-custom {
+    background: var(--accent);
+    color: #000;
+    font-weight: 700;
+    border-radius: 10px;
+}
+
+    .btn-primary-custom:hover {
+        background: #d89b00;
+    }
+
+/* CARD GENERAL */
+.card-custom {
+    background: rgba(255,255,255,0.96);
+    border-radius: 20px;
+    border: none;
+    backdrop-filter: blur(10px);
+}

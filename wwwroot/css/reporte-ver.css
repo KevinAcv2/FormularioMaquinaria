@@ -1,0 +1,49 @@
+﻿
+.reporte-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.titulo-reporte {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #0f2f44;
+    margin-bottom: 6px;
+}
+
+    .titulo-reporte i {
+        color: #f0ad00;
+        margin-right: 10px;
+    }
+
+.subtitulo-reporte {
+    color: #6c757d;
+    margin-bottom: 0;
+}
+
+.acciones-reporte {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.card {
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0,0,0,.08);
+}
+
+.card-header {
+    padding: 18px 22px;
+}
+
+.card-body {
+    padding: 25px;
+}
+
+.card-header h5 {
+    font-size: 18px;
+}

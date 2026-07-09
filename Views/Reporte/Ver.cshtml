@@ -1,0 +1,477 @@
+﻿@model FormularioMaquinaria.Models.ReporteMaquinaria
+
+@{
+    ViewData["Title"] = "Ver Reporte";
+}
+
+<link rel="stylesheet"
+      href="~/css/reporte-ver.css"
+      asp-append-version="true" />
+
+<div class="container-fluid">
+
+    <!-- ENCABEZADO -->
+
+    <div class="reporte-header mb-4">
+
+        <div>
+
+            <h1 class="titulo-reporte">
+                <i class="fa-solid fa-file-lines"></i>
+                Ver Reporte
+            </h1>
+
+            <p class="subtitulo-reporte">
+                Consulta toda la información registrada del reporte.
+            </p>
+
+        </div>
+
+        <div class="acciones-reporte">
+
+            <a asp-action="Historial"
+               class="btn btn-outline-secondary">
+
+                <i class="fa-solid fa-arrow-left"></i>
+
+                Volver
+
+            </a>
+
+            <button class="btn btn-outline-primary">
+
+                <i class="fa-solid fa-print"></i>
+
+                Imprimir
+
+            </button>
+
+            <button class="btn btn-success">
+
+                <i class="fa-solid fa-file-pdf"></i>
+
+                Exportar PDF
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- INFORMACIÓN GENERAL -->
+
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-header bg-white">
+
+            <h5 class="fw-bold mb-0">
+
+                <i class="fa-solid fa-clipboard-list me-2 text-primary"></i>
+
+                REPORTE DE MAQUINARIA
+
+            </h5>
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="row">
+
+                <div class="col-lg-4 mb-4">
+
+                    <strong>Fecha del Reporte</strong>
+
+                    <p>@Model.Fecha.ToString("dd/MM/yyyy HH:mm")</p>
+
+                </div>
+
+                <div class="col-lg-4 mb-4">
+
+                    <strong>Operador</strong>
+
+                    <p>@Model.NombreOperador</p>
+
+                </div>
+
+                <div class="col-lg-4 mb-4">
+
+                    <strong>Frente Operacional</strong>
+
+                    <p>@Model.FrenteOperacional</p>
+
+                </div>
+
+                <div class="col-lg-4 mb-4">
+
+                    <strong>Máquina</strong>
+
+                    <p>@Model.NombreMaquina</p>
+
+                </div>
+
+                <div class="col-lg-4 mb-4">
+
+                    <strong>Tipo de Máquina</strong>
+
+                    <p>@Model.TipoMaquina</p>
+
+                </div>
+
+                <div class="col-lg-4 mb-4">
+
+                    <strong>Estado</strong>
+
+                    @if (Model.EstadoMaquina == 1)
+                    {
+                        <span class="badge bg-success">
+                            Operativa
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">
+                            No Operativa
+                        </span>
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- HORÓMETROS -->
+
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-header bg-white">
+
+            <h5 class="fw-bold mb-0">
+
+                <i class="fa-solid fa-clock me-2 text-primary"></i>
+
+                HORÓMETROS
+
+            </h5>
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="row align-items-center text-center">
+
+                <div class="col-lg-4 col-md-12 mb-3">
+
+                    <div class="horometro-box">
+
+                        <small class="text-muted">
+                            Horómetro Inicial
+                        </small>
+
+                        <h2 class="fw-bold text-primary mt-2">
+
+                            @Model.HorometroInicial
+
+                        </h2>
+
+                    </div>
+
+                </div>
+
+                <div class="col-lg-4 col-md-12 mb-3">
+
+                    <div class="horometro-box">
+
+                        <small class="text-muted">
+                            Horómetro Final
+                        </small>
+
+                        <h2 class="fw-bold text-success mt-2">
+
+                            @Model.HorometroFinal
+
+                        </h2>
+
+                    </div>
+
+                </div>
+
+                <div class="col-lg-4 col-md-12 mb-3">
+
+                    <div class="horometro-box">
+
+                        <small class="text-muted">
+                            Horas Trabajadas
+                        </small>
+
+                        <h2 class="fw-bold text-danger mt-2">
+
+                            @Model.HorasTrabajadas
+
+                        </h2>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- FOTOS Y OBSERVACIONES -->
+
+    <div class="row">
+
+        <!-- Fotos -->
+
+        <div class="col-lg-8 mb-4">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-header bg-white">
+
+                    <h5 class="fw-bold mb-0">
+
+                        <i class="fa-solid fa-camera text-primary me-2"></i>
+
+                        FOTOS DEL REPORTE
+
+                    </h5>
+
+                </div>
+
+                <div class="card-body">
+
+                    <div class="row">
+
+                        <div class="col-md-6 text-center">
+
+                            <h6 class="mb-3">
+
+                                Horómetro Inicial
+
+                            </h6>
+
+                            <img src="@Model.FotoHorometroInicial"
+                                 class="img-fluid foto-reporte"
+                                 alt="Foto Inicial" />
+
+                        </div>
+
+                        <div class="col-md-6 text-center">
+
+                            <h6 class="mb-3">
+
+                                Horómetro Final
+
+                            </h6>
+
+                            <img src="@Model.FotoHorometroFinal"
+                                 class="img-fluid foto-reporte"
+                                 alt="Foto Final" />
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Observaciones -->
+
+        <div class="col-lg-4 mb-4">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-header bg-white">
+
+                    <h5 class="fw-bold mb-0">
+
+                        <i class="fa-solid fa-comment-dots text-warning me-2"></i>
+
+                        OBSERVACIONES
+
+                    </h5>
+
+                </div>
+
+                <div class="card-body">
+
+                    @if (string.IsNullOrWhiteSpace(Model.Observaciones))
+                    {
+                        <p class="text-muted mb-0">
+
+                            No se registraron observaciones para este reporte.
+
+                        </p>
+                    }
+                    else
+                    {
+                        <p class="mb-0">
+
+                            @Model.Observaciones
+
+                        </p>
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- EVALUACIÓN DEL OPERADOR -->
+
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-header bg-white">
+
+            <h5 class="fw-bold mb-0">
+
+                <i class="fa-solid fa-star text-warning me-2"></i>
+
+                EVALUACIÓN DEL OPERADOR
+
+            </h5>
+
+        </div>
+
+        <div class="card-body">
+
+            @if (Model.Evaluacion == null)
+            {
+
+                <div class="text-center py-4">
+
+                    <i class="fa-regular fa-star fa-3x text-secondary mb-3"></i>
+
+                    <h5 class="text-secondary">
+
+                        Este reporte aún no ha sido evaluado.
+
+                    </h5>
+
+                </div>
+
+            }
+            else
+            {
+
+                <div class="row">
+
+                    <div class="col-md-4 mb-3">
+
+                        <strong>Horario</strong>
+
+                        <h5 class="text-warning fw-bold">
+
+                            @Model.Evaluacion.Horario / 5
+
+                        </h5>
+
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+
+                        <strong>Manejo de Maquinaria</strong>
+
+                        <h5 class="text-warning fw-bold">
+
+                            @Model.Evaluacion.ManejoMaquinaria / 5
+
+                        </h5>
+
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+
+                        <strong>Cuidado del Equipo</strong>
+
+                        <h5 class="text-warning fw-bold">
+
+                            @Model.Evaluacion.CuidadoEquipo / 5
+
+                        </h5>
+
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+
+                        <strong>Seguridad Industrial</strong>
+
+                        <h5 class="text-warning fw-bold">
+
+                            @Model.Evaluacion.SeguridadIndustrial / 5
+
+                        </h5>
+
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+
+                        <strong>Productividad</strong>
+
+                        <h5 class="text-warning fw-bold">
+
+                            @Model.Evaluacion.Productividad / 5
+
+                        </h5>
+
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+
+                        <strong>Reporte de Novedades</strong>
+
+                        <h5 class="text-warning fw-bold">
+
+                            @Model.Evaluacion.ReporteNovedades / 5
+
+                        </h5>
+
+                    </div>
+
+                    <div class="col-md-12 mt-3">
+
+                        <strong>Observación del Supervisor</strong>
+
+                        <p>
+
+                            @Model.Evaluacion.ObservacionSupervisor
+
+                        </p>
+
+                    </div>
+
+                    <div class="col-md-12 mt-3">
+
+                        <strong>Fecha de Evaluación</strong>
+
+                        <p>
+
+                            @Model.Evaluacion.FechaEvaluacion.ToString("dd/MM/yyyy")
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            }
+
+        </div>
+
+    </div>
+
+</div>

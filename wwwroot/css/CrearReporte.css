@@ -1,0 +1,89 @@
+﻿body {
+    background: linear-gradient(rgba(0,0,0,.55), rgba(0,0,0,.55)), url('/img/Fondo.jpg') no-repeat center center fixed;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    min-height: 100vh;
+}
+
+.card-industrial {
+    border-radius: 25px;
+    overflow: hidden;
+    border: none;
+    background: rgba(255,255,255,0.96);
+    backdrop-filter: blur(10px);
+}
+
+.header-industrial {
+    background: #0f2f44;
+    padding: 35px;
+    text-align: center;
+    color: white;
+}
+
+.logo-empresa {
+    width: 140px;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 5px solid #f0ad00;
+    margin-bottom: 15px;
+    box-shadow: 0px 0px 20px rgba(0,0,0,.4);
+}
+
+.titulo-principal {
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.subtitulo {
+    color: #d6d6d6;
+    font-size: 15px;
+}
+
+.form-label {
+    color: #0f2f44;
+    font-weight: 700;
+}
+
+.form-control,
+.form-select {
+    border-radius: 12px;
+    padding: 14px;
+    border: 2px solid #d9d9d9;
+}
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: #f0ad00;
+        box-shadow: 0 0 0 .2rem rgba(240,173,0,.25);
+    }
+
+
+.btn-dashboard {
+    padding: 15px;
+    font-size: 18px;
+    font-weight: 800;
+    border-radius: 12px;
+}
+
+.btn-industrial {
+    background: #f0ad00;
+    color: #000;
+    border: none;
+    padding: 15px;
+    font-size: 18px;
+    font-weight: 800;
+    border-radius: 12px;
+    transition: .3s;
+}
+
+    .btn-industrial:hover {
+        background: #d89b00;
+        transform: scale(1.02);
+    }
+
+.card-body {
+    padding: 50px;
+}

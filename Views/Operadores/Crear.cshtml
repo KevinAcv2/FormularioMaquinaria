@@ -1,10 +1,10 @@
-﻿@model Maquinarias.Models.Operador
+﻿@model FormularioMaquinaria.Models.Operador
 
 <div class="container mt-4">
 
     <h2>Nuevo Operador</h2>
 
-    <form method="post">
+    <form asp-action="Crear" method="post">
 
         <div class="mb-3">
 
@@ -12,6 +12,28 @@
 
             <input asp-for="Nombre"
                    class="form-control" />
+
+        </div>
+
+        <div class="mb-3">
+
+            <label>Máquina Asignada</label>
+
+            <select asp-for="MaquinaId"
+                    class="form-select">
+
+                <option value="">
+                    Seleccione una máquina
+                </option>
+
+                @foreach (var maquina in ViewBag.Maquinas)
+                {
+                    <option value="@maquina.Id">
+                        @maquina.Nombre
+                    </option>
+                }
+
+            </select>
 
         </div>
 

@@ -1,101 +1,72 @@
-﻿@model IEnumerable<Maquinarias.Models.Operador>
+﻿@model IEnumerable<FormularioMaquinaria.Models.Operador>
 
 @{
     ViewData["Title"] = "Gestión de Operadores";
 }
 
-<style>
+<link rel="stylesheet"
+      href="~/css/operadores.css"
+      asp-append-version="true" />
 
+<div class="container-fluid">
+        
+    <div id="reporteOperadores">
 
-    body {
-        background: #eef2f6;
-    }
+        <div class="historial-header mb-4">
 
-    .header-card {
-        background: linear-gradient(135deg,#0f2f44,#174d6d);
-        color: white;
-        border-radius: 20px;
-        padding: 25px;
-        margin-bottom: 25px;
-        box-shadow: 0 10px 20px rgba(0,0,0,.15);
-    }
+            <div>
 
-    .card-custom {
-        background: white;
-        border: none;
-        border-radius: 20px;
-        padding: 25px;
-        box-shadow: 0 5px 15px rgba(0,0,0,.08);
-        margin-bottom: 25px;
-    }
+                <h1 class="titulo-reporte">
 
-    .btn-guardar {
-        background: #f0ad00;
-        border: none;
-        color: black;
-        font-weight: bold;
-    }
+                    👷 Gestión de Operadores
 
-        .btn-guardar:hover {
-            background: #d89b00;
-        }
+                </h1>
 
-    .table thead {
-        background: #0f2f44;
-        color: white;
-    }
+                <p class="subtitulo-reporte">
 
-    /* RESPONSIVE */
+                    Administración de operadores autorizados.
 
-    @@media (max-width: 768px) {
+                </p>
 
-        .header-card {
-            text-align: center;
-            padding: 20px;
-        }
+            </div>
 
-            .header-card h2 {
-                font-size: 24px;
-            }
+            <div class="acciones-reporte no-print">
 
-        .card-custom {
-            padding: 15px;
-        }
+                <a asp-action="ExportarExcel"
+                   class="btn btn-success">
 
-        .btn {
-            width: 100%;
-            margin-bottom: 10px;
-        }
+                    <i class="fa-solid fa-file-excel"></i>
 
-        .table {
-            font-size: 14px;
-        }
-    }
+                    Exportar Excel
 
-</style>
+                </a>
 
-<div class="container mt-4">
+                <a asp-action="ExportarPdf"
+                   class="btn btn-danger">
 
-    <div class="header-card">
+                    <i class="fa-solid fa-file-pdf"></i>
 
-        <h2>👷 Gestión de Operadores</h2>
+                    Exportar PDF
 
-        <p class="mb-0">
-            Administración de operadores autorizados
-        </p>
+                </a>
 
-    </div>
+            </div>
 
-    <!-- ESTADÍSTICAS -->
-    <div class="row mb-4">
+        </div>
 
-        <div class="col-md-4">
+        <!-- TOTAL OPERADORES -->
 
-            <div class="card-custom text-center">
+        <div class="row mb-1">
 
-                <h5>Total Operadores</h5>
+            <div class="col-md-4">
 
-                <h2>@Model.Count()</h2>
+                <div class="card-custom text-center">
+
+                    <h5>Total Operadores</h5>
+
+                    <h2>@Model.Count()</h2>
+
+                </div>
 
             </div>
 
@@ -103,110 +74,590 @@
 
     </div>
 
-    <div class="card-custom">
+        <!-- TARJETA CON LA TABLA -->
 
-        <h4 class="mb-3">
-            Nuevo Operador
-        </h4>
+        <div class="card shadow-sm border-0">
 
-        <form asp-action="Crear" method="post">
+            <div class="card shadow-sm border-0" id="reporteOperadores">
 
-            <div class="row">
+                <div class="card-body">
 
-                <div class="col-12 col-md-10 mb-2 mb-md-0">
+                    <form asp-action="Index" method="get">
 
-                    <input type="text"
-                           name="Nombre"
-                           class="form-control"
-                           placeholder="Nombre del operador"
-                           required />
+                        <div class="row align-items-end mb-4 no-print">
 
-                </div>
+                            <!-- FILTROS -->
+                            <div class="col-lg-8">
 
-                <div class="col-12 col-md-2">
+                                <div class="row g-2">
 
-                    <button type="submit"
-                            class="btn btn-guardar w-100">
+                                    <!-- Buscar -->
+                                    <div class="col-4">
 
-                        Guardar
+                                        <input type="text"
+                                               name="buscar"
+                                               class="form-control"
+                                               placeholder="🔍 Buscar operador..."
+                                               value="@ViewBag.Buscar" />
 
-                    </button>
+                                    </div>
+
+                                    <!-- Máquina -->
+                                    <div class="col-4">
+
+                                        <select name="maquinaId" class="form-select">
+
+                                            <option value="">Máquina</option>
+
+                                            @foreach (var maquina in ViewBag.Maquinas)
+                                            {
+                                                <option value="@maquina.Value">
+                                                    @maquina.Text
+                                                </option>
+                                            }
+
+                                        </select>
+
+                                    </div>
+
+                                    <!-- Frente -->
+                                    <div class="col-4">
+
+                                        <select name="frente" class="form-select">
+
+                                            <option value="">Frente</option>
+
+                                            <option value="PADEL"
+                                                    selected="@(ViewBag.Frente == "PADEL")">
+                                                FRENTE PADEL
+                                            </option>
+
+                                            <option value="PANAMÁ"
+                                                    selected="@(ViewBag.Frente == "PANAMÁ")">
+                                                FRENTE PANAMÁ
+                                            </option>
+
+                                        </select>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <!-- BOTONES -->
+                            <div class="col-lg-4">
+
+                                <div class="d-flex justify-content-end gap-2">
+
+                                    <button type="submit"
+                                            class="btn btn-primary btn-toolbar-custom">
+                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                        Buscar
+                                    </button>
+
+                                    <a asp-action="Index"
+                                       class="btn btn-secondary btn-toolbar-custom">
+
+                                        <i class="fa-solid fa-rotate"></i>
+
+                                        Limpiar
+
+                                    </a>
+
+                                    <button type="button"
+                                            class="btn btn-success btn-toolbar-custom"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#modalNuevoOperador">
+
+                                        <i class="fa-solid fa-plus"></i>
+
+                                        Nuevo
+
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <table class="table table-hover align-middle">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>ID</th>
+
+                                    <th>Nombre</th>
+
+                                    <th>Máquina</th>
+
+                                    <th>Frente Operacional</th>
+
+                                    <th class="no-print text-center">
+                                        Acciones
+                                    </th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                @foreach (var item in Model)
+                                {
+
+                                    <tr>
+
+                                        <td>
+                                            @item.Id
+                                        </td>
+
+                                        <td>
+                                            @item.Nombre
+                                        </td>
+
+                                        <td>
+
+                                            @(item.Maquina != null ? item.Maquina.Nombre : "Sin asignar")
+
+                                        </td>
+
+                                        <td>
+                                            @item.FrenteOperacional
+                                        </td>
+
+                                        <td class="text-center no-print">
+
+                                            <!-- EDITAR -->
+                                            <button type="button"
+                                                    class="btn btn-warning btn-sm btnEditar"
+                                                    data-id="@item.Id"
+                                                    data-nombre="@item.Nombre"
+                                                    data-maquina="@item.MaquinaId"
+                                                    data-frente="@item.FrenteOperacional">
+                                                <i class="fa-solid fa-pencil"></i>
+
+                                            </button>
+
+                                            <!-- ELIMINAR -->
+                                            <a asp-action="Eliminar"
+                                               asp-route-id="@item.Id"
+                                               class="btn btn-danger btn-sm">
+                                                <i class="fa-solid fa-trash"></i>
+
+                                            </a>
+
+                                        </td>
+
+                                    </tr>
+
+                                }
+
+                            </tbody>
+
+                        </table>
+
+                    </form>
 
                 </div>
 
             </div>
 
-        </form>
+        </div>
 
     </div>
 
-    <div class="card-custom">
+    <!-- MODAL EDITAR OPERADOR -->
+    <div class="modal fade"
+         id="modalEditarOperador"
+         tabindex="-1"
+         aria-hidden="true">
 
-        <h4 class="mb-3">
-            Lista de Operadores
-        </h4>
+        <div class="modal-dialog modal-lg modal-dialog-centered">
 
-        <div class="table-responsive">
-            <table class="table table-hover align-middle">
+            <div class="modal-content">
 
-            <thead>
+                <div class="modal-header">
 
-                <tr>
+                    <h5 class="modal-title fw-bold">
+                        <i class="fa-solid fa-user-pen text-warning me-2"></i>
+                        Editar Operador
+                    </h5>
 
-                    <th>ID</th>
-                    <th>Nombre</th>
-                    <th>Acciones</th>
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal">
+                    </button>
 
-                </tr>
+                </div>
 
-            </thead>
+                <form id="formEditarOperador">
 
-            <tbody>
+                    <div class="modal-body">
 
-                @foreach (var item in Model)
-                {
-                    <tr>
+                        <input type="hidden" id="EditarId" />
 
-                        <td>@item.Id</td>
+                        <!-- Nombre -->
+                        <div class="mb-3">
 
-                        <td>
-                            <strong>@item.Nombre</strong>
-                        </td>
+                            <label class="form-label fw-bold">
+                                Nombre
+                            </label>
 
-                        <td>
+                            <input type="text"
+                                   id="EditarNombre"
+                                   class="form-control"
+                                   required />
 
-                                <a asp-action="Editar"
-                                   asp-route-id="@item.Id"
-                                   class="btn btn-warning btn-sm">
+                        </div>
 
-                                    Editar
+                        <!-- Máquina -->
+                        <div class="mb-3">
 
-                                </a>
+                            <label class="form-label fw-bold">
+                                Máquina
+                            </label>
 
-                                <a asp-action="Eliminar"
-                                   asp-route-id="@item.Id"
-                                   class="btn btn-danger btn-sm">
+                            <select id="EditarMaquina"
+                                    class="form-select">
 
-                                    Eliminar
+                                <option value="">
+                                    Seleccione una máquina
+                                </option>
 
-                                </a>
+                                @foreach (var maquina in ViewBag.Maquinas)
+                                {
+                                    <option value="@maquina.Value">
+                                        @maquina.Text
+                                    </option>
+                                }
 
-                        </td>
+                            </select>
 
-                    </tr>
-                }
+                        </div>
 
-            </tbody>
+                        <!-- Frente -->
+                        <div class="mb-3">
 
-        </table>
+                            <label class="form-label fw-bold">
+                                Frente Operacional
+                            </label>
+
+                            <select id="EditarFrente"
+                                    class="form-select">
+
+                                <option value="PADEL">
+                                    FRENTE PADEL
+                                </option>
+
+                                <option value="PANAMÁ">
+                                    FRENTE PANAMÁ
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+
+                        <button type="button"
+                                class="btn btn-secondary"
+                                data-bs-dismiss="modal">
+
+                            Cancelar
+
+                        </button>
+
+                        <button type="submit"
+                                class="btn btn-success">
+
+                            <i class="fa-solid fa-floppy-disk me-2"></i>
+
+                            Guardar Cambios
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
 
     </div>
 
-    <a href="/Admin/Index"
-       class="btn btn-secondary mt-3">
+<!-- MODAL NUEVO OPERADOR -->
+<div class="modal fade"
+     id="modalNuevoOperador"
+     tabindex="-1"
+     aria-hidden="true">
 
-        ← Volver al Dashboard
+    <div class="modal-dialog modal-lg modal-dialog-centered">
 
-    </a>
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h5 class="modal-title fw-bold">
+
+                    <i class="fa-solid fa-user-plus text-success me-2"></i>
+
+                    Nuevo Operador
+
+                </h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <form id="formNuevoOperador">
+
+                <div class="modal-body">
+
+                    <!-- Nombre -->
+                    <div class="mb-3">
+
+                        <label class="form-label fw-bold">
+
+                            Nombre
+
+                        </label>
+
+                        <input type="text"
+                               id="NuevoNombre"
+                               class="form-control"
+                               required />
+
+                    </div>
+
+                    <!-- Máquina -->
+                    <div class="mb-3">
+
+                        <label class="form-label fw-bold">
+
+                            Máquina
+
+                        </label>
+
+                        <select id="NuevaMaquina"
+                                class="form-select">
+
+                            <option value="">
+                                Seleccione una máquina
+                            </option>
+
+                            @foreach (var maquina in ViewBag.Maquinas)
+                            {
+                                <option value="@maquina.Value">
+                                    @maquina.Text
+                                </option>
+                            }
+
+                        </select>
+
+                    </div>
+
+                    <!-- Frente -->
+                    <div class="mb-3">
+
+                        <label class="form-label fw-bold">
+
+                            Frente Operacional
+
+                        </label>
+
+                        <select id="NuevoFrente"
+                                class="form-select"
+                                required>
+
+                            <option value="">
+                                Seleccione un frente
+                            </option>
+
+                            <option value="PADEL">
+                                FRENTE PADEL
+                            </option>
+
+                            <option value="PANAMÁ">
+                                FRENTE PANAMÁ
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+
+                    <button type="button"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal">
+
+                        Cancelar
+
+                    </button>
+
+                    <button type="submit"
+                            class="btn btn-success">
+
+                        <i class="fa-solid fa-floppy-disk me-2"></i>
+
+                        Guardar Operador
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
 
 </div>
+
+@section Scripts {
+
+    <script>
+            const modalEditarOperador = new bootstrap.Modal(
+        document.getElementById("modalEditarOperador")
+    );
+
+    // Botones Editar
+    document.querySelectorAll(".btnEditar").forEach(btn => {
+
+        btn.addEventListener("click", () => {
+
+            // Id
+            document.getElementById("EditarId").value = btn.dataset.id;
+
+            // Nombre
+            document.getElementById("EditarNombre").value = btn.dataset.nombre;
+
+            // Máquina
+            document.getElementById("EditarMaquina").value = btn.dataset.maquina;
+
+            // Frente
+            document.getElementById("EditarFrente").value = btn.dataset.frente;
+
+            // Mostrar modal
+            modalEditarOperador.show();
+
+        });
+
+    });
+
+document.getElementById("formEditarOperador")
+.addEventListener("submit", async function (e) {
+
+    e.preventDefault();
+
+    const operador = {
+
+        Id: parseInt(document.getElementById("EditarId").value),
+
+        Nombre: document.getElementById("EditarNombre").value,
+
+        MaquinaId: document.getElementById("EditarMaquina").value || null,
+
+        FrenteOperacional: document.getElementById("EditarFrente").value
+
+    };
+
+    const respuesta = await fetch("/Operadores/Editar", {
+
+        method: "POST",
+
+        headers: {
+
+            "Content-Type": "application/json",
+            "X-Requested-With": "XMLHttpRequest"
+        },
+
+        body: JSON.stringify(operador)
+
+    });
+
+    if (respuesta.ok) {
+
+        modalEditarOperador.hide();
+
+        location.reload();
+
+    }
+    else {
+
+        alert("No fue posible actualizar el operador.");
+
+    }
+
+});
+
+        const modalNuevoOperador = new bootstrap.Modal(
+            document.getElementById("modalNuevoOperador")
+        );
+
+        document.getElementById("formNuevoOperador")
+        .addEventListener("submit", async function (e) {
+
+            e.preventDefault();
+
+            const operador = {
+
+                Nombre: document.getElementById("NuevoNombre").value,
+
+                MaquinaId: document.getElementById("NuevaMaquina").value || null,
+
+                FrenteOperacional: document.getElementById("NuevoFrente").value
+
+            };
+
+            const respuesta = await fetch("/Operadores/CrearModal", {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify(operador)
+
+            });
+
+            if (respuesta.ok) {
+
+                modalNuevoOperador.hide();
+
+                location.reload();
+
+            }
+            else {
+
+                alert("No fue posible guardar el operador.");
+
+            }
+
+        });
+
+        // BOTÓN IMPRIMIR
+        document.getElementById("btnImprimir")
+        .addEventListener("click", function () {
+
+            window.print();
+
+        });
+    </script>
+
+}
+            
+
+            

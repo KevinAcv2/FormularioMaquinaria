@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Maquinarias.Models;
+using FormularioMaquinaria.Models;
 
 namespace Maquinarias.Controllers
 {
@@ -17,6 +17,9 @@ namespace Maquinarias.Controllers
                model.Password == "IngDaniel")
             {
                 HttpContext.Session.SetString("Admin", "SI");
+
+                // Guardar el nombre del usuario
+                HttpContext.Session.SetString("NombreUsuario", model.Usuario);
 
                 return RedirectToAction(
                     "Index",

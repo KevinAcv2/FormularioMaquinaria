@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Maquinarias.Models
+namespace FormularioMaquinaria.Models
 {
     public class LoginViewModel
     {

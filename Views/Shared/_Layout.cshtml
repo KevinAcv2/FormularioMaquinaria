@@ -3,24 +3,231 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>@ViewData["Title"] - FormularioMaquinaria</title>
+
     <script type="importmap"></script>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/FormularioMaquinaria.styles.css" asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+
+    <link rel="stylesheet"
+          href="~/css/site.css"
+          asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/FormularioMaquinaria.styles.css"
+          asp-append-version="true" />
 </head>
 <body>
-    
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+        <div class="d-flex">    
 
-    
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+            <!-- SIDEBAR -->
+        <aside class="bg-dark text-white p-3 no-print"
+               style="width:210px; min-height:100vh;">
+            <div class="text-center py-4">
+
+                <div class="mb-3">
+
+                    <i class="fa-solid fa-truck-monster"
+                       style="font-size:48px;color:#f0ad00;"></i>
+
+                </div>
+
+                <h4 class="fw-bold mb-1">
+
+                    MAQUINARIAS
+
+                </h4>
+
+                <small class="text-light" style="font-size:13px;">
+
+                    Sistema de Gestión
+
+                </small>
+
+            </div>
+
+                <hr class="text-secondary" />
+
+                <ul class="nav flex-column">
+
+                    <li class="nav-item mb-2">
+
+                        <a asp-controller="Admin"
+                           asp-action="Index"
+                           class="nav-link text-white">
+
+                            <i class="fa-solid fa-house me-2"></i>
+
+                            Dashboard
+
+                        </a>
+
+                    </li>
+
+                    <li class="nav-item mb-2">
+
+                        <a asp-controller="Operadores"
+                           asp-action="Index"
+                           class="nav-link text-white">
+
+                            <i class="fa-solid fa-user-gear me-2"></i>
+
+                            Operadores
+
+                        </a>
+
+                    </li>
+
+                    <li class="nav-item mb-2">
+
+                        <a asp-controller="Maquinas"
+                           asp-action="Index"
+                           class="nav-link text-white">
+
+                            <i class="fa-solid fa-truck-monster me-2"></i>
+
+                            Maquinaria
+
+                        </a>
+
+                    </li>
+
+                <li class="nav-item mb-2">
+
+                    <a asp-controller="Reporte"
+                       asp-action="Crear"
+                       class="nav-link text-white">
+
+                        <i class="fa-solid fa-square-plus me-2"></i>
+
+                        Nuevo Reporte
+
+                    </a>
+
+                </li>
+
+                <li class="nav-item mb-2">
+
+                    <a asp-controller="Reporte"
+                       asp-action="Historial"
+                       class="nav-link text-white">
+
+                        <i class="fa-solid fa-folder-open me-2"></i>
+
+                        Historial
+
+                    </a>
+
+                </li>
+
+                <li class="nav-item mb-2">
+
+                    <a asp-controller="Estadisticas"
+                       asp-action="Index"
+                       class="nav-link text-white">
+
+                        <i class="fa-solid fa-chart-column me-2"></i>
+
+                        Estadísticas
+
+                    </a>
+
+                </li>
+
+                <li class="nav-item mt-5">
+                    <a asp-controller="Login"
+                       asp-action="Index"
+                       class="nav-link text-danger">
+
+                        <i class="fa-solid fa-right-from-bracket me-2"></i>
+                        Cerrar sesión
+                    </a>
+                </li>
+
+                </ul>
+
+            </aside>
+
+            <!-- CONTENIDO -->
+            <div class="flex-grow-1">
+
+                <!-- NAVBAR -->
+            <nav class="navbar navbar-expand-lg bg-white shadow-sm px-3 py-2 no-print">
+
+                <div class="input-group" style="max-width:280px;">
+
+                </div>
+
+                <div class="ms-auto d-flex align-items-center">
+
+                    <button class="btn btn-light position-relative me-2">
+
+                        <i class="fa-solid fa-bell"></i>
+
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+
+                            @ViewBag.TotalAlertas
+
+                        </span>
+
+                    </button>
+
+                    <button class="btn btn-light me-3">
+
+                        <i class="fa-solid fa-gear"></i>
+
+                    </button>
+
+                    <img src="https://ui-avatars.com/api/?name=Administrador&background=0f2f44&color=fff"
+                         class="rounded-circle shadow"
+                         width="38">
+
+                    <div class="ms-2">
+
+                        <strong>
+
+                            Administrador
+
+                        </strong>
+
+                        <br>
+
+                        <small class="text-muted">
+
+                            En línea
+
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </nav>
+
+            <main id="contenidoPrincipal"
+                  class="p-4"
+                  style="background:#f4f7fb; min-height:100vh;">
+
+                    @RenderBody()
+
+                </main>
+
+            </div>
+
+        </div>
+
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+        <script src="~/js/site.js" asp-append-version="true"></script>
+
+        @await RenderSectionAsync("Scripts", required: false)
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 </html>

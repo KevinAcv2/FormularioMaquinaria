@@ -1,508 +1,799 @@
-﻿@*
+﻿@using Microsoft.AspNetCore.Http
+@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
-@{
-}
 
-@model IEnumerable<Maquinarias.Models.ReporteMaquinaria>
+@model IEnumerable<FormularioMaquinaria.Models.ReporteMaquinaria>
 
 @{
     ViewData["Title"] = "Panel Administrativo";
 }
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="~/css/dashboard.css" asp-append-version="true" />
 
-<style>
+ <!-- HEADER DASHBOARD -->
 
-    body {
-        background: #eef2f6;
-    }
+<div class="row gx-4 gy-1 mb-1">
 
-    .header-admin {
-        background: linear-gradient(135deg,#0f2f44,#174d6d);
-        border-radius: 25px;
-        padding: 35px;
-        color: white;
-        margin-bottom: 30px;
-        box-shadow: 0px 10px 25px rgba(0,0,0,.15);
-    }
+    <!-- REPORTES -->
 
-    .logo-admin {
-        width: 90px;
-        height: 90px;
-        border-radius: 50%;
-        border: 4px solid #f0ad00;
-        object-fit: cover;
-        background: white;
-    }
+    <div class="col-xl-3 col-md-6">
 
-    .titulo-admin {
-        font-size: 34px;
-        font-weight: 800;
-    }
+        <div class="card kpi-card border-0 shadow-sm">
 
-    .subtitulo {
-        color: #d8d8d8;
-    }
+            <div class="card-body d-flex justify-content-between align-items-center">
 
-    .card-filtro {
-        border: none;
-        border-radius: 20px;
-        padding: 25px;
-        box-shadow: 0px 5px 15px rgba(0,0,0,.08);
-        margin-bottom: 25px;
-        background: white;
-    }
+                <div>
 
-    .form-control,
-    .form-select {
-        border-radius: 12px;
-        padding: 12px;
-    }
+                    <span class="text-muted fw-semibold">
+                        REPORTES
+                    </span>
 
-    .btn-filtrar {
-        background: #f0ad00;
-        border: none;
-        font-weight: 800;
-        border-radius: 12px;
-        color: black;
-    }
+                    <h2 class="fw-bold mt-2 mb-1">
+                        @ViewBag.TotalReportes
+                    </h2>
 
-        .btn-filtrar:hover {
-            background: #d89b00;
-        }
+                    <small class="text-success">
+                        <i class="fa-solid fa-arrow-trend-up"></i>
+                        Sistema activo
+                    </small>
 
-    .table-card {
-        border: none;
-        border-radius: 20px;
-        overflow: hidden;
-        box-shadow: 0px 5px 15px rgba(0,0,0,.08);
-    }
-
-    .table thead {
-        background: #0f2f44;
-        color: white;
-    }
-
-    .table tbody tr:hover {
-        background: #f5f7fa;
-    }
-
-    .badge-industrial {
-        background: #0f2f44;
-        color: white;
-        padding: 8px 14px;
-        border-radius: 12px;
-        font-size: 13px;
-    }
-
-    .horometro {
-        font-weight: 700;
-        color: #174d6d;
-    }
-
-</style>
-
-<div class="container-fluid mt-4">
-
-    <!-- HEADER -->
-
-    <div class="header-admin d-flex justify-content-between align-items-center">
-
-        <div>
-
-            <h1 class="titulo-admin">
-                PANEL ADMINISTRATIVO
-            </h1>
-
-            <p class="subtitulo">
-                Control y seguimiento de maquinaria pesada
-            </p>
-
-        </div>
-
-        <img src="~/img/Logo.png"
-             class="logo-admin" />
-
-    </div>
-
-    <div class="row mb-4">
-
-        <div class="col-md-3">
-            <div class="card shadow border-0 text-center">
-                <div class="card-body">
-                    <h5>📄 Reportes</h5>
-                    <h2>@ViewBag.TotalReportes</h2>
                 </div>
-            </div>
-        </div>
 
-        <div class="col-md-3">
-            <div class="card shadow border-0 text-center">
-                <div class="card-body">
-                    <h5>👷 Operadores</h5>
-                    <h2>@ViewBag.TotalOperadores</h2>
-                </div>
-            </div>
-        </div>
+                <div class="icon-box bg-primary">
 
-        <div class="col-md-3">
-            <div class="card shadow border-0 text-center">
-                <div class="card-body">
-                    <h5>🚜 Máquinas</h5>
-                    <h2>@ViewBag.TotalMaquinas</h2>
-                </div>
-            </div>
-        </div>
+                    <i class="fa-solid fa-file-lines"></i>
 
-        <div class="col-md-3">
-            <div class="card shadow border-0 text-center">
-                <div class="card-body">
-                    <h5>⏱ Horas Totales</h5>
-                    <h2>@ViewBag.HorasTotales</h2>
                 </div>
+
             </div>
+
         </div>
 
     </div>
 
-    <div class="card card-filtro mb-4">
-        <div class="card card-filtro mb-4">
+    <!-- Operadores -->
 
-            <h3 class="mb-4">
-                🏆 Evaluación de Operadores
-            </h3>
+    <div class="col-xl-3 col-md-6">
 
-            <div class="row">
+        <div class="card kpi-card border-0 shadow-sm">
 
-                @foreach (var op in ViewBag.RankingOperadores)
-                {
-                    var puntuacion =
-                    (op.TotalReportes * 5) +
-                    (int)op.HorasTrabajadas +
-                    (op.Observaciones * 2);
+            <div class="card-body d-flex justify-content-between align-items-center">
 
-                    if (puntuacion > 100)
+                <div>
+
+                    <span class="text-muted fw-semibold">
+                        OPERADORES
+                    </span>
+
+                    <h2 class="fw-bold mt-2 mb-1">
+                        @ViewBag.TotalOperadores
+                    </h2>
+
+                    <small class="text-primary">
+
+                        Personal registrado 
+
+                    </small>
+
+                </div>
+
+                <div class="icon-box bg-success">
+
+                    <i class="fa-solid fa-users"></i>
+
+                </div>
+
+            </div>
+
+        </div>  
+
+    </div>
+
+    <!-- Máquinas -->
+
+    <div class="col-xl-3 col-md-6">
+
+        <div class="card kpi-card border-0 shadow-sm">
+
+            <div class="card-body d-flex justify-content-between align-items-center">
+
+                <div>
+
+                    <span class="text-muted fw-semibold">
+                        MÁQUNAS
+                    </span>
+
+                    <h2 class="fw-bold mt-2 mb-1">
+                        @ViewBag.TotalMaquinas
+                    </h2>
+
+                    <small class="text-warning">
+
+                        Inventario
+
+                    </small>
+
+                </div>
+
+                <div class="icon-box bg-warning">
+
+                    <i class="fa-solid fa-truck-monster"></i>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Horas -->
+
+    <div class="col-xl-3 col-md-6">
+
+        <div class="card kpi-card border-0 shadow-sm">
+
+            <div class="card-body d-flex justify-content-between align-items-center">
+
+                <div>
+
+                    <span class="text-muted fw-semibold">
+                        HORAS TOTALES
+                    </span>
+
+                    <h2 class="fw-bold mt-2 mb-1">
+                        @ViewBag.HorasTotales
+                    </h2>
+
+                    <small class="text-danger">
+
+                        Horómetro acumulado
+
+                    </small>
+
+                </div>
+
+                <div class="icon-box bg-danger">
+
+                    <i class="fa-solid fa-clock"></i>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div> 
+
+<div class="row gx-4 gy-1 mb-1">
+
+    <!-- Máquinas fuera de servicio -->
+
+    <div class="col-xl-3 col-md-6">
+
+        <div class="card kpi-card border-0 shadow-sm">
+
+            <div class="card-body d-flex justify-content-between align-items-center">
+
+                <div>
+
+                    <span class="text-muted fw-semibold">
+                        MÁQUINAS FUERA
+                    </span>
+
+                    <h2 class="fw-bold mt-2 mb-1">
+                        @ViewBag.MaquinasFueraServicio.Count
+                    </h2>
+
+                    <small class="text-danger">
+                        Fuera de servicio
+                    </small>
+
+                </div>
+
+                <div class="icon-box bg-danger">
+
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Maquinas operativas -->
+
+    <div class="col-xl-3 col-md-6">
+
+        <div class="card kpi-card border-0 shadow-sm">
+
+            <div class="card-body d-flex justify-content-between align-items-center">
+
+                <div>
+
+                    <span class="text-muted fw-semibold">
+                        MÁQUINAS OPERATIVAS
+                    </span>
+
+                    <h2 class="fw-bold mt-2 mb-1">
+                        @ViewBag.MaquinasOperativas
+                    </h2>
+
+                    <small class="text-warning">
+                        En funcinamineto
+                    </small>
+
+                </div>
+
+                <div class="icon-box bg-warning">
+
+                    <i class="fa-solid fa-user-clock"></i>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Horas acumuladas -->
+
+    <div class="col-xl-3 col-md-6">
+
+        <div class="card kpi-card border-0 shadow-sm">
+
+            <div class="card-body d-flex justify-content-between align-items-center">
+
+                <div>
+
+                    <span class="text-muted fa-clipboard-list">
+                        POR EVALUAR
+                    </span>
+
+                    <h2 class="fw-bold mt-2 mb-1">
+                        @ViewBag.PendientesEvaluacion
+                    </h2>
+
+                    <small class="text-primary">
+                        Reporte sin evaluar
+                    </small>
+
+                </div>
+
+                <div class="icon-box bg-primary">
+
+                    <i class="fa-solid fa-clock"></i>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Día operativo -->
+
+    <div class="col-xl-3 col-md-6">
+
+        <div class="card kpi-card border-0 shadow-sm">
+
+            <div class="card-body d-flex justify-content-between align-items-center">
+
+                <div>
+
+                    <span class="text-muted fw-semibold">
+                        DÍA OPERATIVO
+                    </span>
+
+                    <h2 class="fw-bold mt-2 mb-1">
+                        @DateTime.Now.ToString("dd")
+                    </h2>
+
+                    <small class="text-success">
+                        @DateTime.Now.ToString("MMMM yyyy")
+                    </small>
+
+                </div>
+
+                <div class="icon-box bg-success">
+
+                    <i class="fa-solid fa-calendar-check"></i>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- CENTRO OPERACIONAL -->
+
+<div class="row g-4 mb-1 fade-up">
+
+    <div class="col-lg-6">
+
+        <div class="chart-card">
+
+            <h5 class="fw-bold mb-4">
+
+                ⏱ HORAS TRABAJADAS POR MÁQUINA
+
+            </h5>
+
+            <canvas id="horasChart" height="120"></canvas>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-6">
+
+        <div class="chart-card">
+
+            <h5 class="fw-bold mb-4">
+
+                📄 REPORTE OPERADORES
+
+            </h5>
+
+            <canvas id="operadoresChart" height="120"></canvas>
+
+        </div>
+
+    </div>
+
+</div> 
+
+<!-- Últimos reportes -->
+<div class="row gx-4 gy-1 mb-1">
+
+    <div class="col-12">
+
+        <div class="card border-0 shadow-sm">
+
+            <div class="card-header bg-white border-0">
+
+                <h4 class="fw-bold mb-0">
+                    📄 ÚLTIMOS OPERADORES
+                </h4>
+
+            </div>
+
+            <div class="card-body p-0">
+
+                <table class="table table-hover align-middle mb-0">
+
+                    <thead class="table-light">
+
+                        <tr>
+
+                            <th>Fecha</th>
+                            <th>Operador</th>
+                            <th>Máquina</th>
+                            <th>Horas</th>
+                            <th>Estado</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var item in ViewBag.UltimosReportes)
+                        {
+
+                            <tr>
+
+                                <td>@item.Fecha.ToString("dd/MM/yyyy")</td>
+
+                                <td>@item.NombreOperador</td>
+
+                                <td>@item.NombreMaquina</td>
+
+                                <td>@item.HorasTrabajadas</td>
+
+                                <td>
+
+                                    @if (item.EstadoMaquina == 1)
+                                    {
+                                        <span class="badge bg-success">
+                                            Operativa
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger">
+                                            No Operativa
+                                        </span>
+                                    }
+
+                                </td>
+
+                            </tr>
+
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<div class="row gx-4 gy-1 mb-1">
+
+    <!-- ACTIVIDAD RECIENTE -->
+    <div class="col-xl-4">
+
+        <div class="card dashboard-card shadow-sm border-0 h-100">
+
+            <div class="card-header bg-white border-0">
+
+                <h6 class="fw-bold text-uppercase mb-0">
+                    ACTIVIDADES RECIENTES
+                </h6>
+
+            </div>
+
+            <div class="card-body">
+
+                <div class="actividad-scroll">
+
+                    @if (ViewBag.ActividadReciente != null)
                     {
-                        puntuacion = 100;
-                    }
+                        foreach (var item in ViewBag.ActividadReciente)
+                        {
+                            <div class="d-flex align-items-start mb-3 pb-3 border-bottom">
 
-                    <div class="col-md-4 mb-4">
+                                <div class="me-3">
 
-                        <div class="card border-0 shadow-sm">
+                                    <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center"
+                                         style="width:40px;height:40px;">
 
-                            <div class="card-body">
-
-                                <h5 class="fw-bold">
-                                    👷 @op.Operador
-                                </h5>
-
-                                <hr />
-
-                                <p>
-                                    📄 Reportes:
-                                    <strong>@op.TotalReportes</strong>
-                                </p>
-
-                                <p>
-                                    ⏱ Horas:
-                                    <strong>@op.HorasTrabajadas</strong>
-                                </p>
-
-                                <p>
-                                    📝 Observaciones:
-                                    <strong>@op.Observaciones</strong>
-                                </p>
-
-                                <div class="progress mb-2"
-                                     style="height:25px;">
-
-                                    <div class="progress-bar
-                        @(puntuacion >= 90 ? "bg-success"
-                                                             : puntuacion >= 70 ? "bg-warning"
-                                                             : "bg-danger")"
-                                         role="progressbar"
-                                         style="width:@puntuacion%">
-
-                                        @puntuacion%
+                                        <i class="fa-solid fa-file-lines"></i>
 
                                     </div>
 
                                 </div>
 
-                                @if (puntuacion >= 90)
-                                {
-                                    <span class="badge bg-success">
-                                        Excelente
-                                    </span>
-                                }
-                                else if (puntuacion >= 70)
-                                {
-                                    <span class="badge bg-warning text-dark">
-                                        Bueno
-                                    </span>
-                                }
-                                else
-                                {
-                                    <span class="badge bg-danger">
-                                        Requiere Mejora
-                                    </span>
-                                }
+                                <div>
+
+                                    <strong>@item.NombreOperador</strong><br />
+
+                                    <small class="text-muted">
+                                        Registró un reporte para
+                                        <strong>@item.NombreMaquina</strong>
+                                    </small>
+
+                                    <br />
+
+                                    <small class="text-secondary">
+                                        @item.Fecha.ToString("dd/MM/yyyy HH:mm")
+                                    </small>
+
+                                </div>
 
                             </div>
-
-                        </div>
-
-                    </div>
-                }
-
-            </div>
-
-        </div>
-
-        <div class="row">
-
-            <div class="col-md-6">
-
-                <h4>👷 Operadores</h4>
-
-                <a href="/Operadores/Index"
-                   class="btn btn-primary">
-
-                    Administrar Operadores
-
-                </a>
-
-            </div>
-
-            <div class="col-md-6">
-
-                <h4>🚜 Máquinas</h4>
-
-                <a href="/Maquinas/Index"
-                   class="btn btn-success">
-
-                    Administrar Máquinas
-
-                </a>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <!-- FILTROS -->
-
-    <div class="card card-filtro">
-
-        <form method="get">
-
-            <div class="row g-3">
-
-                <div class="col-md-4">
-
-                    <input type="text"
-                           name="buscar"
-                           class="form-control"
-                           placeholder="Buscar operador o máquina..." />
-
-                </div>
-
-                <div class="col-md-3">
-
-                    <select name="tipoMaquina"
-                            class="form-select">
-
-                        <option value="">
-                            Todas las máquinas
-                        </option>
-
-                        <option>Motoniveladora</option>
-                        <option>Bulldozer</option>
-                        <option>Retroexcavadora</option>
-                        <option>Excavadora</option>
-                        <option>Vibrocompactador</option>
-
-                    </select>
-
-                </div>
-
-                <div class="col-md-2">
-
-                    <button type="submit"
-                            class="btn btn-filtrar w-100">
-
-                        FILTRAR
-
-                    </button>
-
-                </div>
-
-            </div>
-
-        </form>
-
-    </div>
-
-    <div class="mb-3">
-
-    <a asp-action="ExportarExcel"
-       class="btn btn-success">
-
-        DESCARGAR EXCEL
-
-    </a>
-
-        <a asp-action="ExportarPdf"
-           class="btn btn-danger">
-
-            DESCARGAR PDF
-
-        </a>
-
-</div>
-
-    
-
-    <!-- TABLA -->
-
-    <div class="card table-card">
-
-        <div class="table-responsive">
-
-            <table class="table table-hover align-middle mb-0">
-
-                <thead>
-
-                    <tr>
-
-                        <th>Operador</th>
-                        <th>Máquina</th>
-
-                        <th>Horómetro Inicial</th>
-                        <th>Horómetro Final</th>
-
-                        <th>Horas Trabajadas</th>
-
-                        <th>Foto Inicial</th>
-                        <th>Foto Final</th>
-
-                        <th>Fecha</th>
-
-                        <th>Observaciones</th>
-
-                        <th>Acciones</th>
-
-                    </tr>
-
-                </thead>
-
-                <tbody>
-
-                    @foreach (var item in Model)
-                    {
-                        <tr>
-
-                            <td>
-                                <strong>@item.NombreOperador</strong>
-                            </td>
-
-                            <td>
-                                @item.NombreMaquina
-                            </td>
-
-                            
-
-                            <td class="horometro">
-                                @item.HorometroInicial
-                            </td>
-
-                            <td class="horometro">
-                                @item.HorometroFinal
-                            </td>
-
-                            <td>
-
-                                @{
-                                    var horas =
-                                    item.HorometroFinal -
-                                    item.HorometroInicial;
-                                }
-
-                                <span class="badge bg-success">
-                                    @horas hrs
-                                </span>
-
-                            </td>
-
-                            <td>
-
-                                @if (!string.IsNullOrEmpty(item.FotoHorometroInicial))
-                                {
-                                    <a href="@item.FotoHorometroInicial"
-                                       target="_blank"
-                                       class="btn btn-primary btn-sm">
-
-                                        Ver Foto
-
-                                    </a>
-                                }
-
-                            </td>
-
-                            <td>
-
-                                @if (!string.IsNullOrEmpty(item.FotoHorometroFinal))
-                                {
-                                    <a href="@item.FotoHorometroFinal"
-                                       target="_blank"
-                                       class="btn btn-primary btn-sm">
-
-                                        Ver Foto
-
-                                    </a>
-                                }
-
-                            </td>
-
-                            <td>
-                                @item.Fecha.ToString("dd/MM/yyyy HH:mm")
-                            </td>
-
-                            <td>
-                                @item.Observaciones
-                            </td>
-
-                            <td>
-
-                                <a asp-action="Editar"
-                                   asp-route-id="@item.Id"
-                                   class="btn btn-warning btn-sm">
-
-                                    Editar
-
-                                </a>
-
-                                <a asp-action="Eliminar"
-                                   asp-route-id="@item.Id"
-                                   class="btn btn-danger btn-sm">
-
-                                    Eliminar
-
-                                </a>
-
-                            </td>
-
-                        </tr>
+                        }
                     }
 
-                </tbody>
+                </div>
 
-            </table>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ALERTAS -->
+    <div class="col-xl-4">
+
+        <div class="card dashboard-card shadow-sm border-0 h-100">
+
+            <div class="card-header bg-white border-0">
+
+                <h6 class="fw-bold text-uppercase mb-0">
+                    Alertas
+                </h6>
+
+            </div>
+
+            <div class="card-body p-0">
+
+                <table class="table table-hover mb-0">
+
+                    <thead class="table-light">
+
+                        <tr>
+                            <th>Máquina</th>
+                            <th>Fecha</th>
+                            <th>Estado</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var item in ViewBag.MaquinasCriticas)
+                        {
+                            <tr>
+
+                                <td>@item.NombreMaquina</td>
+
+                                <td>@item.Fecha.ToString("dd/MM/yyyy")</td>
+
+                                <td>
+                                    <span class="badge bg-danger">
+                                        No Operativa
+                                    </span>
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- RESUMEN DEL PERÍODO -->
+    <div class="col-xl-4">
+
+        <div class="card dashboard-card shadow-sm border-0 h-100">
+
+            <div class="card-header bg-white border-0">
+
+                <h6 class="fw-bold mb-0">
+                    RESUMEN DEL PERÍODO
+                </h6>
+
+            </div>
+
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+
+                    <div>
+                        <i class="fa-regular fa-clock text-primary me-2"></i>
+                        Horas trabajadas totales
+                    </div>
+
+                    <strong>
+                        @ViewBag.TotalHoras h
+                    </strong>
+
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+
+                    <div>
+                        <i class="fa-regular fa-calendar text-primary me-2"></i>
+                        Promedio de horas por día
+                    </div>
+
+                    <strong>
+                        @ViewBag.PromedioHorasDia h
+                    </strong>
+
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+
+                    <div>
+                        <i class="fa-regular fa-file-lines text-primary me-2"></i>
+                        Reportes registrados
+                    </div>
+
+                    <strong>
+                        @ViewBag.TotalReportes
+                    </strong>
+
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+
+                    <div>
+                        <i class="fa-regular fa-star text-primary me-2"></i>
+                        Evaluaciones realizadas
+                    </div>
+
+                    <strong>
+                        @ViewBag.TotalEvaluaciones
+                    </strong>
+
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+
+                    <div>
+                        <i class="fa-solid fa-user-gear text-primary me-2"></i>
+                        Operadores activos
+                    </div>
+
+                    <strong>
+                        @ViewBag.TotalOperadores
+                    </strong>
+
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+
+                    <div>
+                        <i class="fa-solid fa-circle-check text-success me-2"></i>
+                        Máquinas operativas
+                    </div>
+
+                    <strong>
+                        @ViewBag.MaquinasOperativas
+                    </strong>
+
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center py-2">
+
+                    <div>
+                        <i class="fa-solid fa-triangle-exclamation text-danger me-2"></i>
+                        Máquinas no operativas
+                    </div>
+
+                    <strong>
+                        @ViewBag.MaquinasNoOperativas
+                    </strong>
+
+                </div>
+
+            </div>
 
         </div>
 
     </div>
 
 </div>
+
+@section Scripts {
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+
+        const maquinas=@Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.MaquinasChart));
+
+        const horas=@Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.HorasChart));
+
+        const operadores=@Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.OperadoresChart));
+
+        const reportes=@Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.ReportesChart));
+
+                new Chart(document.getElementById('horasChart'), {
+
+            type: 'bar',
+
+            data: {
+
+                labels: maquinas,
+
+                datasets: [{
+
+                    label: 'Horas Trabajadas',
+
+                    data: horas,
+
+                    backgroundColor: '#0f2f44',
+
+                    borderRadius: 8
+
+                }]
+
+            },
+
+            options: {
+
+                responsive: true,
+
+                maintainAspectRatio: true,
+
+                plugins: {
+
+                    legend: {
+
+                        display: false
+
+                    }
+
+                },
+
+                scales: {
+
+                    y: {
+
+                        beginAtZero: true
+
+                    }
+
+                }
+
+            }
+
+        });
+
+            new Chart(document.getElementById('operadoresChart'), {
+
+            type: 'bar',
+
+            data: {
+
+                labels: operadores,
+
+                datasets: [{
+
+                    label: 'Reportes',
+
+                    data: reportes,
+
+                    backgroundColor: '#f0ad00',
+
+                    borderRadius: 8
+
+                }]
+
+            },
+
+            options: {
+
+                responsive: true,
+
+                maintainAspectRatio: true,
+
+                plugins: {
+
+                    legend: {
+
+                        display: false
+
+                    }
+
+                },
+
+                scales: {
+
+                    y: {
+
+                        beginAtZero: true,
+
+                        ticks: {
+
+                            precision: 0
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        });
+
+    </script>
+
+}

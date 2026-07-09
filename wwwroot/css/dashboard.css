@@ -1,0 +1,214 @@
+﻿body {
+    background: #f4f7fb;
+    font-family: "Segoe UI", sans-serif;
+}
+
+/* CONTENEDOR */
+
+.container-fluid {
+    padding: 18px 22px;
+}
+
+/* Espaciado entre columnas y filas */
+
+.row {
+    --bs-gutter-x: 1rem;
+    --bs-gutter-y: 1rem;
+}
+
+/* TARJETAS KPI */
+
+.kpi-card {
+    border: none;
+    border-radius: 16px;
+    min-height: 105px;
+    transition: .25s;
+    box-shadow: 0 4px 14px rgba(0,0,0,.06);
+}
+
+    .kpi-card:hover {
+        transform: translateY(-3px);
+    }
+
+    .kpi-card .card-body {
+        padding: 18px;
+    }
+
+    .kpi-card span {
+        font-size: .82rem;
+        font-weight: 600;
+        letter-spacing: .3px;
+    }
+
+    .kpi-card h2 {
+        font-size: 2rem;
+        margin: 8px 0 4px;
+        font-weight: 700;
+    }
+
+    .kpi-card small {
+        font-size: .78rem;
+    }
+
+/* ICONOS KPI */
+
+.icon-box {
+    width: 64px;
+    height: 64px;
+    border-radius: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 26px;
+}
+
+/* TARJETAS GENERALES */
+
+.card {
+    border: none;
+    border-radius: 16px;
+}
+
+.dashboard-card {
+    border-radius: 16px;
+    box-shadow: 0 4px 14px rgba(0,0,0,.06);
+}
+
+    .dashboard-card .card-header {
+        padding: 16px 18px;
+        border-bottom: 1px solid #edf2f7;
+    }
+
+    .dashboard-card .card-body {
+        padding: 16px 18px;
+    }
+
+    .dashboard-card h5,
+    .dashboard-card h6 {
+        font-size: .95rem;
+        margin: 0;
+        font-weight: 700;
+    }
+
+/* GRÁFICAS */
+
+.chart-card {
+    background: white;
+    border-radius: 16px;
+    padding: 18px;
+    box-shadow: 0 4px 14px rgba(0,0,0,.06);
+}
+
+    .chart-card h5 {
+        font-size: 1rem;
+        margin-bottom: 15px;
+        font-weight: 700;
+    }
+
+    .chart-card canvas {
+        max-height: 260px;
+    }
+
+/* TABLAS */
+
+.table {
+    margin-bottom: 0;
+    font-size: .88rem;
+}
+
+    .table thead th {
+        font-size: .82rem;
+        text-transform: uppercase;
+        color: #6c757d;
+        font-weight: 700;
+    }
+
+    .table td {
+        vertical-align: middle;
+    }
+
+/* ACTIVIDAD */
+
+.activity-item {
+    display: flex;
+    gap: 14px;
+    padding: 12px 0;
+    border-bottom: 1px solid #edf2f7;
+}
+
+    .activity-item:last-child {
+        border-bottom: none;
+    }
+
+.activity-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: #e8f5e9;
+    color: #28a745;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+}
+
+.activity-info {
+    flex: 1;
+    font-size: .88rem;
+}
+
+    .activity-info small {
+        font-size: .75rem;
+        color: #888;
+    }
+
+/* ACTIVIDAD RECIENTE */
+
+.actividad-scroll {
+    max-height: 290px;
+    overflow-y: auto;
+    padding-right: 8px;
+}
+
+    /* Scroll moderno */
+
+    .actividad-scroll::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .actividad-scroll::-webkit-scrollbar-thumb {
+        background: #bfc7d1;
+        border-radius: 10px;
+    }
+
+        .actividad-scroll::-webkit-scrollbar-thumb:hover {
+            background: #8f98a3;
+        }
+
+/* BADGES */
+
+.badge {
+    font-size: .72rem;
+    padding: 6px 10px;
+    border-radius: 10px;
+}
+
+/* ANIMACIÓN */
+
+.fade-up {
+    animation: fadeUp .5s ease;
+}
+
+@keyframes fadeUp {
+
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

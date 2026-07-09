@@ -1,0 +1,139 @@
+﻿/* HISTORIAL REPORTES */
+
+.historial-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+    .historial-header h2 {
+        color: #0f2f44;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .historial-header p {
+        color: #6c757d;
+        margin-top: 6px;
+    }
+
+.titulo-reporte {
+    color: #0f2f44;
+    font-weight: 700;
+}
+
+/* TARJETA */
+
+.card {
+    border: none;
+    border-radius: 18px;
+    box-shadow: 0 10px 25px rgba(0,0,0,.08);
+}
+
+/* TABLA */
+
+.table {
+    margin: 0;
+}
+
+    .table thead {
+        background: #0f2f44;
+        color: white;
+    }
+
+        .table thead th {
+            font-size: 14px;
+            font-weight: 600;
+            padding: 16px;
+        }
+
+    .table tbody td {
+        padding: 16px;
+        vertical-align: middle;
+    }
+
+    .table tbody tr {
+        transition: .25s;
+    }
+
+        .table tbody tr:hover {
+            background: #f8fafc;
+        }
+
+/* BOTONES */
+
+.btn-sm {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+}
+
+    .btn-sm i {
+        font-size: 14px;
+    }
+
+
+/* FILTROS */
+
+.form-control,
+.form-select {
+    height: 48px;
+    border-radius: 12px;
+    border: 1px solid #d9e2ec;
+    box-shadow: none;
+}
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: #0f2f44;
+        box-shadow: 0 0 0 .15rem rgba(15,47,68,.15);
+    }
+
+.btn {
+    height: 48px;
+    border-radius: 12px;
+    font-weight: 600;
+}
+
+.btn-texto i {
+    margin-right: 6px;
+}
+
+.btn-primary {
+    background: #0f2f44;
+    border: none;
+}
+
+    .btn-primary:hover {
+        background: #174d6d;
+    }
+
+.btn-success {
+    background: #28a745;
+    border: none;
+}
+
+    .btn-success:hover {
+        background: #208638;
+    }
+
+.btn-secondary {
+    border: none;
+}
+
+.btn-toolbar-custom {
+    height: 42px;
+    min-width: 105px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+}

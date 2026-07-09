@@ -1,0 +1,117 @@
+﻿/* ENCABEZADO*/
+
+.historial-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+    .historial-header h2 {
+        color: #0f2f44;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .historial-header p {
+        color: #6c757d;
+        margin-top: 6px;
+    }
+
+.titulo-reporte {
+    color: #0f2f44;
+    font-weight: 700;
+}
+
+.subtitulo-reporte {
+    color: #6c757d;
+}
+
+.acciones-reporte {
+    display: flex;
+    gap: 12px;
+}
+
+/* GENERAL */
+
+body {
+    background: #eef2f6;
+}
+
+.card-custom {
+    background: white;
+    border: none;
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 5px 15px rgba(0,0,0,.08);
+    margin-bottom: 10px;
+}
+
+.btn-guardar {
+    background: #f0ad00;
+    border: none;
+    color: black;
+    font-weight: bold;
+}
+
+    .btn-guardar:hover {
+        background: #d89b00;
+    }
+
+.table thead {
+    background: #0f2f44;
+    color: white;
+}
+/* IMPRESIÓN */
+
+@media print {
+
+    /* Oculta todo lo marcado como no imprimir */
+    .no-print {
+        display: none !important;
+    }
+
+    /* Oculta sidebar y navbar */
+    aside,
+    nav {
+        display: none !important;
+    }
+
+    body {
+        background: white !important;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* El contenido ocupa toda la hoja */
+    #contenidoPrincipal {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+    }
+
+    /* El reporte ocupa toda la página */
+    #reporteOperadores {
+        width: 100% !important;
+        margin: 0 !important;
+    }
+
+    /* Sin sombras */
+    .card,
+    .card-custom {
+        box-shadow: none !important;
+        border: none !important;
+    }
+
+    /* Ocultar botones y filtros */
+    .btn,
+    .acciones-reporte {
+        display: none !important;
+    }
+
+    /* Ocultar columna Acciones */
+    th.no-print,
+    td.no-print {
+        display: none !important;
+    }
+}

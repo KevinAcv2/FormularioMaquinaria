@@ -1,5 +1,5 @@
 ﻿using Maquinarias.Data;
-using Maquinarias.Models;
+using FormularioMaquinaria.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ClosedXML.Excel;
@@ -49,11 +49,39 @@ namespace Maquinarias.Controllers
             ViewBag.TotalMaquinas =
                 await _context.Maquinas.CountAsync();
 
+            ViewBag.MaquinasOperativas =
+                await _context.Maquinas
+                .CountAsync(x => x.Estado == "1");
+
+            ViewBag.MaquinasNoOperativas =
+                await _context.Maquinas
+                .CountAsync(x => x.Estado == "0");
+
             ViewBag.HorasTotales =
                 await _context.ReportesMaquinaria
                 .SumAsync(x =>
                     x.HorometroFinal -
                     x.HorometroInicial);
+
+            // REPORTES DEL DÍA
+            var hoy = DateTime.UtcNow.Date;
+            var manana = hoy.AddDays(1);
+
+            ViewBag.ReportesHoy = await _context.ReportesMaquinaria
+                .CountAsync(x => x.Fecha >= hoy && x.Fecha < manana);
+
+            // TOTAL DE OBSERVACIONES
+
+            ViewBag.TotalObservaciones =
+                await _context.ReportesMaquinaria
+                .CountAsync(x =>
+                    !string.IsNullOrEmpty(x.Observaciones));
+
+            // ALERTAS (por ahora serán las máquinas fuera de servicio)
+
+            ViewBag.TotalAlertas =
+                await _context.Maquinas
+                .CountAsync(x => x.Estado == "0");
 
             // LISTADOS
 
@@ -91,6 +119,101 @@ namespace Maquinarias.Controllers
                 .OrderByDescending(x => x.HorasTrabajadas)
 
                 .ToListAsync();
+
+            // HORAS POR MÁQUINA
+            var horasMaquina = await _context.ReportesMaquinaria
+                .GroupBy(x => x.NombreMaquina)
+                .Select(x => new
+                {
+                    Maquina = x.Key,
+                    Horas = x.Sum(r => r.HorasTrabajadas)
+                })
+                .ToListAsync();
+
+            ViewBag.MaquinasChart =
+                horasMaquina.Select(x => x.Maquina).ToList();
+
+            ViewBag.HorasChart =
+                horasMaquina.Select(x => x.Horas).ToList();
+
+
+            // REPORTES POR OPERADOR
+            var reportesOperador = await _context.ReportesMaquinaria
+                .GroupBy(x => x.NombreOperador)
+                .Select(x => new
+                {
+                    Operador = x.Key,
+                    Total = x.Count()
+                })
+                .ToListAsync();
+
+            ViewBag.OperadoresChart =
+                reportesOperador.Select(x => x.Operador).ToList();
+
+            ViewBag.ReportesChart =
+                reportesOperador.Select(x => x.Total).ToList();
+
+            // ÚLTIMOS REPORTES
+            ViewBag.UltimosReportes = await _context.ReportesMaquinaria
+                .OrderByDescending(x => x.Fecha)
+                .Take(5)
+                .ToListAsync();
+
+            // MÁQUINAS CRÍTICAS
+            ViewBag.MaquinasCriticas = await _context.ReportesMaquinaria
+                .Where(x => x.EstadoMaquina == 0)
+                .OrderByDescending(x => x.Fecha)
+                .Take(5)
+                .ToListAsync();
+
+            // MÁQUINAS FUERA DE SERVICIO
+            ViewBag.MaquinasFueraServicio = await _context.Maquinas
+                .Where(x => x.Estado == "0")
+                .OrderBy(x => x.Nombre)
+                .ToListAsync();
+
+            // OPERADORES SIN REPORTE HOY
+            var operadoresConReporteHoy = await _context.ReportesMaquinaria
+                .Where(x => x.Fecha >= hoy && x.Fecha < manana)
+                .Select(x => x.NombreOperador)
+                .Distinct()
+                .ToListAsync();
+
+            ViewBag.OperadoresSinReporte =
+                await _context.Operadores.CountAsync(x =>
+                    !operadoresConReporteHoy.Contains(x.Nombre));
+
+            // ACTIVIDAD RECIENTE
+            ViewBag.ActividadReciente = await _context.ReportesMaquinaria
+                .OrderByDescending(x => x.Fecha)
+                .Take(8)
+                .ToListAsync();
+
+            // RESUMEN DEL PERÍODO
+
+            ViewBag.TotalEvaluaciones = await _context.EvaluacionesOperadores.CountAsync();
+
+            //reportes sin evaluacion 
+            ViewBag.PendientesEvaluacion =
+                await _context.ReportesMaquinaria
+                    .CountAsync(r =>
+                        !_context.EvaluacionesOperadores
+                            .Any(e => e.ReporteMaquinariaId == r.Id));
+
+            ViewBag.TotalHoras = await _context.ReportesMaquinaria
+                .SumAsync(r => (decimal?)r.HorasTrabajadas) ?? 0;
+
+
+            // Promedio de horas por día
+
+            var dias = await _context.ReportesMaquinaria
+                .Select(r => r.Fecha.Date)
+                .Distinct()
+                .CountAsync();
+
+            ViewBag.PromedioHorasDia = dias > 0
+                ? Math.Round((decimal)ViewBag.TotalHoras / dias, 1)
+                : 0;
 
             return View(await reportes
                 .OrderByDescending(x => x.Fecha)

@@ -1,0 +1,473 @@
+﻿@model Maquinarias.ViewModels.EstadisticasViewModel
+
+@{
+    ViewData["Title"] = "Estadísticas";
+}
+
+<link rel="stylesheet"
+      href="~/css/estadisticas.css"
+      asp-append-version="true" />
+
+<div class="container-fluid">
+
+    <div class="estadisticas-header">
+
+        <div>
+
+            <h2>
+                📊 Estadísticas
+            </h2>
+
+            <p>
+                Indicadores de operación y rendimiento.
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="row g-4 mb-4">
+
+        <!-- REPORTES -->
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card indicador-card border-0 shadow-sm">
+
+                <div class="card-body d-flex justify-content-between align-items-center">
+
+                    <div>
+
+                        <small class="text-muted">
+                            Total Reportes
+                        </small>
+
+                        <h2 class="fw-bold mt-2">
+                            @Model.TotalReportes
+                        </h2>
+
+                    </div>
+
+                    <div class="icono-card bg-primary">
+
+                        <i class="fa-solid fa-file-lines"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- HORAS -->
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card indicador-card border-0 shadow-sm">
+
+                <div class="card-body d-flex justify-content-between align-items-center">
+
+                    <div>
+
+                        <small class="text-muted">
+                            Horas Trabajadas
+                        </small>
+
+                        <h2 class="fw-bold mt-2">
+                            @Model.TotalHoras
+                        </h2>
+
+                    </div>
+
+                    <div class="icono-card bg-success">
+
+                        <i class="fa-solid fa-clock"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- OPERADORES -->
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card indicador-card border-0 shadow-sm">
+
+                <div class="card-body d-flex justify-content-between align-items-center">
+
+                    <div>
+
+                        <small class="text-muted">
+                            Operadores
+                        </small>
+
+                        <h2 class="fw-bold mt-2">
+                            @Model.TotalOperadores
+                        </h2>
+
+                    </div>
+
+                    <div class="icono-card bg-warning">
+
+                        <i class="fa-solid fa-user-gear"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- MAQUINAS -->
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card indicador-card border-0 shadow-sm">
+
+                <div class="card-body d-flex justify-content-between align-items-center">
+
+                    <div>
+
+                        <small class="text-muted">
+                            Máquinas
+                        </small>
+
+                        <h2 class="fw-bold mt-2">
+                            @Model.TotalMaquinas
+                        </h2>
+
+                    </div>
+
+                    <div class="icono-card bg-danger">
+
+                        <i class="fa-solid fa-truck-monster"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="row mt-4">
+
+        <!-- IZQUIERDA -->
+        <div class="col-lg-8">
+
+            <!-- BARRAS -->
+            <div class="card shadow-sm border-0 rounded-4 mb-4">
+
+                <div class="card-body">
+
+                    <h5 class="fw-bold mb-3">
+                        📊 Reportes por Máquina
+                    </h5>
+
+                    <canvas id="graficoMaquinas" height="120"></canvas>
+
+                </div>
+
+            </div>
+
+            <!-- LÍNEAS -->
+            <div class="card shadow-sm border-0 rounded-4">
+
+                <div class="card-body">
+
+                    <h5 class="fw-bold mb-3">
+                        📈 Tendencia Mensual
+                    </h5>
+
+                    <canvas id="graficoMeses" height="120"></canvas>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- DERECHA -->
+        <div class="col-lg-4">
+
+            <!-- DONA -->
+            <div class="card shadow-sm border-0 rounded-4 mb-4">
+
+                <div class="card-body">
+
+                    <h5 class="fw-bold mb-3">
+                       📝 Reportes por Frente
+                    </h5>
+
+                    <canvas id="graficoFrentes"></canvas>
+
+                </div>
+
+            </div>
+
+            <!-- TOP -->
+            <div class="card shadow-sm border-0 rounded-4">
+
+                <div class="card-body">
+
+                    <h5 class="fw-bold mb-3">
+                        🏆 Top Operadores
+                    </h5>
+
+                    <div class="top-operadores-scroll">
+
+                        @for (int i = 0; i < Model.TopOperadores.Count; i++)
+                        {
+                            <div class="operador-item">
+
+                                <div class="operador-info">
+
+                                    <div class="operador-avatar">
+
+                                        @if (i == 0)
+                                        {
+                                            <span>🥇</span>
+                                        }
+                                        else if (i == 1)
+                                        {
+                                            <span>🥈</span>
+                                        }
+                                        else if (i == 2)
+                                        {
+                                            <span>🥉</span>
+                                        }
+                                        else
+                                        {
+                                            @(i + 1)
+                                        }
+
+                                    </div>
+
+                                    <strong>
+
+                                        @Model.TopOperadores[i]
+
+                                    </strong>
+
+                                </div>
+
+                                <span class="badge bg-primary rounded-pill">
+
+                                    @Model.HorasOperadores[i] h
+
+                                </span>
+
+                            </div>
+                        }
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    
+</div>
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const ctx = document.getElementById('graficoMaquinas');
+
+        new Chart(ctx, {
+
+            type: 'bar',
+
+            data: {
+
+                labels: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Maquinas)),
+
+                datasets: [{
+
+                    label: 'Cantidad de Reportes',
+
+                    data: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.CantidadReportes)),
+
+                    borderWidth: 1,
+
+                    borderRadius: 10,
+
+                    backgroundColor: [
+
+                        '#0d6efd',
+
+                        '#198754',
+
+                        '#ffc107',
+
+                        '#dc3545',
+
+                        '#6f42c1',
+
+                        '#20c997'
+
+                    ]
+
+                }]
+
+            },
+
+            options: {
+
+                responsive: true,
+
+                plugins: {
+
+                    legend: {
+
+                        display: false
+
+                    }
+
+                },
+
+                scales: {
+
+                    y: {
+
+                        beginAtZero: true,
+
+                        ticks: {
+
+                            precision: 0
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        });
+
+        const ctxFrentes = document.getElementById('graficoFrentes');
+
+        new Chart(ctxFrentes, {
+
+            type: 'doughnut',
+
+            data: {
+
+                labels: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Frente)),
+
+                datasets: [{
+
+                    data: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.CantidadFrentes)),
+
+                    backgroundColor: [
+
+                        '#0d6efd',
+
+                        '#198754',
+
+                        '#ffc107',
+
+                        '#dc3545',
+
+                        '#6f42c1',
+
+                        '#20c997'
+
+                    ]
+
+                }]
+
+            },
+
+            options: {
+
+                responsive: true,
+
+                plugins: {
+
+                    legend: {
+
+                        position: 'bottom'
+
+                    }
+
+                }
+
+            }
+
+        });
+
+        const ctxMeses = document.getElementById("graficoMeses");
+
+        new Chart(ctxMeses, {
+
+            type: "line",
+
+            data: {
+
+                labels: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Meses)),
+
+                datasets: [{
+
+                    label: "Reportes",
+
+                    data: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.ReportePorMes)),
+
+                    borderColor: "#0d6efd",
+
+                    backgroundColor: "rgba(13,110,253,.15)",
+
+                    fill: true,
+
+                    tension: 0.4,
+
+                    pointRadius: 5,
+
+                    pointHoverRadius: 7
+
+                }]
+
+            },
+
+            options: {
+
+                responsive: true,
+
+                plugins: {
+
+                    legend: {
+
+                        display: false
+
+                    }
+
+                },
+
+                scales: {
+
+                    y: {
+
+                        beginAtZero: true,
+
+                        ticks: {
+
+                            precision: 0
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        });
+    </script>
+}
