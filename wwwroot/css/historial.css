@@ -99,6 +99,15 @@
     border-radius: 12px;
     font-weight: 600;
 }
+.btn-exportar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+}
+
+
 
 .btn-texto i {
     margin-right: 6px;

@@ -1,0 +1,160 @@
+@model FormularioMaquinaria.Models.EvaluacionOperador
+
+@{
+    ViewData["Title"] = "Evaluar Operador";
+}
+
+<link rel="stylesheet" href="~/css/evaluacion.css" asp-append-version="true" />
+
+<div class="container-fluid">
+
+    <!-- ENCABEZADO -->
+    <div class="evaluacion-header mb-4 d-flex justify-content-between align-items-start">
+        <div>
+            <h1 class="titulo-evaluacion">
+                <i class="fa-solid fa-star"></i>
+                Evaluación del Operador
+            </h1>
+            <p class="subtitulo-evaluacion">Complete la evaluación del desempeño del operador.</p>
+        </div>
+
+        <a asp-controller="Reporte" asp-action="Historial" class="btn btn-outline-secondary">
+            <i class="fa-solid fa-arrow-left"></i> Volver
+        </a>
+    </div>
+
+    <!-- INFORMACIÓN DEL REPORTE -->
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-header bg-white">
+            <h5 class="fw-bold mb-0">Información del Reporte</h5>
+        </div>
+
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <strong>Operador</strong>
+                    <p>@(ViewBag.Reporte?.NombreOperador ?? "—")</p>
+                </div>
+
+                <div class="col-md-4">
+                    <strong>Máquina</strong>
+                    <p>@(ViewBag.Reporte?.NombreMaquina ?? "—")</p>
+                </div>
+
+                <div class="col-md-4">
+                    <strong>Fecha</strong>
+                    <p>@(ViewBag.Reporte != null ? ((DateTime)ViewBag.Reporte.Fecha).ToString("dd/MM/yyyy") : "—")</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FORMULARIO -->
+    <form asp-action="Crear" method="post">
+        @Html.AntiForgeryToken()
+
+        <input asp-for="ReporteMaquinariaId" type="hidden" />
+
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-white">
+                <h5 class="fw-bold mb-0">Calificación del Operador</h5>
+            </div>
+
+            <div class="card-body">
+                <div class="row g-4">
+
+                    <div class="col-md-6">
+                        <label asp-for="Horario" class="form-label fw-semibold"></label>
+                        <select asp-for="Horario" class="form-select">
+                            <option value="">Seleccione...</option>
+                            <option value="1">1 - Muy Deficiente</option>
+                            <option value="2">2 - Deficiente</option>
+                            <option value="3">3 - Aceptable</option>
+                            <option value="4">4 - Bueno</option>
+                            <option value="5">5 - Excelente</option>
+                        </select>
+                        <span class="text-danger" asp-validation-for="Horario"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="ManejoMaquinaria" class="form-label fw-semibold"></label>
+                        <select asp-for="ManejoMaquinaria" class="form-select">
+                            <option value="">Seleccione...</option>
+                            <option value="1">1 - Muy Deficiente</option>
+                            <option value="2">2 - Deficiente</option>
+                            <option value="3">3 - Aceptable</option>
+                            <option value="4">4 - Bueno</option>
+                            <option value="5">5 - Excelente</option>
+                        </select>
+                        <span class="text-danger" asp-validation-for="ManejoMaquinaria"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="CuidadoEquipo" class="form-label fw-semibold"></label>
+                        <select asp-for="CuidadoEquipo" class="form-select">
+                            <option value="">Seleccione...</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                        <span class="text-danger" asp-validation-for="CuidadoEquipo"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="SeguridadIndustrial" class="form-label fw-semibold"></label>
+                        <select asp-for="SeguridadIndustrial" class="form-select">
+                            <option value="">Seleccione...</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                        <span class="text-danger" asp-validation-for="SeguridadIndustrial"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="Productividad" class="form-label fw-semibold"></label>
+                        <select asp-for="Productividad" class="form-select">
+                            <option value="">Seleccione...</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                        <span class="text-danger" asp-validation-for="Productividad"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="ReporteNovedades" class="form-label fw-semibold"></label>
+                        <select asp-for="ReporteNovedades" class="form-select">
+                            <option value="">Seleccione...</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                        <span class="text-danger" asp-validation-for="ReporteNovedades"></span>
+                    </div>
+
+                    <div class="col-12">
+                        <label asp-for="ObservacionSupervisor" class="form-label fw-semibold">Observaciones del Supervisor</label>
+                        <textarea asp-for="ObservacionSupervisor" class="form-control" rows="5"></textarea>
+                        <span class="text-danger" asp-validation-for="ObservacionSupervisor"></span>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="card-footer bg-white text-end">
+                <button type="submit" class="btn btn-success">
+                    <i class="fa-solid fa-floppy-disk me-2"></i> Guardar Evaluación
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

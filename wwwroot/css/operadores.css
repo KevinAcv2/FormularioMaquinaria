@@ -44,7 +44,7 @@ body {
     border-radius: 20px;
     padding: 25px;
     box-shadow: 0 5px 15px rgba(0,0,0,.08);
-    margin-bottom: 10px;
+    margin-bottom: 1px;
 }
 
 .btn-guardar {
@@ -52,6 +52,16 @@ body {
     border: none;
     color: black;
     font-weight: bold;
+}
+
+.btn-exp {
+    height: 48px;
+    border-radius: 12px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
 }
 
     .btn-guardar:hover {

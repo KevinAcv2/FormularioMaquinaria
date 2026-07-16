@@ -1,13 +1,14 @@
-﻿using FormularioMaquinaria.Models;
+﻿using ClosedXML.Excel;
+using FormularioMaquinaria.Models;
+using FormularioMaquinaria.Pdf;
 using Maquinarias.Data;
+using Maquinarias.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using ClosedXML.Excel;
+using Microsoft.EntityFrameworkCore;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
-using FormularioMaquinaria.Pdf;
 public class OperadoresController : Controller
 {
     private readonly AppDbContext _context;
@@ -34,6 +35,14 @@ public class OperadoresController : Controller
         hoja.Cell(1, 3).Value = "Máquina";
         hoja.Cell(1, 4).Value = "Frente Operacional";
 
+        // Estilo de encabezados
+        var encabezado = hoja.Range(1, 1, 1, 4);
+        encabezado.Style.Font.Bold = true;
+        encabezado.Style.Font.FontColor = XLColor.White;
+        encabezado.Style.Fill.BackgroundColor = XLColor.SteelBlue;
+        encabezado.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+        encabezado.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+
         int fila = 2;
 
         foreach (var operador in operadores)
@@ -41,21 +50,28 @@ public class OperadoresController : Controller
             hoja.Cell(fila, 1).Value = operador.Id;
             hoja.Cell(fila, 2).Value = operador.Nombre;
             hoja.Cell(fila, 3).Value = operador.Maquina?.Nombre ?? "Sin asignar";
-            hoja.Cell(fila, 4).Value = operador.FrenteOperacional;
+            hoja.Cell(fila, 4).Value = operador.FrenteOperacional.Nombre;
 
             fila++;
         }
 
+        // Bordes para toda la tabla
+        var rango = hoja.Range(1, 1, fila - 1, 4);
+        rango.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+        rango.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+
+        // Centrar ID
+        hoja.Column(1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+        // Ajustar ancho automáticamente
         hoja.Columns().AdjustToContents();
 
         using var stream = new MemoryStream();
 
         workbook.SaveAs(stream);
 
-        var contenido = stream.ToArray();
-
         return File(
-            contenido,
+            stream.ToArray(),
             "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
             "Operadores.xlsx");
     }
@@ -84,9 +100,9 @@ public class OperadoresController : Controller
     {
         contenido.Column(column =>
         {
-            // INFORMACIÓN GENERAL
+    // INFORMACIÓN GENERAL
 
-            column.Item()
+    column.Item()
     .Border(1)
     .BorderColor("#C8D2DC")
     .Background("#F8FAFC")
@@ -238,7 +254,7 @@ public class OperadoresController : Controller
 
                         Celda(item.Maquina?.Nombre ?? "Sin asignar");
 
-                        Celda(item.FrenteOperacional);
+                        Celda(item.FrenteOperacional.Nombre);
                     }
                 });
         });
@@ -273,7 +289,8 @@ public class OperadoresController : Controller
         if (!string.IsNullOrWhiteSpace(frente))
         {
             operadores = operadores.Where(o =>
-                o.FrenteOperacional == frente);
+                o.FrenteOperacional != null &&
+                o.FrenteOperacional.Nombre == frente);
         }
 
         ViewBag.Maquinas = new SelectList(
@@ -284,6 +301,10 @@ public class OperadoresController : Controller
 
         ViewBag.Buscar = buscar;
         ViewBag.Frente = frente;
+
+        ViewBag.Frentes = await _context.FrentesOperacionales
+        .OrderBy(f => f.Nombre)
+        .ToListAsync();
 
         return View(await operadores.ToListAsync());
     }
@@ -381,5 +402,49 @@ public class OperadoresController : Controller
         }
 
         return RedirectToAction(nameof(Index));
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CrearFrente([FromBody] CrearFrenteRequest request)
+    {
+        string nombre = request.Nombre;
+
+        if (string.IsNullOrWhiteSpace(request.Nombre))
+        {
+            return Json(new
+            {
+                success = false,
+                mensaje = "Debe ingresar un nombre."
+            });
+        }
+
+        // Verificar que no exista
+        bool existe = await _context.FrentesOperacionales
+            .AnyAsync(f => f.Nombre == request.Nombre);
+
+        if (existe)
+        {
+            return Json(new
+            {
+                success = false,
+                mensaje = "Ese frente ya existe."
+            });
+        }
+
+        var frente = new FrenteOperacional
+        {
+            Nombre = request.Nombre.Trim()
+        };
+
+        _context.FrentesOperacionales.Add(frente);
+
+        await _context.SaveChangesAsync();
+
+        return Json(new
+        {
+            success = true,
+            id = frente.Id,
+            nombre = frente.Nombre
+        });
     }
 }

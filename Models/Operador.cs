@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Maquinarias.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace FormularioMaquinaria.Models
 {
@@ -9,8 +10,11 @@ namespace FormularioMaquinaria.Models
         [Required]
         public string Nombre { get; set; }
 
-        [Required]
-        public string FrenteOperacional { get; set; }
+        // FK
+        public int? FrenteOperacionalId { get; set; }
+
+        // Navegación
+        public FrenteOperacional? FrenteOperacional { get; set; }
 
         public int? MaquinaId { get; set; }
 

@@ -10,27 +10,68 @@ namespace FormularioMaquinaria.Pdf
         public static Document Generar(
             List<Operador> operadores,
             string logoPath)
-        {
-            return PdfTemplate.Crear(
-                "GESTIÓN DE OPERADORES",
-                "Administración de operadores autorizados",
-                logoPath,
-                contenido =>
                 {
-                    contenido.Column(column =>
-                    {
-                        AgregarInformacion(column, operadores);
+                    return PdfTemplate.Crear(
+                        "GESTIÓN DE OPERADORES",
+                        "Administración de operadores autorizados",
+                        logoPath,
+                        contenido =>
+                        {
+                            contenido.Column(column =>
+                            {
+                                // Fecha
+                                    column.Item()
+                                    .AlignRight()
+                                    .Text($"Valledupar, {DateTime.Now:dd/MM/yyyy}")
+                                    .FontSize(11);
 
-                        column.Item().PaddingVertical(20);
+                                // Referencia
+                                column.Item().PaddingTop(20);
 
-                        AgregarResumen(column, operadores);
+                                column.Item().Text(text =>
+                                {
+                                    text.Span("REFERENCIA: ")
+                                        .Bold();
 
-                        column.Item().PaddingVertical(20);
+                                    text.Span("Listado General de Operadores");
+                                });
 
-                        AgregarTabla(column, operadores);
-                    });
-                });
-        }
+                                // Asunto
+                                column.Item().PaddingTop(12);
+
+                                column.Item().Text(text =>
+                                {
+                                    text.Span("ASUNTO: ")
+                                        .Bold();
+
+                                    text.Span("Operadores registrados en el sistema.");
+                                });
+
+                                column.Item().PaddingTop(15);
+
+                                // Información
+                                AgregarInformacion(column, operadores);
+
+                                column.Item().PaddingTop(15);
+
+                                // Tarjeta resumen
+                                AgregarResumen(column, operadores);
+
+                                column.Item().PaddingTop(15);
+
+                                // Tabla
+                                AgregarTabla(column, operadores);
+
+                                column.Item().PaddingTop(40);
+
+                                AgregarFirma(column);
+
+                                column.Item().PaddingTop(20);
+
+                                AgregarNota(column);
+                            });
+                        });
+                }
 
         private static void AgregarInformacion(
             ColumnDescriptor column,
@@ -86,7 +127,7 @@ namespace FormularioMaquinaria.Pdf
 
                     Celda("Documento", "Listado de Operadores");
 
-                    Celda("Empresa", "AV Río");
+                    Celda("Empresa", "Avenida Río");
 
                     Celda("Fecha",
                         DateTime.Now.ToString("dd/MM/yyyy"));
@@ -94,8 +135,8 @@ namespace FormularioMaquinaria.Pdf
                     Celda("Hora",
                         DateTime.Now.ToString("HH:mm"));
 
-                    Celda("Total Operadores",
-                        operadores.Count.ToString());
+                    Celda("Ciudad",
+                         "Valledupar/Cesar");
 
                     Celda("Generado por",
                         "Sistema de Gestión");
@@ -103,176 +144,230 @@ namespace FormularioMaquinaria.Pdf
         }
 
         private static void AgregarResumen(
-    ColumnDescriptor column,
-    List<Operador> operadores)
-        {
-            column.Item()
-
-                .AlignCenter()
-
-                .Width(220)
-
-                .Border(1)
-
-                .BorderColor("#0F4C81")
-
-                .Background("#F8FBFE")
-
-                .PaddingVertical(12)
-
-                .PaddingHorizontal(20)
-
-                .Column(card =>
+            ColumnDescriptor column,
+            List<Operador> operadores)
                 {
-                    card.Item()
+                    column.Item()
 
                         .AlignCenter()
 
-                        .Text("TOTAL DE OPERADORES")
+                        .Width(220)
 
-                        .Bold()
+                        .Border(1)
 
-                        .FontSize(11)
+                        .BorderColor("#0F4C81")
 
-                        .FontColor("#0F4C81");
+                        .Background("#F8FBFE")
 
-                    card.Item()
+                        .PaddingVertical(12)
 
-                        .PaddingTop(8)
+                        .PaddingHorizontal(20)
 
-                        .AlignCenter()
-
-                        .Text(operadores.Count.ToString())
-
-                        .Bold()
-
-                        .FontSize(28)
-
-                        .FontColor("#0F4C81");
-
-                    card.Item()
-
-                        .PaddingTop(5)
-
-                        .AlignCenter()
-
-                        .Text("Registrados en el sistema")
-
-                        .FontSize(9)
-
-                        .FontColor(Colors.Grey.Darken1);
-                });
-        }
-
-        private static void AgregarTabla(
-    ColumnDescriptor column,
-    List<Operador> operadores)
-        {
-            column.Item()
-
-                .Border(1)
-
-                .BorderColor("#C7D2DB")
-
-                .Table(table =>
-                {
-                    table.ColumnsDefinition(columns =>
-                    {
-                        columns.ConstantColumn(45);
-                        columns.RelativeColumn(3);
-                        columns.RelativeColumn(4);
-                        columns.RelativeColumn(2);
-                    });
-
-                    // ===== ENCABEZADOS =====
-
-                    table.Header(header =>
-                    {
-                        void HeaderCell(string texto)
+                        .Column(card =>
                         {
-                            header.Cell()
-
-                                .Background("#D9E6F2")
-
-                                .Border(1)
-
-                                .BorderColor("#BFCAD6")
-
-                                .PaddingVertical(8)
-
-                                .PaddingHorizontal(6)
+                            card.Item()
 
                                 .AlignCenter()
 
-                                .Text(texto)
+                                .Text("TOTAL DE OPERADORES")
 
                                 .Bold()
 
-                                .FontSize(10)
+                                .FontSize(11)
 
-                                .FontColor("#0F2F44");
-                        }
+                                .FontColor("#0F4C81");
 
-                        HeaderCell("ID");
-                        HeaderCell("OPERADOR");
-                        HeaderCell("MÁQUINA");
-                        HeaderCell("FRENTE");
-                    });
+                            card.Item()
 
-                    // ===== FILAS =====
+                                .PaddingTop(8)
 
-                    int fila = 0;
+                                .AlignCenter()
 
-                    foreach (var operador in operadores)
-                    {
-                        string color =
-                            fila % 2 == 0
-                            ? "#FFFFFF"
-                            : "#F8FAFC";
+                                .Text(operadores.Count.ToString())
 
-                        fila++;
+                                .Bold()
 
-                        void BodyCell(
-                            string texto,
-                            bool centro = false)
+                                .FontSize(28)
+
+                                .FontColor("#0F4C81");
+
+                            card.Item()
+
+                                .PaddingTop(5)
+
+                                .AlignCenter()
+
+                                .Text("Registrados en el sistema")
+
+                                .FontSize(9)
+
+                                .FontColor(Colors.Grey.Darken1);
+                        });
+                }
+
+        private static void AgregarTabla(
+            ColumnDescriptor column,
+            List<Operador> operadores)
+                {
+                    column.Item()
+
+                        .Border(1)
+
+                        .BorderColor("#C7D2DB")
+
+                        .Table(table =>
                         {
-                            var cell = table.Cell()
-
-                                .Background(color)
-
-                                .Border(1)
-
-                                .BorderColor("#D9E2EC")
-
-                                .PaddingVertical(7)
-
-                                .PaddingHorizontal(6);
-
-                            if (centro)
+                            table.ColumnsDefinition(columns =>
                             {
-                                cell.AlignCenter();
+                                columns.ConstantColumn(45);
+                                columns.RelativeColumn(3);
+                                columns.RelativeColumn(4);
+                                columns.RelativeColumn(2);
+                            });
+
+                            // ===== ENCABEZADOS =====
+
+                            table.Header(header =>
+                            {
+                                void HeaderCell(string texto)
+                                {
+                                    header.Cell()
+
+                                        .Background("#D9E6F2")
+
+                                        .Border(1)
+
+                                        .BorderColor("#BFCAD6")
+
+                                        .PaddingVertical(8)
+
+                                        .PaddingHorizontal(6)
+
+                                        .AlignCenter()
+
+                                        .Text(texto)
+
+                                        .Bold()
+
+                                        .FontSize(10)
+
+                                        .FontColor("#0F2F44");
+                                }
+
+                                HeaderCell("ID");
+                                HeaderCell("OPERADOR");
+                                HeaderCell("MÁQUINA");
+                                HeaderCell("FRENTE");
+                            });
+
+                            // ===== FILAS =====
+
+                            int fila = 0;
+
+                            foreach (var operador in operadores)
+                            {
+                                string color =
+                                    fila % 2 == 0
+                                    ? "#FFFFFF"
+                                    : "#F8FAFC";
+
+                                fila++;
+
+                                void BodyCell(
+                                    string texto,
+                                    bool centro = false)
+                                {
+                                    var cell = table.Cell()
+
+                                        .Background(color)
+
+                                        .Border(1)
+
+                                        .BorderColor("#D9E2EC")
+
+                                        .PaddingVertical(7)
+
+                                        .PaddingHorizontal(6);
+
+                                    if (centro)
+                                    {
+                                        cell.AlignCenter();
+                                    }
+
+                                    cell.Text(texto)
+                                        .FontSize(9.5f)
+                                        .FontColor("#2C3E50");
+                                }
+
+                                BodyCell(
+                                    operador.Id.ToString(),
+                                    true);
+
+                                BodyCell(
+                                    operador.Nombre);
+
+                                BodyCell(
+                                    operador.Maquina?.Nombre ??
+                                    "Sin asignar");
+
+                                BodyCell(
+                                    operador.FrenteOperacional.Nombre,
+                                    true);
                             }
+                        });
+                }
+        private static void AgregarFirma(ColumnDescriptor column)
+        {
+            column.Item().PaddingTop(120);
 
-                            cell.Text(texto)
-                                .FontSize(9.5f)
-                                .FontColor("#2C3E50");
-                        }
+            column.Item()
+                .AlignCenter()
+                .Width(220)
+                .LineHorizontal(1);
 
-                        BodyCell(
-                            operador.Id.ToString(),
-                            true);
+            column.Item()
+                .PaddingTop(8)
+                .AlignCenter()
+                .Text("Administrador del Sistema")
+                .Bold()
+                .FontSize(11);
 
-                        BodyCell(
-                            operador.Nombre);
+            column.Item()
+                .AlignCenter()
+                .Text("Sistema de Gestión de Maquinaria")
+                .FontSize(10);
 
-                        BodyCell(
-                            operador.Maquina?.Nombre ??
-                            "Sin asignar");
+            column.Item()
+                .AlignCenter()
+                .Text("Avenida Río")
+                .FontSize(10)
+                .FontColor("#6C757D");
+        }
 
-                        BodyCell(
-                            operador.FrenteOperacional,
-                            true);
-                    }
+        private static void AgregarNota(ColumnDescriptor column)
+        {
+            column.Item().PaddingTop(25);
+
+            column.Item()
+
+                .Border(1)
+
+                .BorderColor("#D9E2EC")
+
+                .Background("#F8FAFC")
+
+                .Padding(12)
+
+                .Text(text =>
+                {
+                    text.Span("NOTA: ")
+                        .Bold()
+                        .FontSize(9)
+                        .FontColor("#4B5563");
+
+                    text.Span("Este documento fue generado automáticamente por el Sistema de Gestión de Maquinaria. La información aquí contenida corresponde a los registros existentes en la base de datos al momento de su generación.")
+                    .FontSize(9)
+                    .FontColor("#4B5563");
                 });
         }
     }

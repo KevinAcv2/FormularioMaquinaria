@@ -47,3 +47,17 @@
 .card-header h5 {
     font-size: 18px;
 }
+
+.btn {
+    height: 48px;
+    border-radius: 12px;
+    font-weight: 600;
+}
+
+.btn-exportar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+}

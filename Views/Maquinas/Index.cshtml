@@ -1,613 +1,309 @@
-﻿@model IEnumerable<FormularioMaquinaria.Models.Maquina>
+﻿    @model IEnumerable<FormularioMaquinaria.Models.Maquina>
 
-@{
-    ViewData["Title"] = "Gestión de Maquinaria";
-}
+    @{
+        ViewData["Title"] = "Gestión de Maquinaria";
+    }
 
-<link rel="stylesheet"
-      href="~/css/maquinaria.css"
-      asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/maquinaria.css" asp-append-version="true" />
 
-<div class="container-fluid">
-
-    <div id="reporteMaquinaria">
-
-        <div class="historial-header mb-4">
-
-            <div>
-
-                <h1 class="titulo-reporte">
-
-                    🚜 Gestión de Maquinaria
-
-                </h1>
-
-                <p class="subtitulo-reporte">
-
-                    Administración de maquinaria registrada.
-
-                </p>
-
-            </div>
-
-            <div class="acciones-reporte no-print">
-
-                <a asp-action="ExportarExcel"
-                   class="btn btn-success">
-
-                    <i class="fa-solid fa-file-excel"></i>
-
-                    Exportar Excel
-
-                </a>
-
-                <a asp-action="ExportarPdf"
-                   class="btn btn-danger">
-
-                    <i class="fa-solid fa-file-pdf"></i>
-
-                    Exportar PDF
-
-                </a>
-
-            </div>
-
-        </div>
-
-        <!-- TOTAL MAQUINAS -->
-
-        <div class="row mb-1">
-
-            <div class="col-md-4">
-
-                <div class="card-custom text-center">
-
-                    <h5>Total Maquinaria</h5>
-
-                    <h2>@Model.Count()</h2>
-
+    <div class="container-fluid">
+        <div id="reporteMaquinaria">
+            <div class="historial-header mb-4 d-flex justify-content-between align-items-start">
+                <div>
+                    <h1 class="titulo-reporte">🚜 Gestión de Maquinaria</h1>
+                    <p class="subtitulo-reporte">Administración de maquinaria registrada.</p>
                 </div>
 
+                <div class="acciones-reporte no-print d-flex gap-2">
+                    <a asp-action="ExportarExcel" class="btn btn-success btn-exp">
+                        <i class="fa-solid fa-file-excel"></i> Exportar Excel
+                    </a>
+
+                    <a asp-action="ExportarPdf" class="btn btn-danger btn-exp">
+                        <i class="bi bi-file-earmark-pdf"></i> Exportar PDF
+                    </a>
+                </div>
             </div>
 
+            <!-- TOTAL MAQUINAS -->
+            <div class="row mb-1">
+                <div class="col-md-4">
+                    <div class="card-custom text-center">
+                        <h5>Total Maquinaria</h5>
+                        <h2>@Model.Count()</h2>
+                    </div>
+                </div>
+            </div>
         </div>
 
-    </div>
-
-    <!-- TARJETA CON LA TABLA -->
-
-    <div class="card shadow-sm border-0">
-
-        <div class="card shadow-sm border-0" id="reporteMaquinaria">
-
+        <!-- TARJETA CON LA TABLA -->
+        <div class="card shadow-sm border-0">
             <div class="card-body">
-
                 <form asp-action="Index" method="get">
-
                     <div class="row align-items-end mb-4 no-print">
-
                         <!-- FILTROS -->
                         <div class="col-lg-8">
-
                             <div class="row g-2">
-
                                 <!-- Buscar -->
                                 <div class="col-4">
-
                                     <input type="text"
                                            name="buscar"
                                            class="form-control"
                                            placeholder="🔍 Buscar maquinaria..."
                                            value="@ViewBag.Buscar" />
-
                                 </div>
+
                                 <div class="col-4">
-
                                     <select name="estado" class="form-select">
-
                                         <option value="">Estado</option>
-
-                                        <option value="1"
-                                                selected="@(ViewBag.Estado?.ToString() == "1")">
-
-                                            OPERATIVA
-
-                                        </option>
-
-                                        <option value="0"
-                                                selected="@(ViewBag.Estado?.ToString() == "0")">
-
-                                            NO OPERATIVA
-
-                                        </option>
-
+                                        <option value="1" selected="@(ViewBag.Estado?.ToString() == "1" ? "selected" : null)">OPERATIVA</option>
+                                        <option value="0" selected="@(ViewBag.Estado?.ToString() == "0" ? "selected" : null)">NO OPERATIVA</option>
                                     </select>
-
                                 </div>
-
                             </div>
-
                         </div>
 
                         <!-- BOTONES -->
                         <div class="col-lg-4">
-
                             <div class="d-flex justify-content-end gap-2">
-
-                                <button type="submit"
-                                        class="btn btn-primary btn-toolbar-custom">
-                                    <i class="fa-solid fa-magnifying-glass"></i>
-                                    Buscar
+                                <button type="submit" class="btn btn-primary btn-toolbar-custom">
+                                    <i class="fa-solid fa-magnifying-glass"></i> Buscar
                                 </button>
 
-                                <a asp-action="Index"
-                                   class="btn btn-secondary btn-toolbar-custom">
-
-                                    <i class="fa-solid fa-rotate"></i>
-
-                                    Limpiar
-
+                                <a asp-action="Index" class="btn btn-secondary btn-toolbar-custom">
+                                    <i class="fa-solid fa-rotate"></i> Limpiar
                                 </a>
 
-                                <button type="button"
-                                        class="btn btn-success btn-toolbar-custom"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#modalNuevaMaquina">
-
-                                    <i class="fa-solid fa-plus"></i>
-
-                                    Nueva 
-
+                                <button type="button" class="btn btn-success btn-toolbar-custom" data-bs-toggle="modal" data-bs-target="#modalNuevaMaquina">
+                                    <i class="fa-solid fa-plus"></i> Nueva
                                 </button>
-
                             </div>
-
                         </div>
-
                     </div>
 
                     <table class="table table-hover align-middle">
-
                         <thead>
-
                             <tr>
                                 <th>ID</th>
                                 <th>Máquina</th>
                                 <th>Estado</th>
-                                <th class="no-print text-center">
-                                    Acciones
-                                </th>
+                                <th class="no-print text-center">Acciones</th>
                             </tr>
-
                         </thead>
 
                         <tbody>
-
                             @foreach (var item in Model)
                             {
                                 <tr>
-
                                     <td>@item.Id</td>
-
-                                    <td>
-                                        @item.Nombre
-                                    </td>
-
+                                    <td>@item.Nombre</td>
                                     <td>
                                         @if (item.Estado == "1")
                                         {
-                                            <span class="badge bg-success">
-                                                OPERATIVA
-                                            </span>
+                                            <span class="badge bg-success">OPERATIVA</span>
                                         }
                                         else
                                         {
-                                            <span class="badge bg-danger">
-                                                NO OPERATIVA
-                                            </span>
+                                            <span class="badge bg-danger">NO OPERATIVA</span>
                                         }
                                     </td>
 
                                     <td class="text-center no-print">
-
                                         <!-- EDITAR -->
                                         <button type="button"
                                                 class="btn btn-warning btn-sm btnEditar"
                                                 data-id="@item.Id"
                                                 data-nombre="@item.Nombre"
                                                 data-estado="@item.Estado">
-
                                             <i class="fa-solid fa-pencil"></i>
-
                                         </button>
 
                                         <!-- ELIMINAR -->
-                                        <a asp-action="Eliminar"
-                                           asp-route-id="@item.Id"
-                                           class="btn btn-danger btn-sm">
+                                        <a asp-action="Eliminar" asp-route-id="@item.Id" class="btn btn-danger btn-sm" onclick="return confirm('¿Eliminar esta máquina?')">
                                             <i class="fa-solid fa-trash"></i>
-
                                         </a>
-
                                     </td>
-                                
                                 </tr>
                             }
-
                         </tbody>
-
                     </table>
-
                 </form>
-
             </div>
-
         </div>
-
     </div>
 
-</div>
+    <!-- MODAL NUEVA MÁQUINA -->
+    <div class="modal fade" id="modalNuevaMaquina" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold"><i class="fa-solid fa-truck-monster text-success me-2"></i> Nueva Máquina</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
 
-@section Scripts {
-    <script>
+                <form id="formNuevaMaquina">
+                    <div class="modal-body">
+                        <!-- Nombre -->
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Nombre / Tipo Maquinaria</label>
+                            <input type="text" id="NombreMaquina" class="form-control" placeholder="Ej: RetroExcavadora KAT120" required />
+                        </div>
 
-        const modalNuevaMaquina =
-            new bootstrap.Modal(
-                document.getElementById("modalNuevaMaquina"));
+                        <!-- Estado -->
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Estado de la Máquina</label>
+                            <select id="EstadoMaquina" class="form-select" required>
+                                <option value="">Seleccione un estado</option>
+                                <option value="1">OPERATIVA</option>
+                                <option value="0">NO OPERATIVA</option>
+                            </select>
+                        </div>
+                    </div>
 
-        document
-            .getElementById("formNuevaMaquina")
-            .addEventListener("submit", async function (e) {
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-success">
+                            <i class="fa-solid fa-floppy-disk me-2"></i> Guardar Máquina
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
-                e.preventDefault();
+    <!-- MODAL EDITAR MÁQUINA -->
+    <div class="modal fade" id="modalEditarMaquina" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold"><i class="fa-solid fa-pen-to-square text-warning me-2"></i> Editar Máquina</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
 
-                const datos = {
+                <form id="formEditarMaquina">
+                    <input type="hidden" id="EditarId" />
+                    <div class="modal-body">
+                        <!-- Nombre -->
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Nombre / Tipo Maquinaria</label>
+                            <input type="text" id="EditarNombre" class="form-control" required />
+                        </div>
 
-                    Nombre: document.getElementById("NombreMaquina").value,
+                        <!-- Estado -->
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Estado</label>
+                            <select id="EditarEstado" class="form-select" required>
+                                <option value="1">OPERATIVA</option>
+                                <option value="0">NO OPERATIVA</option>
+                            </select>
+                        </div>
+                    </div>
 
-                    Estado: document.getElementById("EstadoMaquina").value
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-warning">
+                            <i class="fa-solid fa-floppy-disk me-2"></i> Guardar Cambios
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
-                };
+    @section Scripts {
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                // Helpers seguros
+                const $ = id => document.getElementById(id);
 
-                const respuesta = await fetch("/Maquinas/Crear", {
+                // Modal nueva máquina
+                const modalNuevaMaquina = new bootstrap.Modal($('#modalNuevaMaquina'));
+                const formNueva = $('formNuevaMaquina') || $('formNuevaMaquina') ; // keep reference by id below
+                const formNuevaEl = $('formNuevaMaquina') || null; // safeguard
 
-                    method: "POST",
+                const fnNueva = $('formNuevaMaquina');
+                if (fnNueva) {
+                    fnNueva.addEventListener('submit', async function (e) {
+                        e.preventDefault();
 
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
+                        const datos = {
+                            Nombre: $('#NombreMaquina') ? $('#NombreMaquina').value : '',
+                            Estado: $('#EstadoMaquina') ? $('#EstadoMaquina').value : ''
+                        };
 
-                    body: JSON.stringify(datos)
+                        try {
+                            const respuesta = await fetch('/Maquinas/Crear', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(datos)
+                            });
 
-                });
+                            if (respuesta.ok) {
+                                modalNuevaMaquina.hide();
+                                if ($('#formNuevaMaquina')) $('#formNuevaMaquina').reset();
 
-                if (respuesta.ok) {
-
-                    modalNuevaMaquina.hide();
-                    document.getElementById("formNuevaMaquina").reset();
-
-                    Swal.fire({
-                        icon: "success",
-                        title: "¡Correcto!",
-                        text: "La máquina fue registrada correctamente.",
-                        confirmButtonColor: "#198754"
-                    }).then(() => {
-
-                        location.reload();
-
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: '¡Correcto!',
+                                    text: 'La máquina fue registrada correctamente.',
+                                    confirmButtonColor: '#198754'
+                                }).then(() => location.reload());
+                            } else {
+                                Swal.fire({ icon: 'error', title: 'Error', text: 'No fue posible registrar la máquina.' });
+                            }
+                        } catch (err) {
+                            Swal.fire({ icon: 'error', title: 'Error', text: 'Error al comunicarse con el servidor.' });
+                        }
                     });
-
                 }
-                else {
 
-                    Swal.fire({
-                        icon: "error",
-                        title: "Error",
-                        text: "No fue posible registrar la máquina."
+                // Editar máquina
+                const modalEditarMaquina = new bootstrap.Modal($('#modalEditarMaquina'));
+                document.querySelectorAll('.btnEditar').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        if ($('#EditarId')) $('#EditarId').value = btn.dataset.id || '';
+                        if ($('#EditarNombre')) $('#EditarNombre').value = btn.dataset.nombre || '';
+                        if ($('#EditarEstado')) $('#EditarEstado').value = btn.dataset.estado || '';
+                        modalEditarMaquina.show();
                     });
+                });
 
+                const fe = document.getElementById('formEditarMaquina');
+                if (fe) {
+                    fe.addEventListener('submit', async function (e) {
+                        e.preventDefault();
+
+                        const datos = {
+                            Id: parseInt($('#EditarId') ? $('#EditarId').value : '0'),
+                            Nombre: $('#EditarNombre') ? $('#EditarNombre').value : '',
+                            Estado: $('#EditarEstado') ? $('#EditarEstado').value : ''
+                        };
+
+                        try {
+                            const respuesta = await fetch('/Maquinas/Editar', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(datos)
+                            });
+
+                            if (respuesta.ok) {
+                                modalEditarMaquina.hide();
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: '¡Actualizada!',
+                                    text: 'La máquina fue actualizada correctamente.',
+                                    confirmButtonColor: '#198754'
+                                }).then(() => location.reload());
+                            } else {
+                                Swal.fire({ icon: 'error', title: 'Error', text: 'No fue posible actualizar la máquina.' });
+                            }
+                        } catch (err) {
+                            Swal.fire({ icon: 'error', title: 'Error', text: 'Error al comunicarse con el servidor.' });
+                        }
+                    });
                 }
-
             });
-
-            // EDITAR MÁQUINA
-            const modalEditarMaquina =
-            new bootstrap.Modal(
-            document.getElementById("modalEditarMaquina"));
-
-            document
-            .querySelectorAll(".btnEditar")
-            .forEach(btn => {
-
-                btn.addEventListener("click", () => {
-
-                    document
-                    .getElementById("EditarId")
-                    .value = btn.dataset.id;
-
-                    document
-                    .getElementById("EditarNombre")
-                    .value = btn.dataset.nombre;
-
-                    document
-                    .getElementById("EditarEstado")
-                    .value = btn.dataset.estado;
-
-                    modalEditarMaquina.show();
-
-                });
-
-            });
-
-                    document
-        .getElementById("formEditarMaquina")
-        .addEventListener("submit", async function (e) {
-
-            e.preventDefault();
-
-            const datos = {
-
-                Id: parseInt(document.getElementById("EditarId").value),
-
-                Nombre: document.getElementById("EditarNombre").value,
-
-                Estado: document.getElementById("EditarEstado").value
-
-            };
-
-            const respuesta = await fetch("/Maquinas/Editar", {
-
-                method: "POST",
-
-                headers: {
-                    "Content-Type": "application/json"
-                },
-
-                body: JSON.stringify(datos)
-
-            });
-
-            if (respuesta.ok) {
-
-                modalEditarMaquina.hide();
-
-                Swal.fire({
-                    icon: "success",
-                    title: "¡Actualizada!",
-                    text: "La máquina fue actualizada correctamente.",
-                    confirmButtonColor: "#198754"
-                }).then(() => {
-
-                    location.reload();
-
-                });
-
-            }
-            else {
-
-                Swal.fire({
-                    icon: "error",
-                    title: "Error",
-                    text: "No fue posible actualizar la máquina."
-                });
-
-            }
-
-        });
-    </script>   
-}
-<!-- MODAL NUEVA MÁQUINA -->
-<div class="modal fade"
-     id="modalNuevaMaquina"
-     tabindex="-1"
-     aria-hidden="true">
-
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-
-        <div class="modal-content">
-
-            <div class="modal-header">
-
-                <h5 class="modal-title fw-bold">
-
-                    <i class="fa-solid fa-truck-monster text-success me-2"></i>
-
-                    Nueva Máquina
-
-                </h5>
-
-                <button type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal">
-                </button>
-
-            </div>
-
-            <form id="formNuevaMaquina">
-
-                <div class="modal-body">
-
-                    <!-- Nombre -->
-                    <div class="mb-3">
-
-                        <label class="form-label fw-bold">
-
-                            Nombre / Tipo Maquinaria
-
-                        </label>
-
-                        <input type="text"
-                               id="NombreMaquina"
-                               class="form-control"
-                               placeholder="Ej: RetroExcavadora KAT120"
-                               required />
-
-                    </div>
-
-                    <!-- Estado -->
-                    <div class="mb-3">
-
-                        <label class="form-label fw-bold">
-
-                            Estado de la Máquina
-
-                        </label>
-
-                        <select id="EstadoMaquina"
-                                class="form-select"
-                                required>
-
-                            <option value="">
-                                Seleccione un estado
-                            </option>
-
-                            <option value="1">
-                                OPERATIVA
-                            </option>
-
-                            <option value="0">
-                                NO OPERATIVA
-                            </option>
-
-                        </select>
-
-                    </div>
-
-                </div>
-
-                <div class="modal-footer">
-
-                    <button type="button"
-                            class="btn btn-secondary"
-                            data-bs-dismiss="modal">
-
-                        Cancelar
-
-                    </button>
-
-                    <button type="submit"
-                            class="btn btn-success">
-
-                        <i class="fa-solid fa-floppy-disk me-2"></i>
-
-                        Guardar Máquina
-
-                    </button>
-
-                </div>
-
-            </form>
-
-        </div>
-
-    </div>
-
-</div>
-<!-- ABRIR MODAL EDITAR MÁQUINA -->
-<div class="modal fade"
-     id="modalEditarMaquina"
-     tabindex="-1"
-     aria-hidden="true">
-
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-
-        <div class="modal-content">
-
-            <div class="modal-header">
-
-                <h5 class="modal-title fw-bold">
-
-                    <i class="fa-solid fa-pen-to-square text-warning me-2"></i>
-
-                    Editar Máquina
-
-                </h5>
-
-                <button type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal">
-                </button>
-
-            </div>
-
-            <form id="formEditarMaquina">
-
-                <input type="hidden" id="EditarId" />
-
-                <div class="modal-body">
-
-                    <!-- Nombre -->
-
-                    <div class="mb-3">
-
-                        <label class="form-label fw-bold">
-
-                            Nombre / Tipo Maquinaria
-
-                        </label>
-
-                        <input type="text"
-                               id="EditarNombre"
-                               class="form-control"
-                               required />
-
-                    </div>
-
-                    <!-- Estado -->
-
-                    <div class="mb-3">
-
-                        <label class="form-label fw-bold">
-
-                            Estado
-
-                        </label>
-
-                        <select id="EditarEstado"
-                                class="form-select"
-                                required>
-
-                            <option value="1">
-                                OPERATIVA
-                            </option>
-
-                            <option value="0">
-                                NO OPERATIVA
-                            </option>
-
-                        </select>
-
-                    </div>
-
-                </div>
-
-                <div class="modal-footer">
-
-                    <button type="button"
-                            class="btn btn-secondary"
-                            data-bs-dismiss="modal">
-
-                        Cancelar
-
-                    </button>
-
-                    <button type="submit"
-                            class="btn btn-warning">
-
-                        <i class="fa-solid fa-floppy-disk me-2"></i>
-
-                        Guardar Cambios
-
-                    </button>
-
-                </div>
-
-            </form>
-
-        </div>
-
-    </div>
-
-</div>
+        </script>
+    }
 
 

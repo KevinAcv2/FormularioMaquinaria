@@ -1,7 +1,16 @@
 ﻿body {
-    background: #eef2f6;
+    background: #f4f7fb;
+    font-family: "Segoe UI",sans-serif;
 }
 
+.container-fluid {
+    padding: 18px 22px;
+}
+
+.row {
+    --bs-gutter-x: 1rem;
+    --bs-gutter-y: 1rem;
+}
 .titulo-estadisticas {
     font-weight: 700;
     color: #163A59;
@@ -9,6 +18,26 @@
 
 .subtitulo-estadisticas {
     color: #6c757d;
+}
+
+.fila-graficos {
+    margin-top: 8px;
+    /* Espacio pequeño entre tarjetas */
+    .mb-card {
+        margin-bottom: 0 !important;
+    }
+    /* Espacio superior pequeño */
+    .mt-card {
+        margin-top: 0 !important;
+    }
+}
+
+.chart-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 18px;
+    box-shadow: 0 4px 14px rgba(0,0,0,.06);
+    margin-bottom: 16px;
 }
 
 .tarjeta-estadistica {
@@ -26,6 +55,13 @@
         text-align: center;
         padding: 30px;
     }
+
+.indicador-card {
+    border-radius: 16px;
+    min-height: 105px;
+    transition: .25s;
+    box-shadow: 0 4px 14px rgba(0,0,0,.06);
+}
 
 .icono {
     width: 70px;
@@ -56,7 +92,7 @@ body {
 }
 
 .estadisticas-header {
-    margin-bottom: 35px;
+    margin-bottom: 18px;
 }
 
     .estadisticas-header h2 {
@@ -78,7 +114,7 @@ body {
     }
 
     .indicador-card .card-body {
-        padding: 25px;
+        padding: 18px;
     }
 
 .icono-card {
@@ -96,9 +132,7 @@ body {
     box-shadow: 0 8px 20px rgba(0,0,0,.08) !important;
 }
 
-/*=====================================
-   TOP OPERADORES
-=====================================*/
+/*TOP OPERADORES*/
 
 .top-operadores-scroll {
     max-height: 310px;
@@ -125,7 +159,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px;
+    padding: 12px;
     border-radius: 12px;
     margin-bottom: 10px;
     transition: .25s;

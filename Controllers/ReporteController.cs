@@ -1,9 +1,13 @@
-﻿using Maquinarias.Data;
+﻿using ClosedXML.Excel;
 using FormularioMaquinaria.Models;
+using FormularioMaquinaria.Pdf;
+using Maquinarias.Data;
 using Maquinarias.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using QuestPDF.Fluent;
+using QuestPDF.Infrastructure;
 using System.Text.RegularExpressions;
 
 namespace Maquinarias.Controllers
@@ -211,7 +215,7 @@ namespace Maquinarias.Controllers
             return "/uploads/" + nombreArchivo;
         }
 
-        // COMBOS (CORREGIDO)
+        // COMBOS
         private async Task CargarCombos()
         {
             ViewBag.Operadores = new SelectList(
@@ -230,5 +234,156 @@ namespace Maquinarias.Controllers
                 "Nombre"   
             );
         }
+
+        [HttpGet]
+        public async Task<IActionResult> ExportarPdf(int id)
+        {
+            QuestPDF.Settings.License = LicenseType.Community;
+
+            var reporte = await _context.ReportesMaquinaria
+                .Include(r => r.Evaluacion)
+                .FirstOrDefaultAsync(r => r.Id == id);
+
+            if (reporte == null)
+                return NotFound();
+
+            var logoPath = Path.Combine(
+                Directory.GetCurrentDirectory(),
+                "wwwroot",
+                "img",
+                "Logo.png");
+
+            var documento = ReporteDetallePdf.Generar(
+                reporte,
+                logoPath);
+
+            return File(
+                documento.GeneratePdf(),
+                "application/pdf",
+                $"Reporte_{reporte.Id}.pdf");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ExportarExcel()
+        {
+            var reportes = await _context.ReportesMaquinaria
+                .OrderByDescending(r => r.Fecha)
+                .ToListAsync();
+
+            using var workbook = new XLWorkbook();
+
+            var hoja = workbook.Worksheets.Add("Historial Reportes");
+
+            // Encabezados
+            hoja.Cell(1, 1).Value = "Fecha";
+            hoja.Cell(1, 2).Value = "Operador";
+            hoja.Cell(1, 3).Value = "Máquina";
+            hoja.Cell(1, 4).Value = "Horas Trabajadas";
+            hoja.Cell(1, 5).Value = "Estado";
+
+            // Estilo encabezado
+            var encabezado = hoja.Range(1, 1, 1, 5);
+
+            encabezado.Style.Font.Bold = true;
+            encabezado.Style.Font.FontColor = XLColor.White;
+            encabezado.Style.Fill.BackgroundColor = XLColor.SteelBlue;
+            encabezado.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+            encabezado.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+
+            int fila = 2;
+
+            foreach (var reporte in reportes)
+            {
+                hoja.Cell(fila, 1).Value = reporte.Fecha.ToString("dd/MM/yyyy");
+                hoja.Cell(fila, 2).Value = reporte.NombreOperador;
+                hoja.Cell(fila, 3).Value = reporte.NombreMaquina;
+                hoja.Cell(fila, 4).Value = reporte.HorasTrabajadas;
+                hoja.Cell(fila, 5).Value = reporte.EstadoMaquina;
+
+                hoja.Cell(fila, 5).Value =
+                    reporte.EstadoMaquina == 1
+                    ? "Operativa"
+                    : "No Operativa";
+
+                fila++;
+            }
+
+            // Bordes
+            var rango = hoja.Range(1, 1, fila - 1, 5);
+
+            rango.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+            rango.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+
+            // Centrar columnas
+            hoja.Column(1).Style.Alignment.Horizontal =
+                XLAlignmentHorizontalValues.Center;
+
+            hoja.Column(4).Style.Alignment.Horizontal =
+                XLAlignmentHorizontalValues.Center;
+
+            hoja.Column(5).Style.Alignment.Horizontal =
+                XLAlignmentHorizontalValues.Center;
+
+            hoja.Columns().AdjustToContents();
+
+            using var stream = new MemoryStream();
+
+            workbook.SaveAs(stream);
+
+            return File(
+                stream.ToArray(),
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                "HistorialReportes.xlsx");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Imprimir()
+        {
+            QuestPDF.Settings.License = LicenseType.Community;
+
+            var reportes = await _context.ReportesMaquinaria
+                .OrderByDescending(r => r.Fecha)
+                .ToListAsync();
+
+            var logoPath = Path.Combine(
+                Directory.GetCurrentDirectory(),
+                "wwwroot",
+                "img",
+                "Logo.png");
+
+            var documento = HistorialReportesPdf.Generar(
+                reportes,
+                logoPath);
+
+            return File(
+                documento.GeneratePdf(),
+                "application/pdf");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ExportarPdfHistorial()
+        {
+            QuestPDF.Settings.License = LicenseType.Community;
+
+            var reportes = await _context.ReportesMaquinaria
+                .OrderByDescending(r => r.Fecha)
+                .ToListAsync();
+
+            var logoPath = Path.Combine(
+                Directory.GetCurrentDirectory(),
+                "wwwroot",
+                "img",
+                "Logo.png");
+
+            var documento = HistorialReportesPdf.Generar(
+                reportes,
+                logoPath);
+
+            return File(
+                documento.GeneratePdf(),
+                "application/pdf",
+                "HistorialReportes.pdf");
+        }
+
     }
 }

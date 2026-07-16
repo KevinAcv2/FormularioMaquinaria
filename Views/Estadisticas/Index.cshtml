@@ -2,472 +2,215 @@
 
 @{
     ViewData["Title"] = "Estadísticas";
+    var topCount = Math.Min(Model.TopOperadores?.Count ?? 0, Model.HorasOperadores?.Count ?? 0);
 }
 
-<link rel="stylesheet"
-      href="~/css/estadisticas.css"
-      asp-append-version="true" />
+<link rel="stylesheet" href="~/css/estadisticas.css" asp-append-version="true" />
 
 <div class="container-fluid">
 
-    <div class="estadisticas-header">
-
+    <div class="estadisticas-header mb-4 d-flex justify-content-between align-items-start">
         <div>
-
-            <h2>
-                📊 Estadísticas
-            </h2>
-
-            <p>
-                Indicadores de operación y rendimiento.
-            </p>
-
+            <h2>📊 Estadísticas</h2>
+            <p class="text-muted">Indicadores de operación y rendimiento.</p>
         </div>
-
     </div>
 
-    <div class="row g-4 mb-4">
-
+    <div class="row gx-4 gy-1 mb-3">
         <!-- REPORTES -->
         <div class="col-lg-3 col-md-6">
-
             <div class="card indicador-card border-0 shadow-sm">
-
                 <div class="card-body d-flex justify-content-between align-items-center">
-
                     <div>
-
-                        <small class="text-muted">
-                            Total Reportes
-                        </small>
-
-                        <h2 class="fw-bold mt-2">
-                            @Model.TotalReportes
-                        </h2>
-
+                        <small class="text-muted">Total Reportes</small>
+                        <h2 class="fw-bold mt-2">@Model.TotalReportes</h2>
                     </div>
-
-                    <div class="icono-card bg-primary">
-
-                        <i class="fa-solid fa-file-lines"></i>
-
-                    </div>
-
+                    <div class="icono-card bg-primary"><i class="fa-solid fa-file-lines"></i></div>
                 </div>
-
             </div>
-
         </div>
 
         <!-- HORAS -->
         <div class="col-lg-3 col-md-6">
-
             <div class="card indicador-card border-0 shadow-sm">
-
                 <div class="card-body d-flex justify-content-between align-items-center">
-
                     <div>
-
-                        <small class="text-muted">
-                            Horas Trabajadas
-                        </small>
-
-                        <h2 class="fw-bold mt-2">
-                            @Model.TotalHoras
-                        </h2>
-
+                        <small class="text-muted">Horas Trabajadas</small>
+                        <h2 class="fw-bold mt-2">@Model.TotalHoras</h2>
                     </div>
-
-                    <div class="icono-card bg-success">
-
-                        <i class="fa-solid fa-clock"></i>
-
-                    </div>
-
+                    <div class="icono-card bg-success"><i class="fa-solid fa-clock"></i></div>
                 </div>
-
             </div>
-
         </div>
 
         <!-- OPERADORES -->
         <div class="col-lg-3 col-md-6">
-
             <div class="card indicador-card border-0 shadow-sm">
-
                 <div class="card-body d-flex justify-content-between align-items-center">
-
                     <div>
-
-                        <small class="text-muted">
-                            Operadores
-                        </small>
-
-                        <h2 class="fw-bold mt-2">
-                            @Model.TotalOperadores
-                        </h2>
-
+                        <small class="text-muted">Operadores</small>
+                        <h2 class="fw-bold mt-2">@Model.TotalOperadores</h2>
                     </div>
-
-                    <div class="icono-card bg-warning">
-
-                        <i class="fa-solid fa-user-gear"></i>
-
-                    </div>
-
+                    <div class="icono-card bg-warning"><i class="fa-solid fa-user-gear"></i></div>
                 </div>
-
             </div>
-
         </div>
 
         <!-- MAQUINAS -->
         <div class="col-lg-3 col-md-6">
-
             <div class="card indicador-card border-0 shadow-sm">
-
                 <div class="card-body d-flex justify-content-between align-items-center">
-
                     <div>
-
-                        <small class="text-muted">
-                            Máquinas
-                        </small>
-
-                        <h2 class="fw-bold mt-2">
-                            @Model.TotalMaquinas
-                        </h2>
-
+                        <small class="text-muted">Máquinas</small>
+                        <h2 class="fw-bold mt-2">@Model.TotalMaquinas</h2>
                     </div>
-
-                    <div class="icono-card bg-danger">
-
-                        <i class="fa-solid fa-truck-monster"></i>
-
-                    </div>
-
+                    <div class="icono-card bg-danger"><i class="fa-solid fa-truck-monster"></i></div>
                 </div>
-
             </div>
-
         </div>
-
     </div>
 
-    <div class="row mt-4">
-
+    <div class="row gx-4 gy-3">
         <!-- IZQUIERDA -->
         <div class="col-lg-8">
-
             <!-- BARRAS -->
-            <div class="card shadow-sm border-0 rounded-4 mb-4">
-
-                <div class="card-body">
-
-                    <h5 class="fw-bold mb-3">
-                        📊 Reportes por Máquina
-                    </h5>
-
-                    <canvas id="graficoMaquinas" height="120"></canvas>
-
-                </div>
-
+            <div class="chart-card mb-4">
+                <h5 class="fw-bold mb-4">📊 Reportes por Máquina</h5>
+                <canvas id="graficoMaquinas" height="120"></canvas>
             </div>
 
             <!-- LÍNEAS -->
-            <div class="card shadow-sm border-0 rounded-4">
-
-                <div class="card-body">
-
-                    <h5 class="fw-bold mb-3">
-                        📈 Tendencia Mensual
-                    </h5>
-
-                    <canvas id="graficoMeses" height="120"></canvas>
-
-                </div>
-
+            <div class="chart-card mb-4">
+                <h5 class="fw-bold mb-4">📈 Tendencia Mensual</h5>
+                <canvas id="graficoMeses" height="120"></canvas>
             </div>
-
         </div>
 
         <!-- DERECHA -->
         <div class="col-lg-4">
-
             <!-- DONA -->
-            <div class="card shadow-sm border-0 rounded-4 mb-4">
-
-                <div class="card-body">
-
-                    <h5 class="fw-bold mb-3">
-                       📝 Reportes por Frente
-                    </h5>
-
-                    <canvas id="graficoFrentes"></canvas>
-
-                </div>
-
+            <div class="chart-card mb-4">
+                <h5 class="fw-bold mb-4">📝 Reportes por Frente</h5>
+                <canvas id="graficoFrentes" height="200"></canvas>
             </div>
 
             <!-- TOP -->
-            <div class="card shadow-sm border-0 rounded-4">
-
-                <div class="card-body">
-
-                    <h5 class="fw-bold mb-3">
-                        🏆 Top Operadores
-                    </h5>
-
-                    <div class="top-operadores-scroll">
-
-                        @for (int i = 0; i < Model.TopOperadores.Count; i++)
-                        {
-                            <div class="operador-item">
-
-                                <div class="operador-info">
-
-                                    <div class="operador-avatar">
-
-                                        @if (i == 0)
-                                        {
-                                            <span>🥇</span>
-                                        }
-                                        else if (i == 1)
-                                        {
-                                            <span>🥈</span>
-                                        }
-                                        else if (i == 2)
-                                        {
-                                            <span>🥉</span>
-                                        }
-                                        else
-                                        {
-                                            @(i + 1)
-                                        }
-
-                                    </div>
-
-                                    <strong>
-
-                                        @Model.TopOperadores[i]
-
-                                    </strong>
-
+            <div class="chart-card">
+                <h5 class="fw-bold mb-4">🏆 Top Operadores</h5>
+                <div class="top-operadores-scroll">
+                    @for (int i = 0; i < topCount; i++)
+                    {
+                        <div class="operador-item d-flex justify-content-between align-items-center mb-2">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="operador-avatar">
+                                    @if (i == 0)
+                                    {
+                                        <span>🥇</span>
+                                    }
+                                    else if (i == 1)
+                                    {
+                                        <span>🥈</span>
+                                    }
+                                    else if (i == 2)
+                                    {
+                                        <span>🥉</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary rounded-pill">@((i + 1).ToString())</span>
+                                    }
                                 </div>
 
-                                <span class="badge bg-primary rounded-pill">
-
-                                    @Model.HorasOperadores[i] h
-
-                                </span>
-
+                                <strong>@Model.TopOperadores[i]</strong>
                             </div>
-                        }
 
-                    </div>
-
+                            <span class="badge bg-primary rounded-pill">@Model.HorasOperadores[i] h</span>
+                        </div>
+                    }
                 </div>
-
             </div>
-
         </div>
-
     </div>
-    
+
 </div>
+
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        const ctx = document.getElementById('graficoMaquinas');
+        document.addEventListener('DOMContentLoaded', function () {
+            const colors = ['#0d6efd', '#198754', '#ffc107', '#dc3545', '#6f42c1', '#20c997'];
 
-        new Chart(ctx, {
+            // Helper: safe JSON from model
+            const maquinasLabels = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Maquinas ?? new List<string>()));
+            const maquinasData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.CantidadReportes ?? new List<int>()));
 
-            type: 'bar',
+            const frentesLabels = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Frente ?? new List<string>()));
+            const frentesData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.CantidadFrentes ?? new List<int>()));
 
-            data: {
+            const mesesLabels = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Meses ?? new List<string>()));
+            const mesesData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.ReportePorMes ?? new List<int>()));
 
-                labels: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Maquinas)),
-
-                datasets: [{
-
-                    label: 'Cantidad de Reportes',
-
-                    data: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.CantidadReportes)),
-
-                    borderWidth: 1,
-
-                    borderRadius: 10,
-
-                    backgroundColor: [
-
-                        '#0d6efd',
-
-                        '#198754',
-
-                        '#ffc107',
-
-                        '#dc3545',
-
-                        '#6f42c1',
-
-                        '#20c997'
-
-                    ]
-
-                }]
-
-            },
-
-            options: {
-
-                responsive: true,
-
-                plugins: {
-
-                    legend: {
-
-                        display: false
-
+            // Bar chart - Máquinas
+            const canvasMaquinas = document.getElementById('graficoMaquinas');
+            if (canvasMaquinas) {
+                new Chart(canvasMaquinas, {
+                    type: 'bar',
+                    data: {
+                        labels: maquinasLabels,
+                        datasets: [{
+                            label: 'Cantidad de Reportes',
+                            data: maquinasData,
+                            borderWidth: 1,
+                            borderRadius: 10,
+                            backgroundColor: colors
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: { legend: { display: false } },
+                        scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
                     }
-
-                },
-
-                scales: {
-
-                    y: {
-
-                        beginAtZero: true,
-
-                        ticks: {
-
-                            precision: 0
-
-                        }
-
-                    }
-
-                }
-
+                });
             }
 
-        });
-
-        const ctxFrentes = document.getElementById('graficoFrentes');
-
-        new Chart(ctxFrentes, {
-
-            type: 'doughnut',
-
-            data: {
-
-                labels: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Frente)),
-
-                datasets: [{
-
-                    data: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.CantidadFrentes)),
-
-                    backgroundColor: [
-
-                        '#0d6efd',
-
-                        '#198754',
-
-                        '#ffc107',
-
-                        '#dc3545',
-
-                        '#6f42c1',
-
-                        '#20c997'
-
-                    ]
-
-                }]
-
-            },
-
-            options: {
-
-                responsive: true,
-
-                plugins: {
-
-                    legend: {
-
-                        position: 'bottom'
-
-                    }
-
-                }
-
+            // Doughnut - Frentes
+            const canvasFrentes = document.getElementById('graficoFrentes');
+            if (canvasFrentes) {
+                new Chart(canvasFrentes, {
+                    type: 'doughnut',
+                    data: {
+                        labels: frentesLabels,
+                        datasets: [{ data: frentesData, backgroundColor: colors }]
+                    },
+                    options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+                });
             }
 
-        });
-
-        const ctxMeses = document.getElementById("graficoMeses");
-
-        new Chart(ctxMeses, {
-
-            type: "line",
-
-            data: {
-
-                labels: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Meses)),
-
-                datasets: [{
-
-                    label: "Reportes",
-
-                    data: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.ReportePorMes)),
-
-                    borderColor: "#0d6efd",
-
-                    backgroundColor: "rgba(13,110,253,.15)",
-
-                    fill: true,
-
-                    tension: 0.4,
-
-                    pointRadius: 5,
-
-                    pointHoverRadius: 7
-
-                }]
-
-            },
-
-            options: {
-
-                responsive: true,
-
-                plugins: {
-
-                    legend: {
-
-                        display: false
-
+            // Line - Meses
+            const canvasMeses = document.getElementById('graficoMeses');
+            if (canvasMeses) {
+                new Chart(canvasMeses, {
+                    type: 'line',
+                    data: {
+                        labels: mesesLabels,
+                        datasets: [{
+                            label: 'Reportes',
+                            data: mesesData,
+                            borderColor: '#0d6efd',
+                            backgroundColor: 'rgba(13,110,253,.15)',
+                            fill: true,
+                            tension: 0.4,
+                            pointRadius: 5,
+                            pointHoverRadius: 7
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: { legend: { display: false } },
+                        scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
                     }
-
-                },
-
-                scales: {
-
-                    y: {
-
-                        beginAtZero: true,
-
-                        ticks: {
-
-                            precision: 0
-
-                        }
-
-                    }
-
-                }
-
+                });
             }
-
         });
     </script>
 }
