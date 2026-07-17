@@ -18,8 +18,5 @@
         public List<decimal> HorasOperadores { get; set; } = new();
         public List<string> Meses { get; set; } = new();
         public List<int> ReportePorMes { get; set; } = new();
-
-
-
     }
 }

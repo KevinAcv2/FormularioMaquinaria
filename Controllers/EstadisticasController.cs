@@ -82,27 +82,52 @@ namespace FormularioMaquinaria.Controllers
                 .Select(x => x.Horas)
                 .ToList();
 
-            var reportesMes = await _context.ReportesMaquinaria
-                .GroupBy(r => new { r.Fecha.Year, r.Fecha.Month })
-                .Select(g => new
-                {
-                    Mes = new DateTime(g.Key.Year, g.Key.Month, 1)
-                        .ToString("MMM yyyy"),
-                    Cantidad = g.Count(),
-                    Orden = new DateTime(g.Key.Year, g.Key.Month, 1)
-                })
-                .OrderBy(x => x.Orden)
+            return View(modelo);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ObtenerTendenciaSemanal(DateTime fecha)
+        {
+            fecha = DateTime.SpecifyKind(fecha, DateTimeKind.Utc);
+            int diasDesdeLunes = fecha.DayOfWeek == DayOfWeek.Sunday
+                ? 6
+                : (int)fecha.DayOfWeek - 1;
+
+            DateTime inicioSemana = fecha.Date.AddDays(-diasDesdeLunes);
+            DateTime finSemana = inicioSemana.AddDays(7);
+
+            var reportesSemana = await _context.ReportesMaquinaria
+                .Where(r => r.Fecha >= inicioSemana && r.Fecha < finSemana)
                 .ToListAsync();
 
-            modelo.Meses = reportesMes
-                .Select(x => x.Mes)
-                .ToList();
+            var etiquetas = new List<string>();
+            var valores = new List<int>();
 
-            modelo.ReportePorMes = reportesMes
-                .Select(x => x.Cantidad)
-                .ToList();
+            for (int i = 0; i < 7; i++)
+            {
+                var dia = inicioSemana.AddDays(i).Date;
 
-            return View(modelo);
+                etiquetas.Add(dia.ToString("ddd dd"));
+
+                valores.Add(
+                    reportesSemana.Count(r => r.Fecha.Date == dia)
+                );
+            }
+            foreach (var r in reportesSemana)
+            {
+                Console.WriteLine($"Fecha BD: {r.Fecha:yyyy-MM-dd HH:mm:ss}");
+            }
+
+            Console.WriteLine($"Inicio: {inicioSemana:yyyy-MM-dd HH:mm:ss}");
+            Console.WriteLine($"Fin: {finSemana:yyyy-MM-dd HH:mm:ss}");
+            Console.WriteLine($"Registros encontrados: {reportesSemana.Count}");
+
+            return Json(new
+            {
+                labels = etiquetas,
+                data = valores
+            });
+
         }
     }
 }

@@ -9,100 +9,167 @@
 
 <div class="container-fluid">
 
-    <div class="estadisticas-header mb-4 d-flex justify-content-between align-items-start">
+    <!-- ENCABEZADO -->
+    <div class="estadisticas-header d-flex justify-content-between align-items-start mb-3">
         <div>
             <h2>📊 Estadísticas</h2>
-            <p class="text-muted">Indicadores de operación y rendimiento.</p>
+            <p class="text-muted mb-0">
+                Indicadores de operación y rendimiento.
+            </p>
         </div>
     </div>
 
-    <div class="row gx-4 gy-1 mb-3">
+    <!-- TARJETAS -->
+    <div class="row g-3 mb-3">
+
         <!-- REPORTES -->
-        <div class="col-lg-3 col-md-6">
-            <div class="card indicador-card border-0 shadow-sm">
+        <div class="col-xl-3 col-md-6">
+            <div class="card indicador-card border-0 shadow-sm h-100">
                 <div class="card-body d-flex justify-content-between align-items-center">
+
                     <div>
                         <small class="text-muted">Total Reportes</small>
-                        <h2 class="fw-bold mt-2">@Model.TotalReportes</h2>
+                        <h2 class="fw-bold mt-2 mb-0">@Model.TotalReportes</h2>
                     </div>
-                    <div class="icono-card bg-primary"><i class="fa-solid fa-file-lines"></i></div>
+
+                    <div class="icono-card bg-primary">
+                        <i class="fa-solid fa-file-lines"></i>
+                    </div>
+
                 </div>
             </div>
         </div>
 
         <!-- HORAS -->
-        <div class="col-lg-3 col-md-6">
-            <div class="card indicador-card border-0 shadow-sm">
+        <div class="col-xl-3 col-md-6">
+            <div class="card indicador-card border-0 shadow-sm h-100">
                 <div class="card-body d-flex justify-content-between align-items-center">
+
                     <div>
                         <small class="text-muted">Horas Trabajadas</small>
-                        <h2 class="fw-bold mt-2">@Model.TotalHoras</h2>
+                        <h2 class="fw-bold mt-2 mb-0">@Model.TotalHoras</h2>
                     </div>
-                    <div class="icono-card bg-success"><i class="fa-solid fa-clock"></i></div>
+
+                    <div class="icono-card bg-success">
+                        <i class="fa-solid fa-clock"></i>
+                    </div>
+
                 </div>
             </div>
         </div>
 
         <!-- OPERADORES -->
-        <div class="col-lg-3 col-md-6">
-            <div class="card indicador-card border-0 shadow-sm">
+        <div class="col-xl-3 col-md-6">
+            <div class="card indicador-card border-0 shadow-sm h-100">
                 <div class="card-body d-flex justify-content-between align-items-center">
+
                     <div>
                         <small class="text-muted">Operadores</small>
-                        <h2 class="fw-bold mt-2">@Model.TotalOperadores</h2>
+                        <h2 class="fw-bold mt-2 mb-0">@Model.TotalOperadores</h2>
                     </div>
-                    <div class="icono-card bg-warning"><i class="fa-solid fa-user-gear"></i></div>
+
+                    <div class="icono-card bg-warning">
+                        <i class="fa-solid fa-user-gear"></i>
+                    </div>
+
                 </div>
             </div>
         </div>
 
-        <!-- MAQUINAS -->
-        <div class="col-lg-3 col-md-6">
-            <div class="card indicador-card border-0 shadow-sm">
+        <!-- MÁQUINAS -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card indicador-card border-0 shadow-sm h-100">
                 <div class="card-body d-flex justify-content-between align-items-center">
+
                     <div>
                         <small class="text-muted">Máquinas</small>
-                        <h2 class="fw-bold mt-2">@Model.TotalMaquinas</h2>
+                        <h2 class="fw-bold mt-2 mb-0">@Model.TotalMaquinas</h2>
                     </div>
-                    <div class="icono-card bg-danger"><i class="fa-solid fa-truck-monster"></i></div>
+
+                    <div class="icono-card bg-danger">
+                        <i class="fa-solid fa-truck-monster"></i>
+                    </div>
+
                 </div>
             </div>
         </div>
+
     </div>
 
-    <div class="row gx-4 gy-3">
-        <!-- IZQUIERDA -->
+    <!-- ===================== DASHBOARD ===================== -->
+    <div class="row g-3">
+
+        <!-- ================= IZQUIERDA ================= -->
         <div class="col-lg-8">
-            <!-- BARRAS -->
-            <div class="chart-card mb-4">
-                <h5 class="fw-bold mb-4">📊 Reportes por Máquina</h5>
-                <canvas id="graficoMaquinas" height="120"></canvas>
+
+            <!-- Reportes por Máquina -->
+            <div class="chart-card">
+                <h5 class="fw-bold">
+                    📊 Reportes por Máquina
+                </h5>
+
+                <canvas id="graficoMaquinas"></canvas>
             </div>
 
-            <!-- LÍNEAS -->
-            <div class="chart-card mb-4">
-                <h5 class="fw-bold mb-4">📈 Tendencia Mensual</h5>
-                <canvas id="graficoMeses" height="120"></canvas>
-            </div>
         </div>
 
-        <!-- DERECHA -->
+        <!-- ================= DERECHA ================= -->
         <div class="col-lg-4">
-            <!-- DONA -->
-            <div class="chart-card mb-4">
-                <h5 class="fw-bold mb-4">📝 Reportes por Frente</h5>
-                <canvas id="graficoFrentes" height="200"></canvas>
+
+            <!-- Reportes por Frente -->
+            <div class="chart-card">
+                <h5 class="fw-bold">
+                    📝 Reportes por Frente
+                </h5>
+
+                <canvas id="graficoFrentes"></canvas>
             </div>
 
-            <!-- TOP -->
+        </div>
+
+        <!-- ================= IZQUIERDA ================= -->
+        <div class="col-lg-8">
+
+            <!-- Tendencia Semanal -->
             <div class="chart-card">
-                <h5 class="fw-bold mb-4">🏆 Top Operadores</h5>
+
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="fw-bold mb-0">
+                        📈 Tendencia Semanal
+                    </h5>
+
+                    <input type="date"
+                           id="fechaSemana"
+                           class="form-control"
+                           style="width:190px;">
+                </div>
+
+                <canvas id="graficoSemana" height="110"></canvas>
+
+            </div>
+
+        </div>
+
+        <!-- ================= DERECHA ================= -->
+        <div class="col-lg-4">
+
+            <!-- Top Operadores -->
+            <div class="chart-card">
+
+                <h5 class="fw-bold">
+                    🏆 Top Operadores
+                </h5>
+
                 <div class="top-operadores-scroll">
+
                     @for (int i = 0; i < topCount; i++)
                     {
-                        <div class="operador-item d-flex justify-content-between align-items-center mb-2">
+                        <div class="operador-item d-flex justify-content-between align-items-center">
+
                             <div class="d-flex align-items-center gap-3">
+
                                 <div class="operador-avatar">
+
                                     @if (i == 0)
                                     {
                                         <span>🥇</span>
@@ -117,19 +184,32 @@
                                     }
                                     else
                                     {
-                                        <span class="badge bg-secondary rounded-pill">@((i + 1).ToString())</span>
+                                        <span class="badge bg-secondary rounded-pill">
+                                            @(i + 1)
+                                        </span>
                                     }
+
                                 </div>
 
-                                <strong>@Model.TopOperadores[i]</strong>
+                                <strong>
+                                    @Model.TopOperadores[i]
+                                </strong>
+
                             </div>
 
-                            <span class="badge bg-primary rounded-pill">@Model.HorasOperadores[i] h</span>
+                            <span class="badge bg-primary rounded-pill">
+                                @Model.HorasOperadores[i] h
+                            </span>
+
                         </div>
                     }
+
                 </div>
+
             </div>
+
         </div>
+
     </div>
 
 </div>
@@ -173,7 +253,7 @@
                 });
             }
 
-            // Doughnut - Frentes
+            // Frentes
             const canvasFrentes = document.getElementById('graficoFrentes');
             if (canvasFrentes) {
                 new Chart(canvasFrentes, {
@@ -186,31 +266,79 @@
                 });
             }
 
-            // Line - Meses
-            const canvasMeses = document.getElementById('graficoMeses');
-            if (canvasMeses) {
-                new Chart(canvasMeses, {
-                    type: 'line',
-                    data: {
-                        labels: mesesLabels,
-                        datasets: [{
-                            label: 'Reportes',
-                            data: mesesData,
-                            borderColor: '#0d6efd',
-                            backgroundColor: 'rgba(13,110,253,.15)',
-                            fill: true,
-                            tension: 0.4,
-                            pointRadius: 5,
-                            pointHoverRadius: 7
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        plugins: { legend: { display: false } },
-                        scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
+                // Semana
+                const canvasSemana = document.getElementById("graficoSemana");
+
+                let graficoSemanal = null;
+
+                if (canvasSemana) {
+
+                    graficoSemanal = new Chart(canvasSemana, {
+                        type: "line",
+                        data: {
+                            labels: mesesLabels,
+                            datasets: [{
+                                label: "Reportes",
+                                data: mesesData,
+                                borderColor: "#0d6efd",
+                                backgroundColor: "rgba(13,110,253,.15)",
+                                fill: true,
+                                tension: 0.4,
+                                pointRadius: 5,
+                                pointHoverRadius: 7
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    display: false
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    ticks: {
+                                        precision: 0
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                }
+
+                // CAMBIAR SEMANA
+                const calendario = document.getElementById("fechaSemana");
+
+                if (calendario) {
+
+                    calendario.valueAsDate = new Date();
+
+                    async function cargarSemana(fecha) {
+
+                        const respuesta = await fetch(
+                            `/Estadisticas/ObtenerTendenciaSemanal?fecha=${fecha}`
+                        );
+
+                        const datos = await respuesta.json();
+
+                        graficoSemanal.data.labels = datos.labels;
+                        graficoSemanal.data.datasets[0].data = datos.data;
+
+                        graficoSemanal.update();
                     }
-                });
-            }
-        });
+
+                    // Cargar la semana actual apenas abre la página
+                    cargarSemana(calendario.value);
+
+                    calendario.addEventListener("change", function () {
+
+                        cargarSemana(this.value);
+
+                    });
+                }          
+            });
     </script>
 }
