@@ -198,13 +198,13 @@
 
                     <!-- Frente -->
                     <div class="mb-3">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
+                        @* <div class="d-flex justify-content-between align-items-center mb-2">
                             <label class="form-label fw-bold mb-0">Frente Operacional</label>
                             <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modalNuevoFrente">
                                 <i class="fa-solid fa-plus"></i> Nuevo Frente
                             </button>
-                        </div>
-
+                        </div> *@
+                        <label class="form-label fw-bold">Frente Operacional</label>
                         <select id="EditarFrente" class="form-select">
                             <option value="">Seleccione un frente</option>
                             @foreach (var frente in ViewBag.Frentes)

@@ -119,7 +119,9 @@
                                         </button>
 
                                         <!-- ELIMINAR -->
-                                        <a asp-action="Eliminar" asp-route-id="@item.Id" class="btn btn-danger btn-sm" onclick="return confirm('¿Eliminar esta máquina?')">
+                                        <a href="#"
+                                           class="btn btn-danger btn-sm btnEliminar"
+                                           data-id="@item.Id">
                                             <i class="fa-solid fa-trash"></i>
                                         </a>
                                     </td>
@@ -210,100 +212,182 @@
         </div>
     </div>
 
-    @section Scripts {
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                // Helpers seguros
-                const $ = id => document.getElementById(id);
+@section Scripts
+{
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
 
-                // Modal nueva máquina
-                const modalNuevaMaquina = new bootstrap.Modal($('#modalNuevaMaquina'));
-                const formNueva = $('formNuevaMaquina') || $('formNuevaMaquina') ; // keep reference by id below
-                const formNuevaEl = $('formNuevaMaquina') || null; // safeguard
+            // MODALES
 
-                const fnNueva = $('formNuevaMaquina');
-                if (fnNueva) {
-                    fnNueva.addEventListener('submit', async function (e) {
-                        e.preventDefault();
+            const modalNuevaMaquina = bootstrap.Modal.getOrCreateInstance(
+                document.getElementById("modalNuevaMaquina")
+            );
 
-                        const datos = {
-                            Nombre: $('#NombreMaquina') ? $('#NombreMaquina').value : '',
-                            Estado: $('#EstadoMaquina') ? $('#EstadoMaquina').value : ''
-                        };
+            const modalEditarMaquina = bootstrap.Modal.getOrCreateInstance(
+                document.getElementById("modalEditarMaquina")
+            );
 
-                        try {
-                            const respuesta = await fetch('/Maquinas/Crear', {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify(datos)
-                            });
+            // CREAR MÁQUINA
 
-                            if (respuesta.ok) {
-                                modalNuevaMaquina.hide();
-                                if ($('#formNuevaMaquina')) $('#formNuevaMaquina').reset();
+            const formNueva = document.getElementById("formNuevaMaquina");
 
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: '¡Correcto!',
-                                    text: 'La máquina fue registrada correctamente.',
-                                    confirmButtonColor: '#198754'
-                                }).then(() => location.reload());
-                            } else {
-                                Swal.fire({ icon: 'error', title: 'Error', text: 'No fue posible registrar la máquina.' });
-                            }
-                        } catch (err) {
-                            Swal.fire({ icon: 'error', title: 'Error', text: 'Error al comunicarse con el servidor.' });
+            if (formNueva) {
+
+                formNueva.addEventListener("submit", async function (e) {
+
+                    e.preventDefault();
+
+                    const datos = {
+                        Nombre: document.getElementById("NombreMaquina").value,
+                        Estado: document.getElementById("EstadoMaquina").value
+                    };
+
+                    try {
+
+                        const respuesta = await fetch("/Maquinas/Crear", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify(datos)
+                        });
+
+                        if (!respuesta.ok) {
+                            throw new Error();
                         }
-                    });
-                }
 
-                // Editar máquina
-                const modalEditarMaquina = new bootstrap.Modal($('#modalEditarMaquina'));
-                document.querySelectorAll('.btnEditar').forEach(btn => {
-                    btn.addEventListener('click', () => {
-                        if ($('#EditarId')) $('#EditarId').value = btn.dataset.id || '';
-                        if ($('#EditarNombre')) $('#EditarNombre').value = btn.dataset.nombre || '';
-                        if ($('#EditarEstado')) $('#EditarEstado').value = btn.dataset.estado || '';
-                        modalEditarMaquina.show();
-                    });
+                        modalNuevaMaquina.hide();
+
+                        formNueva.reset();
+
+                        Swal.fire({
+                            icon: "success",
+                            title: "¡Correcto!",
+                            text: "La máquina fue registrada correctamente.",
+                            confirmButtonColor: "#198754"
+                        }).then(() => location.reload());
+
+                    }
+                    catch {
+
+                        Swal.fire({
+                            icon: "error",
+                            title: "Error",
+                            text: "No fue posible registrar la máquina."
+                        });
+
+                    }
+
                 });
 
-                const fe = document.getElementById('formEditarMaquina');
-                if (fe) {
-                    fe.addEventListener('submit', async function (e) {
-                        e.preventDefault();
+            }
 
-                        const datos = {
-                            Id: parseInt($('#EditarId') ? $('#EditarId').value : '0'),
-                            Nombre: $('#EditarNombre') ? $('#EditarNombre').value : '',
-                            Estado: $('#EditarEstado') ? $('#EditarEstado').value : ''
-                        };
+            // CARGAR DATOS EN MODAL EDITAR
 
-                        try {
-                            const respuesta = await fetch('/Maquinas/Editar', {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify(datos)
-                            });
+            document.querySelectorAll(".btnEditar").forEach(function (boton) {
 
-                            if (respuesta.ok) {
-                                modalEditarMaquina.hide();
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: '¡Actualizada!',
-                                    text: 'La máquina fue actualizada correctamente.',
-                                    confirmButtonColor: '#198754'
-                                }).then(() => location.reload());
-                            } else {
-                                Swal.fire({ icon: 'error', title: 'Error', text: 'No fue posible actualizar la máquina.' });
-                            }
-                        } catch (err) {
-                            Swal.fire({ icon: 'error', title: 'Error', text: 'Error al comunicarse con el servidor.' });
-                        }
-                    });
-                }
+                boton.addEventListener("click", function () {
+
+                    document.getElementById("EditarId").value = this.dataset.id;
+                    document.getElementById("EditarNombre").value = this.dataset.nombre;
+                    document.getElementById("EditarEstado").value = this.dataset.estado;
+
+                    modalEditarMaquina.show();
+
+                });
+
             });
-        </script>
-    }
+
+            // GUARDAR EDICIÓN
+
+            const formEditar = document.getElementById("formEditarMaquina");
+
+            if (formEditar) {
+
+                formEditar.addEventListener("submit", async function (e) {
+
+                    e.preventDefault();
+
+                    const datos = {
+                        Id: parseInt(document.getElementById("EditarId").value),
+                        Nombre: document.getElementById("EditarNombre").value,
+                        Estado: document.getElementById("EditarEstado").value
+                    };
+
+                    try {
+
+                        const respuesta = await fetch("/Maquinas/Editar", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify(datos)
+                        });
+
+                        if (!respuesta.ok) {
+                            throw new Error();
+                        }
+
+                        modalEditarMaquina.hide();
+
+                        Swal.fire({
+                            icon: "success",
+                            title: "¡Actualizada!",
+                            text: "La máquina fue actualizada correctamente.",
+                            confirmButtonColor: "#198754"
+                        }).then(() => location.reload());
+
+                    }
+                    catch {
+
+                        Swal.fire({
+                            icon: "error",
+                            title: "Error",
+                            text: "No fue posible actualizar la máquina."
+                        });
+
+                    }
+
+                });
+
+            }
+
+            // ELIMINAR MÁQUINA
+
+            document.querySelectorAll(".btnEliminar").forEach(function (boton) {
+
+                boton.addEventListener("click", function (e) {
+
+                    e.preventDefault();
+
+                    const id = this.dataset.id;
+
+                    Swal.fire({
+                        title: "¿Eliminar máquina?",
+                        text: "Esta acción no se puede deshacer.",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#dc3545",
+                        cancelButtonColor: "#6c757d",
+                        confirmButtonText: "Sí, eliminar",
+                        cancelButtonText: "Cancelar"
+                    })
+                    .then((result) => {
+
+                        if (result.isConfirmed) {
+
+                            window.location.href = "/Maquinas/Eliminar/" + id;
+
+                        }
+
+                    });
+
+                });
+
+            });
+
+        });
+    </script>
+}
 
 
