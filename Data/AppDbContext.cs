@@ -19,6 +19,8 @@ namespace Maquinarias.Data
         public DbSet<EvaluacionOperador> EvaluacionesOperadores { get; set; }
 
         public DbSet<FrenteOperacional> FrentesOperacionales { get; set; }
+
+        public DbSet<NovedadOperacion> NovedadesOperacion { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Relación Operador -> Máquina
@@ -42,6 +44,13 @@ namespace Maquinarias.Data
                 .HasOne(e => e.Reporte)
                 .WithOne(r => r.Evaluacion)
                 .HasForeignKey<EvaluacionOperador>(e => e.ReporteMaquinariaId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Relación Reporte -> Novedades
+            modelBuilder.Entity<NovedadOperacion>()
+                .HasOne(n => n.Reporte)
+                .WithMany(r => r.Novedades)
+                .HasForeignKey(n => n.ReporteMaquinariaId)
                 .OnDelete(DeleteBehavior.Cascade);
 
 

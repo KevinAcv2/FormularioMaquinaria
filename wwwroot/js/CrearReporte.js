@@ -1,0 +1,205 @@
+﻿document.addEventListener("DOMContentLoaded", function () {
+
+    // ESTADO DE LA MÁQUINA
+    document.getElementById("estadoMaquina")
+    .addEventListener("change", function () {
+
+        let divMotivo = document.getElementById("divMotivo");
+
+        if (this.value == "0") {
+            divMotivo.style.display = "block";
+        } else {
+            divMotivo.style.display = "none";
+        }
+    });
+
+    // FOTO HORÓMETRO INICIAL
+    document.getElementById("fotoInicial")
+    .addEventListener("change", async function () {
+
+        let archivo = this.files[0];
+
+        if (!archivo)
+            return;
+
+        Swal.fire({
+            title: "Leyendo horómetro...",
+            text: "La IA está analizando la imagen.",
+            allowOutsideClick: false,
+            didOpen: () => Swal.showLoading()
+        });
+
+        let formData = new FormData();
+
+        formData.append("imagen", archivo);
+
+        let respuesta = await fetch("/Reporte/LeerHorometro", {
+            method: "POST",
+            body: formData
+        });
+
+        let datos = await respuesta.json();
+
+        Swal.close();
+
+        if (datos.exito) {
+
+            let input = document.getElementById("horometroInicial");
+
+            input.value = datos.valor;
+
+            input.classList.remove("is-warning");
+            input.classList.add("is-valid");
+
+            Swal.fire({
+                icon: "success",
+                title: "Horómetro inicial detectado",
+                html: `
+                            <h2 style="color:#0f2f44">${datos.valor}</h2>
+
+                            <p>
+                                Revise cuidadosamente el valor detectado.
+                                Si observa alguna diferencia puede editarlo
+                                antes de guardar el reporte.
+                            </p>
+                        `,
+                confirmButtonText: "Entendido",
+                confirmButtonColor: "#0f2f44"
+            });
+
+        } else {
+
+            Swal.fire({
+                icon: "error",
+                title: "No fue posible leer el horómetro",
+                text: datos.mensaje
+            });
+
+        }
+
+    });
+
+    // SI EL OPERADOR MODIFICA EL VALOR
+    document.getElementById("horometroInicial")
+    .addEventListener("input", function () {
+
+        this.classList.remove("is-valid");
+        this.classList.add("is-warning");
+
+    });
+
+    // FOTO HORÓMETRO FINAL
+    document.getElementById("fotoFinal")
+    .addEventListener("change", async function () {
+
+        let archivo = this.files[0];
+
+        if (!archivo)
+            return;
+
+        Swal.fire({
+            title: "Leyendo horómetro...",
+            text: "La IA está analizando la imagen.",
+            allowOutsideClick: false,
+            didOpen: () => Swal.showLoading()
+        });
+
+        let formData = new FormData();
+
+        formData.append("imagen", archivo);
+
+        let respuesta = await fetch("/Reporte/LeerHorometro", {
+            method: "POST",
+            body: formData
+        });
+
+        let datos = await respuesta.json();
+
+        Swal.close();
+
+        if (datos.exito) {
+
+            let input = document.getElementById("horometroFinal");
+
+            input.value = datos.valor;
+
+            input.classList.remove("is-warning");
+            input.classList.add("is-valid");
+
+            Swal.fire({
+                icon: "success",
+                title: "Horómetro final detectado",
+                html: `
+                            <h2 style="color:#0f2f44">${datos.valor}</h2>
+
+                            <p>
+                                Revise cuidadosamente el valor detectado.
+                                Si observa alguna diferencia puede editarlo
+                                antes de guardar el reporte.
+                            </p>
+                        `,
+                confirmButtonText: "Entendido",
+                confirmButtonColor: "#0f2f44"
+            });
+
+        } else {
+
+            Swal.fire({
+                icon: "error",
+                title: "No fue posible leer el horómetro",
+                text: datos.mensaje
+            });
+
+        }
+
+    });
+
+    // SI EL OPERADOR MODIFICA EL VALOR
+    document.getElementById("horometroFinal")
+    .addEventListener("input", function () {
+
+        this.classList.remove("is-valid");
+        this.classList.add("is-warning");
+
+    });
+
+    // OPERADOR -> MÁQUINA
+    document.getElementById("operador")
+    .addEventListener("change", async function () {
+
+        let nombre = this.value;
+
+        if (nombre == "") {
+
+            document.getElementById("nombreMaquina").value = "";
+            return;
+
+        }
+
+        let respuesta = await fetch(
+            "/Reporte/ObtenerMaquinaOperador?nombre=" +
+            encodeURIComponent(nombre));
+
+        let datos = await respuesta.json();
+
+        if (datos.exito) {
+
+            document.getElementById("nombreMaquina").value =
+                datos.maquina;
+
+        } else {
+
+            document.getElementById("nombreMaquina").value = "";
+
+            Swal.fire({
+                icon: "warning",
+                title: "Máquina no asignada",
+                text: "Este operador no tiene una máquina asignada.",
+                confirmButtonColor: "#0f2f44"
+            });
+
+        }
+
+    });
+
+});

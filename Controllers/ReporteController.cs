@@ -337,7 +337,7 @@ namespace Maquinarias.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Imprimir()
+        public async Task<IActionResult> ImprimirHistorial()
         {
             QuestPDF.Settings.License = LicenseType.Community;
 

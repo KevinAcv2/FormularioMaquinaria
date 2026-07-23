@@ -25,5 +25,7 @@ namespace FormularioMaquinaria.Models
         public string FotoHorometroFinal { get; set; } = string.Empty;
 
         public EvaluacionOperador? Evaluacion { get; set; }
+
+        public ICollection<NovedadOperacion> Novedades { get; set; } = new List<NovedadOperacion>();
     }
 }
