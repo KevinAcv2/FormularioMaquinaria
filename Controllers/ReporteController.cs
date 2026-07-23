@@ -81,7 +81,7 @@ namespace Maquinarias.Controllers
                     await _context.SaveChangesAsync();
                 }
 
-                TempData["Mensaje"] = "Reporte enviado correctamente";
+                TempData["Exito"] = "Reporte enviado correctamente.";
 
                 return RedirectToAction(nameof(Crear));
             }
@@ -383,6 +383,35 @@ namespace Maquinarias.Controllers
                 documento.GeneratePdf(),
                 "application/pdf",
                 "HistorialReportes.pdf");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Eliminar(int id)
+        {
+            var reporte = await _context.ReportesMaquinaria
+                .FirstOrDefaultAsync(r => r.Id == id);
+
+            if (reporte == null)
+            {
+                return Json(new
+                {
+                    exito = false
+                });
+            }
+
+            _context.ReportesMaquinaria.Remove(reporte);
+
+            await _context.SaveChangesAsync();
+
+            return Json(new
+            {
+                exito = true
+            });
+        }
+
+        public IActionResult IniciarJornada()
+        {
+            return View();
         }
 
     }

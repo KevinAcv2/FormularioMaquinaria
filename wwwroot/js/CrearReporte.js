@@ -1,4 +1,17 @@
-﻿document.addEventListener("DOMContentLoaded", function () {
+﻿// MENSAJE DE ÉXITO
+if (window.mensajeExito && window.mensajeExito.trim() !== "") {
+
+    Swal.fire({
+        icon: "success",
+        title: "¡Reporte enviado!",
+        text: window.mensajeExito,
+        confirmButtonColor: "#0f2f44",
+        confirmButtonText: "Aceptar"
+    });
+
+}
+
+document.addEventListener("DOMContentLoaded", function () {
 
     // ESTADO DE LA MÁQUINA
     document.getElementById("estadoMaquina")
@@ -199,6 +212,64 @@
             });
 
         }
+
+    });
+
+    // =======================================
+    // MODO OFFLINE
+    // =======================================
+
+    const formulario = document.getElementById("formReporte");
+
+    formulario.addEventListener("submit", function (e) {
+
+        // Si hay internet, deja que el formulario funcione normalmente
+        if (navigator.onLine)
+            return;
+
+        // Si no hay internet
+        e.preventDefault();
+
+        const datos = {
+
+            operador: document.getElementById("operador").value,
+
+            frente: document.querySelector("[name='FrenteOperacional']").value,
+
+            maquina: document.getElementById("nombreMaquina").value,
+
+            estado: document.getElementById("estadoMaquina").value,
+
+            horometroInicial: document.getElementById("horometroInicial").value,
+
+            horometroFinal: document.getElementById("horometroFinal").value,
+
+            observaciones: document.querySelector("[name='Observaciones']").value,
+
+            fecha: new Date().toISOString()
+        };
+
+        let pendientes =
+            JSON.parse(localStorage.getItem("reportesPendientes")) || [];
+
+        pendientes.push(datos);
+
+        localStorage.setItem(
+            "reportesPendientes",
+            JSON.stringify(pendientes)
+        );
+
+        Swal.fire({
+
+            icon: "warning",
+
+            title: "Sin conexión",
+
+            text: "El reporte quedó guardado en este dispositivo y se enviará cuando vuelva el internet."
+
+        });
+
+        formulario.reset();
 
     });
 

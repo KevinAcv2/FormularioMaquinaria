@@ -170,7 +170,7 @@
 
         }
 
-        // Boton Imprimir
+// Boton Imprimir
 
 async function imprimirHistorial() {
 
@@ -237,3 +237,85 @@ async function imprimirHistorial() {
     }
 
 }
+
+// ===============================
+// ELIMINAR REPORTE
+// ===============================
+
+document.querySelectorAll(".btnEliminar").forEach(btn => {
+
+    btn.addEventListener("click", function () {
+
+        let id = this.dataset.id;
+
+        Swal.fire({
+
+            title: "¿Eliminar reporte?",
+
+            text: "Esta acción no se puede deshacer.",
+
+            icon: "warning",
+
+            showCancelButton: true,
+
+            confirmButtonColor: "#d33",
+
+            cancelButtonColor: "#6c757d",
+
+            confirmButtonText: "Sí, eliminar",
+
+            cancelButtonText: "Cancelar"
+
+        }).then((result) => {
+
+            if (!result.isConfirmed)
+                return;
+
+            fetch("/Reporte/Eliminar/" + id, {
+
+                method: "POST"
+
+            })
+                .then(r => r.json())
+                .then(data => {
+
+                    if (data.exito) {
+
+                        Swal.fire({
+
+                            icon: "success",
+
+                            title: "Reporte eliminado",
+
+                            text: "El reporte fue eliminado correctamente.",
+
+                            confirmButtonColor: "#0f2f44"
+
+                        }).then(() => {
+
+                            location.reload();
+
+                        });
+
+                    }
+                    else {
+
+                        Swal.fire({
+
+                            icon: "error",
+
+                            title: "Error",
+
+                            text: "No fue posible eliminar."
+
+                        });
+
+                    }
+
+                });
+
+        });
+
+    });
+
+});
