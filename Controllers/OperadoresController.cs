@@ -391,17 +391,28 @@ public class OperadoresController : Controller
         return RedirectToAction(nameof(Index));
     }
 
+    [HttpPost]
     public async Task<IActionResult> Eliminar(int id)
     {
-        var operador = await _context.Operadores.FindAsync(id);
+        var operador = await _context.Operadores
+            .FirstOrDefaultAsync(o => o.Id == id);
 
-        if (operador != null)
+        if (operador == null)
         {
-            _context.Operadores.Remove(operador);
-            await _context.SaveChangesAsync();
+            return Json(new
+            {
+                exito = false
+            });
         }
 
-        return RedirectToAction(nameof(Index));
+        _context.Operadores.Remove(operador);
+
+        await _context.SaveChangesAsync();
+
+        return Json(new
+        {
+            exito = true
+        });
     }
 
     [HttpPost]

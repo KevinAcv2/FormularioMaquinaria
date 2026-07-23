@@ -176,44 +176,103 @@ document.addEventListener("DOMContentLoaded", function () {
 
     });
 
-    // OPERADOR -> MÁQUINA
+    // =======================================
+    // OPERADOR -> MÁQUINA (ONLINE / OFFLINE)
+    // =======================================
+
     document.getElementById("operador")
-    .addEventListener("change", async function () {
+        .addEventListener("change", async function () {
 
-        let nombre = this.value;
+            let nombre = this.value;
 
-        if (nombre == "") {
+            if (nombre === "") {
 
-            document.getElementById("nombreMaquina").value = "";
-            return;
+                document.getElementById("nombreMaquina").value = "";
+                return;
 
-        }
+            }
 
-        let respuesta = await fetch(
-            "/Reporte/ObtenerMaquinaOperador?nombre=" +
-            encodeURIComponent(nombre));
+            // ===========================
+            // SIN INTERNET
+            // ===========================
 
-        let datos = await respuesta.json();
+            if (!navigator.onLine) {
 
-        if (datos.exito) {
+                let maquinasGuardadas =
+                    JSON.parse(localStorage.getItem("maquinasOperadores")) || {};
 
-            document.getElementById("nombreMaquina").value =
-                datos.maquina;
+                if (maquinasGuardadas[nombre]) {
 
-        } else {
+                    document.getElementById("nombreMaquina").value =
+                        maquinasGuardadas[nombre];
 
-            document.getElementById("nombreMaquina").value = "";
+                } else {
 
-            Swal.fire({
-                icon: "warning",
-                title: "Máquina no asignada",
-                text: "Este operador no tiene una máquina asignada.",
-                confirmButtonColor: "#0f2f44"
-            });
+                    document.getElementById("nombreMaquina").value = "";
 
-        }
+                    Swal.fire({
+                        icon: "warning",
+                        title: "Sin conexión",
+                        text: "No existe una máquina almacenada para este operador."
+                    });
 
-    });
+                }
+
+                return;
+            }
+
+            // ===========================
+            // CON INTERNET
+            // ===========================
+
+            try {
+
+                let respuesta = await fetch(
+                    "/Reporte/ObtenerMaquinaOperador?nombre=" +
+                    encodeURIComponent(nombre));
+
+                let datos = await respuesta.json();
+
+                if (datos.exito) {
+
+                    document.getElementById("nombreMaquina").value =
+                        datos.maquina;
+
+                    // Guardar asignación para modo offline
+                    let maquinasGuardadas =
+                        JSON.parse(localStorage.getItem("maquinasOperadores")) || {};
+
+                    maquinasGuardadas[nombre] = datos.maquina;
+
+                    localStorage.setItem(
+                        "maquinasOperadores",
+                        JSON.stringify(maquinasGuardadas)
+                    );
+
+                } else {
+
+                    document.getElementById("nombreMaquina").value = "";
+
+                    Swal.fire({
+                        icon: "warning",
+                        title: "Máquina no asignada",
+                        text: "Este operador no tiene una máquina asignada.",
+                        confirmButtonColor: "#0f2f44"
+                    });
+
+                }
+
+            } catch {
+
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "No fue posible consultar la máquina."
+                });
+
+            }
+
+        });
 
     // =======================================
     // MODO OFFLINE
