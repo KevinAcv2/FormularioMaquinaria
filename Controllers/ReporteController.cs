@@ -9,6 +9,13 @@ using Microsoft.EntityFrameworkCore;
 using QuestPDF.Fluent;
 using QuestPDF.Infrastructure;
 using System.Text.RegularExpressions;
+using System.Text.Json;
+using FormularioMaquinaria.Models;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using System;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace Maquinarias.Controllers
 {
@@ -40,13 +47,20 @@ namespace Maquinarias.Controllers
         [HttpPost]
         public async Task<IActionResult> Crear(
             ReporteMaquinaria reporte,
-            IFormFile fotoInicial,
-            IFormFile fotoFinal)
+            IFormFile? fotoInicial,
+            IFormFile? fotoFinal,
+            IFormFile? EvidenciaNovedad,
+            string? NovedadesJson)
         {
-            if (fotoInicial == null || fotoFinal == null)
+            // Solo exigir fotos si la máquina está operativa
+            if (reporte.EstadoMaquina == 1)
             {
-                ModelState.AddModelError("", "Las fotos son obligatorias");
+                if (fotoInicial == null || fotoFinal == null)
+                {
+                    ModelState.AddModelError("", "Las fotos son obligatorias.");
+                }
             }
+
 
             if (!ModelState.IsValid)
             {
@@ -61,14 +75,84 @@ namespace Maquinarias.Controllers
                 if (!Directory.Exists(uploadsFolder))
                     Directory.CreateDirectory(uploadsFolder);
 
-                reporte.FotoHorometroInicial = await GuardarArchivo(fotoInicial, uploadsFolder);
-                reporte.FotoHorometroFinal = await GuardarArchivo(fotoFinal, uploadsFolder);
+                // Guardar evidencia de la novedad
+                string evidenciaInicio = "";
+
+                if (EvidenciaNovedad != null)
+                {
+                    evidenciaInicio = await GuardarArchivo(EvidenciaNovedad, uploadsFolder);
+                }
+
+                // Si está operativa guarda fotos y calcula horas
+                if (reporte.EstadoMaquina == 1)
+                {
+                    reporte.FotoHorometroInicial =
+                        await GuardarArchivo(fotoInicial, uploadsFolder);
+
+                    reporte.FotoHorometroFinal =
+                        await GuardarArchivo(fotoFinal, uploadsFolder);
+
+                    reporte.HorasTrabajadas =
+                        reporte.HorometroFinal - reporte.HorometroInicial;
+                }
+                else
+                {
+                    reporte.FotoHorometroInicial = "";
+                    reporte.FotoHorometroFinal = "";
+                    reporte.HorometroInicial = 0;
+                    reporte.HorometroFinal = 0;
+                    reporte.HorasTrabajadas = 0;
+                }
 
                 reporte.Fecha = DateTime.UtcNow;
-                reporte.HorasTrabajadas = reporte.HorometroFinal - reporte.HorometroInicial;
 
                 _context.ReportesMaquinaria.Add(reporte);
                 await _context.SaveChangesAsync();
+
+                // Guardar novedades del reporte
+
+                if (!string.IsNullOrWhiteSpace(NovedadesJson))
+                {
+                    var novedades = JsonSerializer.Deserialize<List<NovedadOperacion>>(NovedadesJson);
+                                     
+                    if (novedades != null)
+                    {
+                        foreach (var novedad in novedades)
+                        {
+                            novedad.Id = 0;
+
+                            novedad.ReporteMaquinariaId = reporte.Id;
+
+                            // Guardar la ruta de la evidencia
+                            novedad.EvidenciaInicio = evidenciaInicio;
+
+                            _context.NovedadesOperacion.Add(novedad);
+                        }
+
+                        await _context.SaveChangesAsync();
+                    }
+                }
+
+                // Crear notificación si el reporte tiene novedades
+                if (!string.IsNullOrWhiteSpace(NovedadesJson))
+                {
+                    var notificacion = new Notificacion
+                    {
+                        Titulo = "Nueva novedad registrada",
+
+                        Mensaje = $"{reporte.NombreOperador} reportó una novedad en la máquina {reporte.NombreMaquina}.",
+
+                        ReporteMaquinariaId = reporte.Id,
+
+                        Fecha = DateTime.UtcNow,
+
+                        Leida = false
+                    };
+
+                    _context.Notificaciones.Add(notificacion);
+
+                    await _context.SaveChangesAsync();
+                }
 
                 // Actualizar el estado actual de la máquina
                 var maquina = await _context.Maquinas
@@ -149,6 +233,7 @@ namespace Maquinarias.Controllers
         {
             var reporte = await _context.ReportesMaquinaria
                 .Include(r => r.Evaluacion)
+                .Include(r => r.Novedades)
                 .FirstOrDefaultAsync(r => r.Id == id);
 
             if (reporte == null)
@@ -202,15 +287,16 @@ namespace Maquinarias.Controllers
         }
 
         // GUARDAR ARCHIVO
-        private async Task<string> GuardarArchivo(IFormFile file, string folder)
+        private async Task<string> GuardarArchivo(IFormFile? file, string folder)
         {
+            if (file == null)
+                return "";
+
             string nombreArchivo = Guid.NewGuid() + Path.GetExtension(file.FileName);
             string ruta = Path.Combine(folder, nombreArchivo);
 
-            using (var stream = new FileStream(ruta, FileMode.Create))
-            {
-                await file.CopyToAsync(stream);
-            }
+            using var stream = new FileStream(ruta, FileMode.Create);
+            await file.CopyToAsync(stream);
 
             return "/uploads/" + nombreArchivo;
         }
@@ -414,5 +500,118 @@ namespace Maquinarias.Controllers
             return View();
         }
 
+        // Verificar si existe alguna novedad activa la maquina
+        [HttpGet]
+        public async Task<IActionResult> ExisteNovedadActiva(string maquina)
+        {
+            var reporte = await _context.ReportesMaquinaria
+                .Where(r => r.NombreMaquina == maquina)
+                .OrderByDescending(r => r.Id)
+                .FirstOrDefaultAsync();
+
+            if (reporte == null)
+            {
+                return Json(new
+                {
+                    activa = false
+                });
+            }
+
+            var novedad = await _context.NovedadesOperacion
+                .FirstOrDefaultAsync(n =>
+                    n.ReporteMaquinariaId == reporte.Id &&
+                    n.Activa);
+
+            return Json(new
+            {
+                activa = novedad != null
+            });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> FinalizarNovedad(
+            string maquina,
+            string observacionFin,
+            IFormFile? evidenciaFin)
+        {
+            var reporte = await _context.ReportesMaquinaria
+                .Where(r => r.NombreMaquina == maquina)
+                .OrderByDescending(r => r.Id)
+                .FirstOrDefaultAsync();
+
+            if (reporte == null)
+            {
+                return Json(new
+                {
+                    exito = false,
+                    mensaje = "No se encontró el reporte."
+                });
+            }
+
+            var novedad = await _context.NovedadesOperacion
+                .FirstOrDefaultAsync(n =>
+                    n.ReporteMaquinariaId == reporte.Id &&
+                    n.Activa);
+
+            if (novedad == null)
+            {
+                return Json(new
+                {
+                    exito = false,
+                    mensaje = "No existe una novedad activa."
+                });
+            }
+
+            novedad.Activa = false;
+            novedad.HoraFin = DateTime.UtcNow;
+            novedad.ObservacionFin = observacionFin;
+
+            if (evidenciaFin != null)
+            {
+                string carpeta = Path.Combine(_environment.WebRootPath, "uploads");
+
+                if (!Directory.Exists(carpeta))
+                    Directory.CreateDirectory(carpeta);
+
+                novedad.EvidenciaFin =
+                    await GuardarArchivo(evidenciaFin, carpeta);
+            }
+
+            await _context.SaveChangesAsync();
+
+            return Json(new
+            {
+                exito = true
+            });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GuardarNovedad(int reporteId, IFormFile evidenciaInicial)
+        {
+            var reporte = await _context.ReportesMaquinaria.FindAsync(reporteId);
+            if (reporte == null) return NotFound();
+
+            if (evidenciaInicial != null && evidenciaInicial.Length > 0)
+            {
+                var uploads = Path.Combine(_environment.WebRootPath, "uploads");
+                Directory.CreateDirectory(uploads);
+
+                var fileName = $"{Guid.NewGuid()}{Path.GetExtension(evidenciaInicial.FileName)}";
+                var fullPath = Path.Combine(uploads, fileName);
+
+                using (var stream = System.IO.File.Create(fullPath))
+                {
+                    await evidenciaInicial.CopyToAsync(stream);
+                }
+
+                // Guarda ruta pública relativa en la BD
+                reporte.FotoHorometroInicial = "/uploads/" + fileName;
+                _context.ReportesMaquinaria.Update(reporte);
+                await _context.SaveChangesAsync();
+            }
+
+            return Json(new { success = true, evidencia = reporte.FotoHorometroInicial });
+        }
     }
+
 }

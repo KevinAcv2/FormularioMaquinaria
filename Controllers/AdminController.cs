@@ -155,6 +155,7 @@ namespace Maquinarias.Controllers
 
             // ÚLTIMOS REPORTES
             ViewBag.UltimosReportes = await _context.ReportesMaquinaria
+                .Include(r => r.Novedades)
                 .OrderByDescending(x => x.Fecha)
                 .Take(5)
                 .ToListAsync();
@@ -215,7 +216,18 @@ namespace Maquinarias.Controllers
                 ? Math.Round((decimal)ViewBag.TotalHoras / dias, 1)
                 : 0;
 
+            ViewBag.TotalNotificaciones = await _context.NovedadesOperacion
+                .CountAsync(n => n.Activa);
+
+            ViewBag.Notificaciones = await _context.NovedadesOperacion
+                .Where(n => n.Activa)
+                .Include(n => n.Reporte)
+                .OrderByDescending(n => n.HoraInicio)
+                .Take(10)
+                .ToListAsync();
+
             return View(await reportes
+                .Include(r => r.Novedades)
                 .OrderByDescending(x => x.Fecha)
                 .ToListAsync());
         }
@@ -284,6 +296,10 @@ namespace Maquinarias.Controllers
             DateTime? fechaFin)
         {
             var reportes = _context.ReportesMaquinaria.AsQueryable();
+
+            ViewBag.Notificaciones =
+                await _context.NovedadesOperacion
+                    .CountAsync(x => x.Activa);
 
             // FILTRO FECHAS
 
@@ -535,6 +551,44 @@ namespace Maquinarias.Controllers
                 stream,
                 "application/pdf",
                 "ReporteMaquinaria.pdf");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ObtenerNovedad(int id)
+        {
+            var novedad = await _context.NovedadesOperacion
+                .Include(n => n.Reporte)
+                .FirstOrDefaultAsync(n => n.Id == id);
+
+            if (novedad == null) return NotFound();
+
+            string duracion;
+
+            if (novedad.HoraFin.HasValue)
+            {
+                var t = novedad.HoraFin.Value - novedad.HoraInicio;
+                duracion = $"{(int)t.TotalHours} h {t.Minutes} min";
+            }
+            else
+            {
+                var t = DateTime.UtcNow - novedad.HoraInicio;
+                duracion = $"{(int)t.TotalHours} h {t.Minutes} min (en curso)";
+            }
+
+            return Json(new
+            {
+                id = novedad.Id,
+                maquina = novedad.Reporte?.NombreMaquina,
+                operador = novedad.Reporte?.NombreOperador,
+                tipo = novedad.TipoNovedad,
+                horaInicio = novedad.HoraInicio.ToString("dd/MM/yyyy HH:mm"),
+                horaFin = novedad.HoraFin?.ToString("dd/MM/yyyy HH:mm"),
+                duracion = duracion,
+                observacion = novedad.Observacion,
+                estado = novedad.Activa ? "Activa" : "Finalizada",
+                evidenciaInicio = string.IsNullOrEmpty(novedad.EvidenciaInicio) ? null : Url.Content(novedad.EvidenciaInicio),
+                evidenciaFin = string.IsNullOrEmpty(novedad.EvidenciaFin) ? null : Url.Content(novedad.EvidenciaFin)
+            });
         }
     }
 }

@@ -20,6 +20,7 @@ namespace FormularioMaquinaria.Models
         public string? Observaciones { get; set; }
 
         public DateTime Fecha { get; set; } = DateTime.UtcNow;
+        public DateTime? FechaFin { get; set; }
 
         public string FotoHorometroInicial { get; set; } = string.Empty;
         public string FotoHorometroFinal { get; set; } = string.Empty;

@@ -3,6 +3,7 @@ using System;
 using Maquinarias.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FormularioMaquinaria.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260727155647_Add_FechaFin_ReporteMaquinaria")]
+    partial class Add_FechaFin_ReporteMaquinaria
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -62,7 +65,7 @@ namespace FormularioMaquinaria.Migrations
                     b.HasIndex("ReporteMaquinariaId")
                         .IsUnique();
 
-                    b.ToTable("EvaluacionesOperadores", (string)null);
+                    b.ToTable("EvaluacionesOperadores");
                 });
 
             modelBuilder.Entity("FormularioMaquinaria.Models.Maquina", b =>
@@ -81,7 +84,7 @@ namespace FormularioMaquinaria.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Maquinas", (string)null);
+                    b.ToTable("Maquinas");
                 });
 
             modelBuilder.Entity("FormularioMaquinaria.Models.Notificacion", b =>
@@ -111,7 +114,7 @@ namespace FormularioMaquinaria.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Notificaciones", (string)null);
+                    b.ToTable("Notificaciones");
                 });
 
             modelBuilder.Entity("FormularioMaquinaria.Models.NovedadOperacion", b =>
@@ -155,7 +158,7 @@ namespace FormularioMaquinaria.Migrations
 
                     b.HasIndex("ReporteMaquinariaId");
 
-                    b.ToTable("NovedadesOperacion", (string)null);
+                    b.ToTable("NovedadesOperacion");
                 });
 
             modelBuilder.Entity("FormularioMaquinaria.Models.Operador", b =>
@@ -182,7 +185,7 @@ namespace FormularioMaquinaria.Migrations
 
                     b.HasIndex("MaquinaId");
 
-                    b.ToTable("Operadores", (string)null);
+                    b.ToTable("Operadores");
                 });
 
             modelBuilder.Entity("FormularioMaquinaria.Models.ReporteMaquinaria", b =>
@@ -240,7 +243,7 @@ namespace FormularioMaquinaria.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ReportesMaquinaria", (string)null);
+                    b.ToTable("ReportesMaquinaria");
                 });
 
             modelBuilder.Entity("Maquinarias.Models.FrenteOperacional", b =>
@@ -258,7 +261,7 @@ namespace FormularioMaquinaria.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("FrentesOperacionales", (string)null);
+                    b.ToTable("FrentesOperacionales");
 
                     b.HasData(
                         new

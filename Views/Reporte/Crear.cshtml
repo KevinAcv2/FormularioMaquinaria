@@ -48,6 +48,15 @@
                           method="post"
                           enctype="multipart/form-data">
 
+                        <input type="hidden"
+                               id="NovedadesJson"
+                               name="NovedadesJson" />
+
+                        <input type="file"
+                               id="EvidenciaNovedadForm"
+                               name="EvidenciaNovedad"
+                               hidden />
+
                         <div class="mb-4">
 
                             <label class="form-label">
@@ -201,10 +210,28 @@
                             </label>
 
                             <textarea asp-for="Observaciones"
+                                      id="observaciones"
                                       class="form-control"
                                       rows="4" 
                                       placeholder="Escriba cualquiero observacion del reporte">
                             </textarea>
+
+                        </div>
+
+                        <hr class="my-4" />
+
+                        <h5 class="fw-bold">
+                            <i class="fa-solid fa-list-check text-warning"></i>
+                            Novedades registradas
+                        </h5>
+
+                        <div id="listaNovedades">
+
+                            <div class="alert alert-light text-muted">
+
+                                No hay novedades registradas.
+
+                            </div>
 
                         </div>
 
@@ -214,13 +241,6 @@
                             ENVIAR REPORTE OPERACIONAL
 
                         </button>
-
-                        <a href="/Inicio/Index"
-                           class="btn btn-secondary btn-dashboard w-100 mt-3">
-
-                            VOLVER AL INICIO
-
-                        </a>
                         
                     </form>
                     
@@ -234,6 +254,8 @@
 
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
@@ -241,3 +263,204 @@
 </script>
 
 <script src="~/js/CrearReporte.js" asp-append-version="true"></script>
+
+<!-- MODAL REGISTRAR NOVEDAD  -->
+
+<div class="modal fade"
+     id="modalNovedad"
+     tabindex="-1"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h5 class="modal-title fw-bold">
+
+                    <i class="fa-solid fa-triangle-exclamation text-warning me-2"></i>
+
+                    Registrar Novedad
+
+                </h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <div class="mb-3">
+
+                    <label class="form-label fw-bold">
+
+                        Tipo de novedad
+
+                    </label>
+
+                    <select id="TipoNovedad"
+                            class="form-select">
+
+                        <option value="">
+                            Seleccione...
+                        </option>
+
+                        <option>Daño Mecánico</option>
+                        <option>Falta de Combustible</option>
+                        <option>Mantenimiento</option>
+                        <option>Espera de Material</option>
+                        <option>Cambio de Operador</option>
+                        <option>Condiciones Climáticas</option>
+                        <option>Otro</option>
+
+                    </select>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label fw-bold">
+
+                        Observación
+
+                    </label>
+
+                    <textarea id="ObservacionNovedad"
+                              class="form-control"
+                              rows="5"
+                              placeholder="Describe la novedad..."></textarea>
+
+                    <div class="mb-3">
+
+                        <label class="form-label fw-bold">
+                            Evidencia (Foto)
+                        </label>
+
+                        <input type="file"
+                               id="EvidenciaNovedad"
+                               name="EvidenciaNovedad"
+                               class="form-control"
+                               accept="image/*"
+                               capture="environment" />
+
+                        <small class="text-muted">
+                            Puede seleccionar una fotografía o tomarla desde el dispositivo.
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+
+                    Cancelar
+
+                </button>
+
+                <button type="button"
+                        id="btnGuardarNovedad"
+                        class="btn btn-warning">
+
+                    <i class="fa-solid fa-floppy-disk me-2"></i>
+
+                    Guardar Novedad
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- MODAL FINALIZAR NOVEDAD -->
+
+<div class="modal fade"
+     id="modalFinalizarNovedad"
+     tabindex="-1"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h5 class="modal-title fw-bold">
+                    Finalizar novedad
+                </h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <input type="hidden" id="IdReporteTemporal" />
+
+                <div class="mb-3">
+
+                    <label class="form-label fw-bold">
+                        Observación de cierre
+                    </label>
+
+                    <textarea id="ObservacionFin"
+                              class="form-control"
+                              rows="4"
+                              placeholder="Describa cómo se solucionó la novedad...">
+                    </textarea>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label fw-bold">
+                        Evidencia de reparación
+                    </label>
+
+                    <input type="file"
+                           id="EvidenciaFin"
+                           class="form-control"
+                           accept="image/*"
+                           capture="environment" />
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+                    Cancelar
+                </button>
+
+                <button id="btnFinalizarNovedad"
+                        class="btn btn-success">
+
+                    Finalizar novedad
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

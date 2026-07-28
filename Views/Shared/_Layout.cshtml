@@ -27,7 +27,7 @@
 
             <!-- SIDEBAR -->
         <aside class="bg-dark text-white p-3 no-print"
-               style="width:210px; min-height:100vh;">
+               style="width:210px; height:100vh; position:fixed; top:0; left:0; overflow-y:auto; z-index:1000;">
             <div class="text-center py-4">
 
                 <div class="mb-3">
@@ -153,11 +153,13 @@
 
             </aside>
 
-            <!-- CONTENIDO -->
-            <div class="flex-grow-1">
+        <!-- CONTENIDO -->
+        <div class="flex-grow-1"
+             style="margin-left:210px;">
 
                 <!-- NAVBAR -->
-            <nav class="navbar navbar-expand-lg bg-white shadow-sm px-3 py-2 no-print">
+            <nav class="navbar navbar-expand-lg bg-white shadow-sm px-3 py-2 no-print"
+                 style="position:sticky;top:0; z-index:999;">
 
                 <div class="input-group" style="max-width:280px;">
 
@@ -165,24 +167,8 @@
 
                 <div class="ms-auto d-flex align-items-center">
 
-                    @* <button class="btn btn-light position-relative me-2">
-
-                        <i class="fa-solid fa-bell"></i>
-
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-
-                            @ViewBag.TotalAlertas
-
-                        </span>
-
-                    </button> *@
-
-                    @* <button class="btn btn-light me-3">
-
-                        <i class="fa-solid fa-gear"></i>
-
-                    </button> *@
-
+                    @await Component.InvokeAsync("Alertas")
+                                      
                     <img src="https://ui-avatars.com/api/?name=Administrador&background=0f2f44&color=fff"
                          class="rounded-circle shadow"
                          width="38">
@@ -221,6 +207,41 @@
 
         </div>
 
+    <!-- MODAL DETALLE NOTIFICACIÓN -->
+
+    <div class="modal fade"
+         id="modalNotificacion"
+         tabindex="-1">
+
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+
+                    <h5 class="modal-title"
+                        id="tituloModalNotificacion">
+                    </h5>
+
+                    <button class="btn-close"
+                            data-bs-dismiss="modal">
+                    </button>
+
+                </div>
+
+                <div class="modal-body">
+
+                    <div id="contenidoNotificacion">
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
         <script src="~/lib/jquery/dist/jquery.min.js"></script>
 
         <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -229,5 +250,254 @@
 
         @await RenderSectionAsync("Scripts", required: false)
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+
+        document.addEventListener("click", async function (e) {
+
+            const boton = e.target.closest(".abrirNotificacion");
+
+            if (!boton)
+                return;
+
+            e.preventDefault();
+
+            const id = boton.dataset.id;
+
+            const respuesta = await fetch("/Admin/ObtenerNovedad?id=" + id);
+
+            if (!respuesta.ok)
+                return;
+
+            const datos = await respuesta.json();
+            console.log(datos);
+            console.log(datos.evidenciaInicio);
+
+            const header = document.querySelector("#modalNotificacion .modal-header");
+
+            const titulo = document.getElementById("tituloModalNotificacion");
+
+            if (datos.estado === "Activa") {
+
+                header.className = "modal-header bg-danger text-white";
+
+                titulo.innerHTML = `
+                    <i class="fa-solid fa-triangle-exclamation me-2"></i>
+                    Novedad Activa
+                `;
+
+            }
+            else {
+
+                header.className = "modal-header bg-success text-white";
+
+                titulo.innerHTML = `
+                    <i class="fa-solid fa-circle-check me-2"></i>
+                    Novedad Finalizada
+                `;
+
+            }
+
+        document.getElementById("contenidoNotificacion").innerHTML = `
+
+        <div class="row g-4">
+
+            <div class="col-lg-6">
+
+                <h4 class="fw-bold text-primary mb-4">
+                    ${datos.maquina}
+                </h4>
+
+                <table class="table align-middle">
+
+                <tbody>
+
+                    <tr>
+                        <th style="width:150px;">Operador</th>
+                        <td>${datos.operador}</td>
+                    </tr>
+
+                    <tr>
+                        <th>Tipo</th>
+                        <td>${datos.tipo}</td>
+                    </tr>
+
+                    <tr>
+                        <th>Estado</th>
+
+                        <td>
+
+                            <span class="badge rounded-pill ${
+                                datos.estado === "Activa"
+                                    ? "bg-danger"
+                                    : "bg-success"
+                            }">
+
+                                ${datos.estado}
+
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+            <div class="border rounded-3 p-3 mb-3">
+
+            <h6 class="fw-bold mb-3">
+
+                Línea de tiempo
+
+            </h6>
+
+            <div class="d-flex">
+
+                <div class="me-3 text-center">
+
+                    <i class="fa-solid fa-circle text-success"></i>
+
+                    <br>
+
+                    <i class="fa-solid fa-grip-lines-vertical text-secondary"></i>
+
+                    <br>
+
+                    <i class="fa-solid fa-circle ${datos.estado === "Activa"
+                        ? "text-danger"
+                        : "text-success"}"></i>
+
+                        </div>
+
+                        <div>
+
+                            <div class="mb-4">
+
+                                <strong>Inicio</strong>
+
+                                <br>
+
+                                <small class="text-muted">
+
+                                    ${datos.horaInicio}
+
+                                </small>
+
+                            </div>
+
+                            <div>
+
+                                <strong>Fin</strong>
+
+                                <br>
+
+                                <small class="text-muted">
+
+                                    ${datos.horaFin ?? "Aún no finaliza"}
+
+                                </small>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                </tbody>
+
+                </table>
+
+                <div class="border rounded-3 p-3 bg-light mb-3">
+
+                    <div class="d-flex align-items-center">
+
+                        <i class="fa-regular fa-clock text-danger fs-4 me-3"></i>
+
+                        <div>
+
+                            <small class="text-muted">
+
+                                Tiempo fuera de servicio
+
+                            </small>
+
+                            <h4 class="text-danger fw-bold mb-0">
+
+                                ${datos.duracion}
+
+                            </h4>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="border rounded-3 p-3">
+
+                    <h6 class="fw-bold">
+
+                        Observación
+
+                    </h6>
+
+                    <hr>
+
+                    <p class="mb-0">
+
+                        ${datos.observacion}
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="col-lg-6">
+
+                <div class="card shadow-sm mb-3">
+
+                    <div class="card-header fw-bold">
+
+                        Evidencia inicial
+
+                    </div>
+
+                    <div class="card-body text-center">
+
+                        ${
+                            datos.evidenciaInicio
+
+                            ? `
+                            <a href="${datos.evidenciaInicio}" target="_blank">
+
+                                <img src="${datos.evidenciaInicio}"
+                                     class="img-fluid rounded"
+                                     style="height:220px;width:100%;object-fit:cover;cursor:pointer;">
+
+                            </a>
+                            `
+
+                            : "<p class='text-muted'>Sin evidencia.</p>"
+                        }
+
+                    </div>
+
+                </div>
+
+                
+            </div>
+
+        </div>
+
+        `;
+
+            new bootstrap.Modal(
+                document.getElementById("modalNotificacion")
+            ).show();
+
+        });
+
+    </script>
 </body>
 </html>

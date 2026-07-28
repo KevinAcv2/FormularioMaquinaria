@@ -12,5 +12,6 @@ namespace Maquinarias.ViewModels
 
         [StringLength(500)]
         public string? Observacion { get; set; }
+        public IFormFile? EvidenciaInicio { get; set; }
     }
 }

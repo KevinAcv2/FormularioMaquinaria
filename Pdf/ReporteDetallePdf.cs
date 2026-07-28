@@ -56,6 +56,10 @@ namespace FormularioMaquinaria.Pdf
 
                         column.Item().PaddingTop(20);
 
+                        AgregarNovedades(column, reporte);
+
+                        column.Item().PaddingTop(20);
+
                         AgregarObservaciones(column, reporte);
 
                         column.Item().PaddingTop(20);
@@ -297,8 +301,8 @@ namespace FormularioMaquinaria.Pdf
         }
 
         private static void AgregarEvaluacion(
-    ColumnDescriptor column,
-    ReporteMaquinaria reporte)
+            ColumnDescriptor column,
+            ReporteMaquinaria reporte)
         {
             column.Item()
                 .PaddingTop(20)
@@ -366,6 +370,134 @@ namespace FormularioMaquinaria.Pdf
                     Celda("Fecha de Evaluación", reporte.Evaluacion.FechaEvaluacion.ToString("dd/MM/yyyy"));
                     Celda("Observación", reporte.Evaluacion.ObservacionSupervisor ?? "Sin observaciones");
                 });
+        }
+
+        private static void AgregarNovedades(
+    ColumnDescriptor column,
+    ReporteMaquinaria reporte)
+        {
+            column.Item()
+                .PaddingTop(20)
+                .Text("HISTORIAL DE NOVEDADES")
+                .Bold()
+                .FontSize(13)
+                .FontColor("#0F4C81");
+
+            column.Item().PaddingTop(10);
+
+            var novedades = reporte.Novedades?
+                .OrderByDescending(n => n.HoraInicio)
+                .ToList();
+
+            if (novedades == null || novedades.Count == 0)
+            {
+                column.Item()
+                    .Border(1)
+                    .BorderColor("#D9E2EC")
+                    .Background("#F8FAFC")
+                    .Padding(15)
+                    .AlignCenter()
+                    .Text("Este reporte no registra novedades.")
+                    .FontSize(11);
+
+                return;
+            }
+
+            foreach (var novedad in novedades)
+            {
+                column.Item()
+                    .PaddingBottom(10)
+                    .Border(1)
+                    .BorderColor("#D9E2EC")
+                    .Background("#F8FAFC")
+                    .Padding(12)
+                    .Column(col =>
+                    {
+                        // Encabezado: tipo + estado
+                        col.Item().Row(row =>
+                        {
+                            row.RelativeItem()
+                                .Text(novedad.TipoNovedad)
+                                .Bold()
+                                .FontSize(11)
+                                .FontColor("#0F4C81");
+
+                            row.AutoItem()
+                                .Background(novedad.Activa ? "#F8D7DA" : "#D4EDDA")
+                                .Padding(5)
+                                .Text(novedad.Activa ? "ACTIVA" : "FINALIZADA")
+                                .Bold()
+                                .FontSize(8)
+                                .FontColor(novedad.Activa ? "#842029" : "#0F5132");
+                        });
+
+                        col.Item().PaddingTop(8);
+
+                        // Datos de tiempo
+                        col.Item().Row(row =>
+                        {
+                            void Dato(RowDescriptor row, string titulo, string valor)
+                            {
+                                row.RelativeItem()
+                                    .Column(c =>
+                                    {
+                                        c.Item()
+                                            .Text(titulo)
+                                            .Bold()
+                                            .FontSize(8)
+                                            .FontColor("#6C757D");
+
+                                        c.Item()
+                                            .PaddingTop(2)
+                                            .Text(valor)
+                                            .FontSize(9);
+                                    });
+                            }
+
+                            Dato(row, "Hora inicio", novedad.HoraInicio.ToString("dd/MM/yyyy HH:mm"));
+
+                            Dato(row, "Hora fin", novedad.HoraFin?.ToString("dd/MM/yyyy HH:mm") ?? "Aún no finaliza");
+
+                            string duracion;
+                            if (novedad.HoraFin.HasValue)
+                            {
+                                var t = novedad.HoraFin.Value - novedad.HoraInicio;
+                                duracion = $"{(int)t.TotalHours} h {t.Minutes} min";
+                            }
+                            else
+                            {
+                                duracion = "En proceso";
+                            }
+
+                            Dato(row, "Tiempo fuera de servicio", duracion);
+                        });
+
+                        col.Item().PaddingTop(8);
+
+                        // Observación
+                        col.Item()
+                            .Text(text =>
+                            {
+                                text.Span("Observación: ").Bold().FontSize(9).FontColor("#0F4C81");
+                                text.Span(string.IsNullOrWhiteSpace(novedad.Observacion)
+                                    ? "Sin observación."
+                                    : novedad.Observacion)
+                                    .FontSize(9);
+                            });
+
+                        if (!string.IsNullOrWhiteSpace(novedad.ObservacionFin))
+                        {
+                            col.Item().PaddingTop(4);
+
+                            col.Item()
+                                .Text(text =>
+                                {
+                                    text.Span("Observación de cierre: ").Bold().FontSize(9).FontColor("#0F4C81");
+                                    text.Span(novedad.ObservacionFin).FontSize(9);
+                                });
+                        }
+                    });
+            }
         }
 
         private static void AgregarFirma(ColumnDescriptor column)

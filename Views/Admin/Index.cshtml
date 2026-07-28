@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Http
+@using Maquinarias.Data;
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
@@ -356,7 +357,7 @@
 </div> 
 
 <!-- Últimos reportes -->
-<div class="row gx-4 gy-1 mb-1">
+@* <div class="row gx-4 gy-1 mb-1">
 
     <div class="col-12">
 
@@ -383,6 +384,7 @@
                             <th>Máquina</th>
                             <th>Horas</th>
                             <th>Estado</th>
+                            <th>Novedades</th>
 
                         </tr>
 
@@ -390,7 +392,7 @@
 
                     <tbody>
 
-                        @foreach (var item in ViewBag.UltimosReportes)
+                        @foreach (ReporteMaquinaria item in (IEnumerable<ReporteMaquinaria>)ViewBag.UltimosReportes)
                         {
 
                             <tr>
@@ -420,6 +422,115 @@
 
                                 </td>
 
+                                <td>
+
+                                    @if (item.Novedades.Any(n => n.Activa))
+                                    {
+                                        <span class="badge bg-danger">
+                                            🔴 Novedad activa
+                                        </span>
+                                    }
+                                    else if (item.Novedades.Any())
+                                    {
+                                        <span class="badge bg-success">
+                                            ✅ Finalizada
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">
+                                            Sin novedades
+                                        </span>
+                                    }
+
+                                </td>
+
+                                <td>
+
+                                    @if (item.Novedades != null && item.Novedades.Count > 0)
+                                    {
+                                        foreach (var novedad in item.Novedades)
+                                        {
+                                            <div class="border rounded p-2 mb-2">
+
+                                                <strong>@novedad.TipoNovedad</strong>
+
+                                                <br />
+
+                                                <small>
+                                                    @novedad.Observacion
+                                                </small>
+
+                                                <br />
+
+                                                @if (!string.IsNullOrEmpty(novedad.EvidenciaInicio))
+                                                {
+                                                    <div class="mt-2">
+
+                                                        <strong>Inicio</strong>
+
+                                                        <br />
+
+                                                        <a href="@Url.Content(novedad.EvidenciaInicio)"
+                                                           target="_blank">
+
+                                                            <img src="@Url.Content(novedad.EvidenciaInicio)"
+                                                                 class="img-thumbnail"
+                                                                 style="width:120px;height:120px;object-fit:cover;" />
+
+                                                        </a>
+                                                    </div>
+                                                }
+
+                                                @if (!string.IsNullOrEmpty(novedad.EvidenciaFin))
+                                                {
+                                                    <div class="mt-2">
+
+                                                        <strong>Cierre</strong>
+
+                                                        <br />
+
+                                                        <a href="@Url.Content(novedad.EvidenciaFin)"
+                                                           target="_blank">
+
+                                                            <img src="@Url.Content(novedad.EvidenciaFin)"
+                                                                 class="img-thumbnail"
+                                                                 style="width:120px;height:120px;object-fit:cover;" />
+
+                                                        </a>
+
+                                                    </div>
+                                                }
+
+                                                <div class="mt-2">
+
+                                                    @if (novedad.Activa)
+                                                    {
+                                                        <span class="badge bg-warning">
+                                                            Activa
+                                                        </span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="badge bg-success">
+                                                            Finalizada
+                                                        </span>
+                                                    }
+
+                                                </div>
+
+                                            </div>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">
+                                            Sin novedades
+                                        </span>
+                                    }
+
+                                </td>
+
                             </tr>
 
                         }
@@ -434,7 +545,7 @@
     </div>
 
 </div>
-
+ *@
 <div class="row gx-4 gy-1 mb-1">
 
     <!-- ACTIVIDAD RECIENTE -->

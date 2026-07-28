@@ -3,6 +3,7 @@ using System;
 using Maquinarias.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FormularioMaquinaria.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260724153900_AgregarCierreNovedades")]
+    partial class AgregarCierreNovedades
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -62,7 +65,7 @@ namespace FormularioMaquinaria.Migrations
                     b.HasIndex("ReporteMaquinariaId")
                         .IsUnique();
 
-                    b.ToTable("EvaluacionesOperadores", (string)null);
+                    b.ToTable("EvaluacionesOperadores");
                 });
 
             modelBuilder.Entity("FormularioMaquinaria.Models.Maquina", b =>
@@ -81,81 +84,7 @@ namespace FormularioMaquinaria.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Maquinas", (string)null);
-                });
-
-            modelBuilder.Entity("FormularioMaquinaria.Models.Notificacion", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("Fecha")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<bool>("Leida")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Mensaje")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("ReporteMaquinariaId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Titulo")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Notificaciones", (string)null);
-                });
-
-            modelBuilder.Entity("FormularioMaquinaria.Models.NovedadOperacion", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("Activa")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("EvidenciaFin")
-                        .HasColumnType("text");
-
-                    b.Property<string>("EvidenciaInicio")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("HoraFin")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime>("HoraInicio")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Observacion")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("ObservacionFin")
-                        .HasColumnType("text");
-
-                    b.Property<int>("ReporteMaquinariaId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("TipoNovedad")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ReporteMaquinariaId");
-
-                    b.ToTable("NovedadesOperacion", (string)null);
+                    b.ToTable("Maquinas");
                 });
 
             modelBuilder.Entity("FormularioMaquinaria.Models.Operador", b =>
@@ -182,7 +111,7 @@ namespace FormularioMaquinaria.Migrations
 
                     b.HasIndex("MaquinaId");
 
-                    b.ToTable("Operadores", (string)null);
+                    b.ToTable("Operadores");
                 });
 
             modelBuilder.Entity("FormularioMaquinaria.Models.ReporteMaquinaria", b =>
@@ -197,9 +126,6 @@ namespace FormularioMaquinaria.Migrations
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("Fecha")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime?>("FechaFin")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("FotoHorometroFinal")
@@ -240,7 +166,7 @@ namespace FormularioMaquinaria.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ReportesMaquinaria", (string)null);
+                    b.ToTable("ReportesMaquinaria");
                 });
 
             modelBuilder.Entity("Maquinarias.Models.FrenteOperacional", b =>
@@ -258,7 +184,7 @@ namespace FormularioMaquinaria.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("FrentesOperacionales", (string)null);
+                    b.ToTable("FrentesOperacionales");
 
                     b.HasData(
                         new
@@ -278,22 +204,55 @@ namespace FormularioMaquinaria.Migrations
                         });
                 });
 
+            modelBuilder.Entity("NovedadOperacion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Activa")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("EvidenciaFin")
+                        .HasColumnType("text");
+
+                    b.Property<string>("EvidenciaInicio")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("HoraFin")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("HoraInicio")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Observacion")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ObservacionFin")
+                        .HasColumnType("text");
+
+                    b.Property<int>("ReporteMaquinariaId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("TipoNovedad")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReporteMaquinariaId");
+
+                    b.ToTable("NovedadesOperacion");
+                });
+
             modelBuilder.Entity("FormularioMaquinaria.Models.EvaluacionOperador", b =>
                 {
                     b.HasOne("FormularioMaquinaria.Models.ReporteMaquinaria", "Reporte")
                         .WithOne("Evaluacion")
                         .HasForeignKey("FormularioMaquinaria.Models.EvaluacionOperador", "ReporteMaquinariaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Reporte");
-                });
-
-            modelBuilder.Entity("FormularioMaquinaria.Models.NovedadOperacion", b =>
-                {
-                    b.HasOne("FormularioMaquinaria.Models.ReporteMaquinaria", "Reporte")
-                        .WithMany("Novedades")
-                        .HasForeignKey("ReporteMaquinariaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -315,6 +274,17 @@ namespace FormularioMaquinaria.Migrations
                     b.Navigation("FrenteOperacional");
 
                     b.Navigation("Maquina");
+                });
+
+            modelBuilder.Entity("NovedadOperacion", b =>
+                {
+                    b.HasOne("FormularioMaquinaria.Models.ReporteMaquinaria", "Reporte")
+                        .WithMany("Novedades")
+                        .HasForeignKey("ReporteMaquinariaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Reporte");
                 });
 
             modelBuilder.Entity("FormularioMaquinaria.Models.ReporteMaquinaria", b =>

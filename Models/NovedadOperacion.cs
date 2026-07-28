@@ -1,28 +1,27 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using FormularioMaquinaria.Models;
 
-namespace FormularioMaquinaria.Models
+namespace FormularioMaquinaria.Models;
+
+public class NovedadOperacion
 {
-    public class NovedadOperacion
-    {
-        public int Id { get; set; }
+    public int Id { get; set; }
 
-        [Required]
-        public int ReporteMaquinariaId { get; set; }
+    public int ReporteMaquinariaId { get; set; }
+    public ReporteMaquinaria? Reporte { get; set; }
 
-        public ReporteMaquinaria Reporte { get; set; } = null!;
+    public string TipoNovedad { get; set; } = string.Empty;
 
-        [Required]
-        public DateTime HoraInicio { get; set; } = DateTime.UtcNow;
+    public string Observacion { get; set; } = string.Empty;
 
-        public DateTime? HoraFin { get; set; }
+    public DateTime HoraInicio { get; set; }
 
-        [Required]
-        [StringLength(100)]
-        public string TipoNovedad { get; set; } = string.Empty;
+    public string? EvidenciaInicio { get; set; }
 
-        [StringLength(500)]
-        public string? Observacion { get; set; }
+    public DateTime? HoraFin { get; set; }
 
-        public bool Activa { get; set; } = true;
-    }
+    public string? ObservacionFin { get; set; }
+
+    public string? EvidenciaFin { get; set; }
+
+    public bool Activa { get; set; } = true;
 }
