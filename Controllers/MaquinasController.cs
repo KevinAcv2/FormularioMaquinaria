@@ -27,8 +27,9 @@ namespace Maquinarias.Controllers
             if (!string.IsNullOrWhiteSpace(buscar))
             {
                 maquinas = maquinas.Where(x =>
-                    x.Nombre.Contains(buscar));
+                    x.Nombre != null && x.Nombre.Contains(buscar));
             }
+
 
             // Filtrar por estado
             if (!string.IsNullOrWhiteSpace(estado))

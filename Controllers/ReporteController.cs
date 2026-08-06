@@ -10,7 +10,6 @@ using QuestPDF.Fluent;
 using QuestPDF.Infrastructure;
 using System.Text.RegularExpressions;
 using System.Text.Json;
-using FormularioMaquinaria.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using System;

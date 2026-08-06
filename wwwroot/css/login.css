@@ -1,0 +1,80 @@
+﻿* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(rgba(0,0,0,.55), rgba(0,0,0,.55)), url('/img/Fondo.jpg') no-repeat center center fixed;
+    background-size: cover;
+    padding: 20px;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 480px;
+    background: rgba(255,255,255,.96);
+    border-radius: 25px;
+    overflow: hidden;
+    box-shadow: 0px 15px 40px rgba(0,0,0,.35);
+    backdrop-filter: blur(10px);
+}
+
+.login-header {
+    background: #0f2f44;
+    padding: 35px;
+    text-align: center;
+    color: white;
+}
+
+.logo-login {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: white;
+    border: 5px solid #f0ad00;
+    object-fit: contain;
+    padding: 10px;
+    margin-bottom: 15px;
+}
+
+.titulo-login {
+    font-size: 30px;
+    font-weight: 800;
+}
+
+.subtitulo-login {
+    color: #d7d7d7;
+}
+
+.login-body {
+    padding: 35px;
+}
+
+.form-label {
+    font-weight: 700;
+    color: #0f2f44;
+}
+
+.form-control {
+    padding: 12px;
+    border-radius: 12px;
+}
+
+.btn-login {
+    background: #f0ad00;
+    color: black;
+    border: none;
+    font-weight: 800;
+    padding: 14px;
+    border-radius: 12px;
+    transition: .3s;
+}
+
+    .btn-login:hover {
+        background: #d89b00;
+    }

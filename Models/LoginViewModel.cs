@@ -4,10 +4,10 @@ namespace FormularioMaquinaria.Models
 {
     public class LoginViewModel
     {
-        [Required]
-        public string Usuario { get; set; }
+        [Required(ErrorMessage = "El usuario es obligatorio.")]
+        public string Usuario { get; set; } = string.Empty;
 
-        [Required]
-        public string Password { get; set; }
+        [Required(ErrorMessage = "La contraseña es obligatoria.")]
+        public string Password { get; set; } = string.Empty;
     }
 }

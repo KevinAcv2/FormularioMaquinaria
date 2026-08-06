@@ -13,7 +13,7 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="~/css/dashboard.css" asp-append-version="true" />
 
- <!-- HEADER DASHBOARD -->
+<!-- HEADER DASHBOARD -->
 
 <div class="row gx-4 gy-1 mb-1">
 
@@ -74,7 +74,7 @@
 
                     <small class="text-primary">
 
-                        Personal registrado 
+                        Personal registrado
 
                     </small>
 
@@ -88,7 +88,7 @@
 
             </div>
 
-        </div>  
+        </div>
 
     </div>
 
@@ -168,7 +168,7 @@
 
     </div>
 
-</div> 
+</div>
 
 <div class="row gx-4 gy-1 mb-1">
 
@@ -354,198 +354,9 @@
 
     </div>
 
-</div> 
+</div>
 
 <!-- Últimos reportes -->
-@* <div class="row gx-4 gy-1 mb-1">
-
-    <div class="col-12">
-
-        <div class="card border-0 shadow-sm">
-
-            <div class="card-header bg-white border-0">
-
-                <h4 class="fw-bold mb-0">
-                    📄 ÚLTIMOS OPERADORES
-                </h4>
-
-            </div>
-
-            <div class="card-body p-0">
-
-                <table class="table table-hover align-middle mb-0">
-
-                    <thead class="table-light">
-
-                        <tr>
-
-                            <th>Fecha</th>
-                            <th>Operador</th>
-                            <th>Máquina</th>
-                            <th>Horas</th>
-                            <th>Estado</th>
-                            <th>Novedades</th>
-
-                        </tr>
-
-                    </thead>
-
-                    <tbody>
-
-                        @foreach (ReporteMaquinaria item in (IEnumerable<ReporteMaquinaria>)ViewBag.UltimosReportes)
-                        {
-
-                            <tr>
-
-                                <td>@item.Fecha.ToString("dd/MM/yyyy")</td>
-
-                                <td>@item.NombreOperador</td>
-
-                                <td>@item.NombreMaquina</td>
-
-                                <td>@item.HorasTrabajadas</td>
-
-                                <td>
-
-                                    @if (item.EstadoMaquina == 1)
-                                    {
-                                        <span class="badge bg-success">
-                                            Operativa
-                                        </span>
-                                    }
-                                    else
-                                    {
-                                        <span class="badge bg-danger">
-                                            No Operativa
-                                        </span>
-                                    }
-
-                                </td>
-
-                                <td>
-
-                                    @if (item.Novedades.Any(n => n.Activa))
-                                    {
-                                        <span class="badge bg-danger">
-                                            🔴 Novedad activa
-                                        </span>
-                                    }
-                                    else if (item.Novedades.Any())
-                                    {
-                                        <span class="badge bg-success">
-                                            ✅ Finalizada
-                                        </span>
-                                    }
-                                    else
-                                    {
-                                        <span class="badge bg-secondary">
-                                            Sin novedades
-                                        </span>
-                                    }
-
-                                </td>
-
-                                <td>
-
-                                    @if (item.Novedades != null && item.Novedades.Count > 0)
-                                    {
-                                        foreach (var novedad in item.Novedades)
-                                        {
-                                            <div class="border rounded p-2 mb-2">
-
-                                                <strong>@novedad.TipoNovedad</strong>
-
-                                                <br />
-
-                                                <small>
-                                                    @novedad.Observacion
-                                                </small>
-
-                                                <br />
-
-                                                @if (!string.IsNullOrEmpty(novedad.EvidenciaInicio))
-                                                {
-                                                    <div class="mt-2">
-
-                                                        <strong>Inicio</strong>
-
-                                                        <br />
-
-                                                        <a href="@Url.Content(novedad.EvidenciaInicio)"
-                                                           target="_blank">
-
-                                                            <img src="@Url.Content(novedad.EvidenciaInicio)"
-                                                                 class="img-thumbnail"
-                                                                 style="width:120px;height:120px;object-fit:cover;" />
-
-                                                        </a>
-                                                    </div>
-                                                }
-
-                                                @if (!string.IsNullOrEmpty(novedad.EvidenciaFin))
-                                                {
-                                                    <div class="mt-2">
-
-                                                        <strong>Cierre</strong>
-
-                                                        <br />
-
-                                                        <a href="@Url.Content(novedad.EvidenciaFin)"
-                                                           target="_blank">
-
-                                                            <img src="@Url.Content(novedad.EvidenciaFin)"
-                                                                 class="img-thumbnail"
-                                                                 style="width:120px;height:120px;object-fit:cover;" />
-
-                                                        </a>
-
-                                                    </div>
-                                                }
-
-                                                <div class="mt-2">
-
-                                                    @if (novedad.Activa)
-                                                    {
-                                                        <span class="badge bg-warning">
-                                                            Activa
-                                                        </span>
-                                                    }
-                                                    else
-                                                    {
-                                                        <span class="badge bg-success">
-                                                            Finalizada
-                                                        </span>
-                                                    }
-
-                                                </div>
-
-                                            </div>
-                                        }
-                                    }
-                                    else
-                                    {
-                                        <span class="text-muted">
-                                            Sin novedades
-                                        </span>
-                                    }
-
-                                </td>
-
-                            </tr>
-
-                        }
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
-        </div>
-    </div>
-
-</div>
- *@
 <div class="row gx-4 gy-1 mb-1">
 
     <!-- ACTIVIDAD RECIENTE -->
@@ -786,125 +597,14 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
-
-        const maquinas=@Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.MaquinasChart));
-
-        const horas=@Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.HorasChart));
-
-        const operadores=@Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.OperadoresChart));
-
-        const reportes=@Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.ReportesChart));
-
-                new Chart(document.getElementById('horasChart'), {
-
-            type: 'bar',
-
-            data: {
-
-                labels: maquinas,
-
-                datasets: [{
-
-                    label: 'Horas Trabajadas',
-
-                    data: horas,
-
-                    backgroundColor: '#0f2f44',
-
-                    borderRadius: 8
-
-                }]
-
-            },
-
-            options: {
-
-                responsive: true,
-
-                maintainAspectRatio: true,
-
-                plugins: {
-
-                    legend: {
-
-                        display: false
-
-                    }
-
-                },
-
-                scales: {
-
-                    y: {
-
-                        beginAtZero: true
-
-                    }
-
-                }
-
-            }
-
-        });
-
-            new Chart(document.getElementById('operadoresChart'), {
-
-            type: 'bar',
-
-            data: {
-
-                labels: operadores,
-
-                datasets: [{
-
-                    label: 'Reportes',
-
-                    data: reportes,
-
-                    backgroundColor: '#f0ad00',
-
-                    borderRadius: 8
-
-                }]
-
-            },
-
-            options: {
-
-                responsive: true,
-
-                maintainAspectRatio: true,
-
-                plugins: {
-
-                    legend: {
-
-                        display: false
-
-                    }
-
-                },
-
-                scales: {
-
-                    y: {
-
-                        beginAtZero: true,
-
-                        ticks: {
-
-                            precision: 0
-
-                        }
-
-                    }
-
-                }
-
-            }
-
-        });
-
+        window.dashboardData = {
+            maquinas: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.MaquinasChart)),
+            horas: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.HorasChart)),
+            operadores: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.OperadoresChart)),
+            reportes: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.ReportesChart))
+        };
     </script>
+
+    <script src="~/js/admin-dashboard.js" asp-append-version="true"></script>
 
 }

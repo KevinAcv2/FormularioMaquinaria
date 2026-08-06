@@ -8,13 +8,13 @@ namespace FormularioMaquinaria.Models
         public int Id { get; set; }
 
         [Required]
-        public string Nombre { get; set; }
+        public string Nombre { get; set; } = string.Empty;
 
         // FK
         public int? FrenteOperacionalId { get; set; }
 
         // Navegación
-        public FrenteOperacional? FrenteOperacional { get; set; }
+        public FrenteOperacional FrenteOperacional { get; set; } = null!;
 
         public int? MaquinaId { get; set; }
 

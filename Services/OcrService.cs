@@ -18,8 +18,9 @@ namespace Maquinarias.Services
 
         public async Task<string> LeerTextoAsync(IFormFile imagen)
         {
-            var apiKey =
-                _configuration["OcrSpace:ApiKey"];
+            var apiKey = _configuration["OcrSpace:ApiKey"]
+                ?? throw new InvalidOperationException("La API Key 'OcrSpace:ApiKey' no está configurada en appsettings.json.");
+
 
             using var content =
                 new MultipartFormDataContent();

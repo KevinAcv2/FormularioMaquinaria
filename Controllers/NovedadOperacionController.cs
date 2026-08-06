@@ -23,12 +23,11 @@ namespace FormularioMaquinaria.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-
             var novedad = new NovedadOperacion
             {
                 ReporteMaquinariaId = model.ReporteMaquinariaId,
                 TipoNovedad = model.TipoNovedad,
-                Observacion = model.Observacion,
+                Observacion = model.Observacion ?? string.Empty,
                 HoraInicio = DateTime.UtcNow,
                 Activa = true
             };
