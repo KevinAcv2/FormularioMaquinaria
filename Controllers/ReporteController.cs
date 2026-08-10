@@ -138,13 +138,9 @@ namespace Maquinarias.Controllers
                     var notificacion = new Notificacion
                     {
                         Titulo = "Nueva novedad registrada",
-
                         Mensaje = $"{reporte.NombreOperador} reportó una novedad en la máquina {reporte.NombreMaquina}.",
-
                         ReporteMaquinariaId = reporte.Id,
-
                         Fecha = DateTime.UtcNow,
-
                         Leida = false
                     };
 

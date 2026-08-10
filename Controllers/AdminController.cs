@@ -20,8 +20,8 @@ namespace Maquinarias.Controllers
 
         // LISTADO
         public async Task<IActionResult> Index(
-        string buscar,
-        string tipoMaquina)
+            string buscar,
+            string tipoMaquina)
         {
             var reportes = _context.ReportesMaquinaria.AsQueryable();
 
