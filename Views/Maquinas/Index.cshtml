@@ -1,393 +1,543 @@
-﻿    @model IEnumerable<FormularioMaquinaria.Models.Maquina>
+﻿@model IEnumerable<FormularioMaquinaria.Models.Maquina>
 
-    @{
-        ViewData["Title"] = "Gestión de Maquinaria";
-    }
+@{
+    ViewData["Title"] = "Gestión de Maquinaria";
+}
 
-    <link rel="stylesheet" href="~/css/maquinaria.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/maquinaria.css" asp-append-version="true" />
 
-    <div class="container-fluid">
-        <div id="reporteMaquinaria">
-            <div class="historial-header mb-4 d-flex justify-content-between align-items-start">
-                <div>
-                    <h1 class="titulo-reporte">🚜 Gestión de Maquinaria</h1>
-                    <p class="subtitulo-reporte">Administración de maquinaria registrada.</p>
-                </div>
+<div class="container-fluid">
 
-                <div class="acciones-reporte no-print d-flex gap-2">
-                    <a asp-action="ExportarExcel" class="btn btn-success btn-exp">
-                        <i class="fa-solid fa-file-excel"></i> Exportar Excel
-                    </a>
+    <!-- ENCABEZADO -->
+    <div id="reporteMaquinaria">
 
-                    <a asp-action="ExportarPdf" class="btn btn-danger btn-exp">
-                        <i class="bi bi-file-earmark-pdf"></i> Exportar PDF
-                    </a>
-                </div>
+        <div class="historial-header mb-4 d-flex justify-content-between align-items-start">
+
+            <div>
+                <h1 class="titulo-reporte">
+                    🚜 Gestión de Maquinaria
+                </h1>
+
+                <p class="subtitulo-reporte">
+                    Administración de maquinaria registrada.
+                </p>
             </div>
 
-            <!-- TOTAL MAQUINAS -->
-            <div class="row mb-1">
-                <div class="col-md-4">
-                    <div class="card-custom text-center">
-                        <h5>Total Maquinaria</h5>
-                        <h2>@Model.Count()</h2>
-                    </div>
-                </div>
+            <!-- EXPORTACIONES -->
+            <div class="acciones-reporte no-print d-flex gap-2">
+
+                <a asp-action="ExportarExcel"
+                   class="btn btn-success btn-exp">
+
+                    <i class="fa-solid fa-file-excel"></i>
+                    Exportar Excel
+
+                </a>
+
+                <a asp-action="ExportarPdf"
+                   class="btn btn-danger btn-exp">
+
+                    <i class="fa-solid fa-file-pdf"></i>
+                    Exportar PDF
+
+                </a>
+
             </div>
+
         </div>
 
-        <!-- TARJETA CON LA TABLA -->
-        <div class="card shadow-sm border-0">
-            <div class="card-body">
-                <form asp-action="Index" method="get">
-                    <div class="row align-items-end mb-4 no-print">
-                        <!-- FILTROS -->
-                        <div class="col-lg-8">
-                            <div class="row g-2">
-                                <!-- Buscar -->
-                                <div class="col-4">
-                                    <input type="text"
-                                           name="buscar"
-                                           class="form-control"
-                                           placeholder="🔍 Buscar maquinaria..."
-                                           value="@ViewBag.Buscar" />
-                                </div>
 
-                                <div class="col-4">
-                                    <select name="estado" class="form-select">
-                                        <option value="">Estado</option>
-                                        <option value="1" selected="@(ViewBag.Estado?.ToString() == "1" ? "selected" : null)">OPERATIVA</option>
-                                        <option value="0" selected="@(ViewBag.Estado?.ToString() == "0" ? "selected" : null)">NO OPERATIVA</option>
-                                    </select>
-                                </div>
+        <!-- TOTAL MAQUINAS -->
+        <div class="row mb-3">
+
+            <div class="col-md-4">
+
+                <div class="card-custom text-center">
+
+                    <h5>
+                        Total Maquinaria
+                    </h5>
+
+                    <h2>
+                        @Model.Count()
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- TARJETA PRINCIPAL -->
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body">
+
+
+            <!-- ============================= -->
+            <!-- FILTROS -->
+            <!-- ============================= -->
+
+            <form asp-action="Index"
+                  method="get">
+
+                <div class="row align-items-end mb-4 no-print">
+
+
+                    <!-- CAMPOS -->
+                    <div class="col-lg-8">
+
+                        <div class="row g-2">
+
+
+                            <!-- BUSCAR -->
+                            <div class="col-4">
+
+                                <input type="text"
+                                       name="buscar"
+                                       class="form-control"
+                                       placeholder="🔍 Buscar maquinaria..."
+                                       value="@ViewBag.Buscar" />
+
                             </div>
+
+
+                            <!-- ESTADO -->
+                            <div class="col-4">
+
+                                <select name="estado"
+                                        class="form-select">
+
+                                    <option value="">
+                                        Estado
+                                    </option>
+
+                                    <option value="1"
+                                            selected="@(ViewBag.Estado?.ToString() == "1" ? "selected" : null)">
+                                        OPERATIVA
+                                    </option>
+
+                                    <option value="0"
+                                            selected="@(ViewBag.Estado?.ToString() == "0" ? "selected" : null)">
+                                        NO OPERATIVA
+                                    </option>
+
+                                </select>
+
+                            </div>
+
                         </div>
 
-                        <!-- BOTONES -->
-                        <div class="col-lg-4">
-                            <div class="d-flex justify-content-end gap-2">
-                                <button type="submit" class="btn btn-primary btn-toolbar-custom">
-                                    <i class="fa-solid fa-magnifying-glass"></i> Buscar
-                                </button>
-
-                                <a asp-action="Index" class="btn btn-secondary btn-toolbar-custom">
-                                    <i class="fa-solid fa-rotate"></i> Limpiar
-                                </a>
-
-                                <button type="button" class="btn btn-success btn-toolbar-custom" data-bs-toggle="modal" data-bs-target="#modalNuevaMaquina">
-                                    <i class="fa-solid fa-plus"></i> Nueva
-                                </button>
-                            </div>
-                        </div>
                     </div>
 
-                    <table class="table table-hover align-middle">
-                        <thead>
+
+                    <!-- BOTONES -->
+                    <div class="col-lg-4">
+
+                        <div class="d-flex justify-content-end gap-2">
+
+
+                            <!-- BUSCAR -->
+                            <button type="submit"
+                                    class="btn btn-primary btn-toolbar-custom">
+
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                Buscar
+
+                            </button>
+
+
+                            <!-- LIMPIAR -->
+                            <a asp-action="Index"
+                               class="btn btn-secondary btn-toolbar-custom">
+
+                                <i class="fa-solid fa-rotate"></i>
+                                Limpiar
+
+                            </a>
+
+
+                            <!-- NUEVA -->
+                            <button type="button"
+                                    class="btn btn-success btn-toolbar-custom"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#modalNuevaMaquina">
+
+                                <i class="fa-solid fa-plus"></i>
+                                Nueva
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+
+            <!-- ============================= -->
+            <!-- TABLA -->
+            <!-- ============================= -->
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                ID
+                            </th>
+
+                            <th>
+                                Máquina
+                            </th>
+
+                            <th>
+                                Estado
+                            </th>
+
+                            <th class="no-print text-center">
+                                Acciones
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        @foreach (var item in Model)
+                        {
+
                             <tr>
-                                <th>ID</th>
-                                <th>Máquina</th>
-                                <th>Estado</th>
-                                <th class="no-print text-center">Acciones</th>
+
+                                <!-- ID -->
+                                <td>
+                                    @item.Id
+                                </td>
+
+
+                                <!-- NOMBRE -->
+                                <td>
+                                    @item.Nombre
+                                </td>
+
+
+                                <!-- ESTADO -->
+                                <td>
+
+                                    @if (item.Estado == "1")
+                                    {
+
+                                        <span class="badge bg-success">
+                                            OPERATIVA
+                                        </span>
+
+                                    }
+                                    else
+                                    {
+
+                                        <span class="badge bg-danger">
+                                            NO OPERATIVA
+                                        </span>
+
+                                    }
+
+                                </td>
+
+
+                                <!-- ACCIONES -->
+                                <td class="text-center no-print">
+
+
+                                    <!-- EDITAR -->
+                                    <button type="button"
+                                            class="btn btn-warning btn-sm btnEditar"
+                                            data-id="@item.Id"
+                                            data-nombre="@item.Nombre"
+                                            data-estado="@item.Estado"
+                                            title="Editar">
+
+                                        <i class="fa-solid fa-pencil"></i>
+
+                                    </button>
+
+
+                                    <!-- ELIMINAR -->
+                                    <a href="#"
+                                       class="btn btn-danger btn-sm btnEliminar"
+                                       data-id="@item.Id"
+                                       title="Eliminar">
+
+                                        <i class="fa-solid fa-trash"></i>
+
+                                    </a>
+
+                                </td>
+
                             </tr>
-                        </thead>
 
-                        <tbody>
-                            @foreach (var item in Model)
-                            {
-                                <tr>
-                                    <td>@item.Id</td>
-                                    <td>@item.Nombre</td>
-                                    <td>
-                                        @if (item.Estado == "1")
-                                        {
-                                            <span class="badge bg-success">OPERATIVA</span>
-                                        }
-                                        else
-                                        {
-                                            <span class="badge bg-danger">NO OPERATIVA</span>
-                                        }
-                                    </td>
+                        }
 
-                                    <td class="text-center no-print">
-                                        <!-- EDITAR -->
-                                        <button type="button"
-                                                class="btn btn-warning btn-sm btnEditar"
-                                                data-id="@item.Id"
-                                                data-nombre="@item.Nombre"
-                                                data-estado="@item.Estado">
-                                            <i class="fa-solid fa-pencil"></i>
-                                        </button>
+                    </tbody>
 
-                                        <!-- ELIMINAR -->
-                                        <a href="#"
-                                           class="btn btn-danger btn-sm btnEliminar"
-                                           data-id="@item.Id">
-                                            <i class="fa-solid fa-trash"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </form>
+                </table>
+
             </div>
+
         </div>
+
     </div>
 
-    <!-- MODAL NUEVA MÁQUINA -->
-    <div class="modal fade" id="modalNuevaMaquina" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title fw-bold"><i class="fa-solid fa-truck-monster text-success me-2"></i> Nueva Máquina</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+</div>
+
+
+
+<!-- ================================================= -->
+<!-- MODAL NUEVA MÁQUINA -->
+<!-- ================================================= -->
+
+<div class="modal fade"
+     id="modalNuevaMaquina"
+     tabindex="-1"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+
+        <div class="modal-content">
+
+
+            <!-- HEADER -->
+            <div class="modal-header">
+
+                <h5 class="modal-title fw-bold">
+
+                    <i class="fa-solid fa-truck-monster text-success me-2"></i>
+
+                    Nueva Máquina
+
+                </h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+
+            <!-- FORMULARIO -->
+            <form id="formNuevaMaquina">
+
+                <div class="modal-body">
+
+
+                    <!-- NOMBRE -->
+                    <div class="mb-3">
+
+                        <label class="form-label fw-bold">
+                            Nombre / Tipo Maquinaria
+                        </label>
+
+                        <input type="text"
+                               id="NombreMaquina"
+                               class="form-control"
+                               placeholder="Ej: RetroExcavadora KAT120"
+                               required />
+
+                    </div>
+
+
+                    <!-- ESTADO -->
+                    <div class="mb-3">
+
+                        <label class="form-label fw-bold">
+                            Estado de la Máquina
+                        </label>
+
+                        <select id="EstadoMaquina"
+                                class="form-select"
+                                required>
+
+                            <option value="">
+                                Seleccione un estado
+                            </option>
+
+                            <option value="1">
+                                OPERATIVA
+                            </option>
+
+                            <option value="0">
+                                NO OPERATIVA
+                            </option>
+
+                        </select>
+
+                    </div>
+
                 </div>
 
-                <form id="formNuevaMaquina">
-                    <div class="modal-body">
-                        <!-- Nombre -->
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Nombre / Tipo Maquinaria</label>
-                            <input type="text" id="NombreMaquina" class="form-control" placeholder="Ej: RetroExcavadora KAT120" required />
-                        </div>
 
-                        <!-- Estado -->
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Estado de la Máquina</label>
-                            <select id="EstadoMaquina" class="form-select" required>
-                                <option value="">Seleccione un estado</option>
-                                <option value="1">OPERATIVA</option>
-                                <option value="0">NO OPERATIVA</option>
-                            </select>
-                        </div>
-                    </div>
+                <!-- FOOTER -->
+                <div class="modal-footer">
 
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-success">
-                            <i class="fa-solid fa-floppy-disk me-2"></i> Guardar Máquina
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+                    <button type="button"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal">
 
-    <!-- MODAL EDITAR MÁQUINA -->
-    <div class="modal fade" id="modalEditarMaquina" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title fw-bold"><i class="fa-solid fa-pen-to-square text-warning me-2"></i> Editar Máquina</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        Cancelar
+
+                    </button>
+
+                    <button type="submit"
+                            class="btn btn-success">
+
+                        <i class="fa-solid fa-floppy-disk me-2"></i>
+
+                        Guardar Máquina
+
+                    </button>
+
                 </div>
 
-                <form id="formEditarMaquina">
-                    <input type="hidden" id="EditarId" />
-                    <div class="modal-body">
-                        <!-- Nombre -->
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Nombre / Tipo Maquinaria</label>
-                            <input type="text" id="EditarNombre" class="form-control" required />
-                        </div>
+            </form>
 
-                        <!-- Estado -->
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Estado</label>
-                            <select id="EditarEstado" class="form-select" required>
-                                <option value="1">OPERATIVA</option>
-                                <option value="0">NO OPERATIVA</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-warning">
-                            <i class="fa-solid fa-floppy-disk me-2"></i> Guardar Cambios
-                        </button>
-                    </div>
-                </form>
-            </div>
         </div>
+
     </div>
+
+</div>
+
+
+
+<!-- ================================================= -->
+<!-- MODAL EDITAR MÁQUINA -->
+<!-- ================================================= -->
+
+<div class="modal fade"
+     id="modalEditarMaquina"
+     tabindex="-1"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+
+        <div class="modal-content">
+
+
+            <!-- HEADER -->
+            <div class="modal-header">
+
+                <h5 class="modal-title fw-bold">
+
+                    <i class="fa-solid fa-pen-to-square text-warning me-2"></i>
+
+                    Editar Máquina
+
+                </h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+
+            <!-- FORMULARIO -->
+            <form id="formEditarMaquina">
+
+                <input type="hidden"
+                       id="EditarId" />
+
+
+                <div class="modal-body">
+
+
+                    <!-- NOMBRE -->
+                    <div class="mb-3">
+
+                        <label class="form-label fw-bold">
+                            Nombre / Tipo Maquinaria
+                        </label>
+
+                        <input type="text"
+                               id="EditarNombre"
+                               class="form-control"
+                               required />
+
+                    </div>
+
+
+                    <!-- ESTADO -->
+                    <div class="mb-3">
+
+                        <label class="form-label fw-bold">
+                            Estado
+                        </label>
+
+                        <select id="EditarEstado"
+                                class="form-select"
+                                required>
+
+                            <option value="1">
+                                OPERATIVA
+                            </option>
+
+                            <option value="0">
+                                NO OPERATIVA
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <!-- FOOTER -->
+                <div class="modal-footer">
+
+                    <button type="button"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal">
+
+                        Cancelar
+
+                    </button>
+
+                    <button type="submit"
+                            class="btn btn-warning">
+
+                        <i class="fa-solid fa-floppy-disk me-2"></i>
+
+                        Guardar Cambios
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
 
 @section Scripts
 {
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-
-            // MODALES
-
-            const modalNuevaMaquina = bootstrap.Modal.getOrCreateInstance(
-                document.getElementById("modalNuevaMaquina")
-            );
-
-            const modalEditarMaquina = bootstrap.Modal.getOrCreateInstance(
-                document.getElementById("modalEditarMaquina")
-            );
-
-            // CREAR MÁQUINA
-
-            const formNueva = document.getElementById("formNuevaMaquina");
-
-            if (formNueva) {
-
-                formNueva.addEventListener("submit", async function (e) {
-
-                    e.preventDefault();
-
-                    const datos = {
-                        Nombre: document.getElementById("NombreMaquina").value,
-                        Estado: document.getElementById("EstadoMaquina").value
-                    };
-
-                    try {
-
-                        const respuesta = await fetch("/Maquinas/Crear", {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json"
-                            },
-                            body: JSON.stringify(datos)
-                        });
-
-                        if (!respuesta.ok) {
-                            throw new Error();
-                        }
-
-                        modalNuevaMaquina.hide();
-
-                        formNueva.reset();
-
-                        Swal.fire({
-                            icon: "success",
-                            title: "¡Correcto!",
-                            text: "La máquina fue registrada correctamente.",
-                            confirmButtonColor: "#198754"
-                        }).then(() => location.reload());
-
-                    }
-                    catch {
-
-                        Swal.fire({
-                            icon: "error",
-                            title: "Error",
-                            text: "No fue posible registrar la máquina."
-                        });
-
-                    }
-
-                });
-
-            }
-
-            // CARGAR DATOS EN MODAL EDITAR
-
-            document.querySelectorAll(".btnEditar").forEach(function (boton) {
-
-                boton.addEventListener("click", function () {
-
-                    document.getElementById("EditarId").value = this.dataset.id;
-                    document.getElementById("EditarNombre").value = this.dataset.nombre;
-                    document.getElementById("EditarEstado").value = this.dataset.estado;
-
-                    modalEditarMaquina.show();
-
-                });
-
-            });
-
-            // GUARDAR EDICIÓN
-
-            const formEditar = document.getElementById("formEditarMaquina");
-
-            if (formEditar) {
-
-                formEditar.addEventListener("submit", async function (e) {
-
-                    e.preventDefault();
-
-                    const datos = {
-                        Id: parseInt(document.getElementById("EditarId").value),
-                        Nombre: document.getElementById("EditarNombre").value,
-                        Estado: document.getElementById("EditarEstado").value
-                    };
-
-                    try {
-
-                        const respuesta = await fetch("/Maquinas/Editar", {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json"
-                            },
-                            body: JSON.stringify(datos)
-                        });
-
-                        if (!respuesta.ok) {
-                            throw new Error();
-                        }
-
-                        modalEditarMaquina.hide();
-
-                        Swal.fire({
-                            icon: "success",
-                            title: "¡Actualizada!",
-                            text: "La máquina fue actualizada correctamente.",
-                            confirmButtonColor: "#198754"
-                        }).then(() => location.reload());
-
-                    }
-                    catch {
-
-                        Swal.fire({
-                            icon: "error",
-                            title: "Error",
-                            text: "No fue posible actualizar la máquina."
-                        });
-
-                    }
-
-                });
-
-            }
-
-            // ELIMINAR MÁQUINA
-
-            document.querySelectorAll(".btnEliminar").forEach(function (boton) {
-
-                boton.addEventListener("click", function (e) {
-
-                    e.preventDefault();
-
-                    const id = this.dataset.id;
-
-                    Swal.fire({
-                        title: "¿Eliminar máquina?",
-                        text: "Esta acción no se puede deshacer.",
-                        icon: "warning",
-                        showCancelButton: true,
-                        confirmButtonColor: "#dc3545",
-                        cancelButtonColor: "#6c757d",
-                        confirmButtonText: "Sí, eliminar",
-                        cancelButtonText: "Cancelar"
-                    })
-                    .then((result) => {
-
-                        if (result.isConfirmed) {
-
-                            window.location.href = "/Maquinas/Eliminar/" + id;
-
-                        }
-
-                    });
-
-                });
-
-            });
-
-        });
+    <script src="~/js/maquinaria.js"
+            asp-append-version="true">
     </script>
 }
-
-

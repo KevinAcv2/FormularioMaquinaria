@@ -13,8 +13,8 @@ namespace Maquinarias.Controllers
         [HttpPost]
         public IActionResult Index(LoginViewModel model)
         {
-            if (model.Usuario == "Daniel" &&
-               model.Password == "IngDaniel")
+            if (model.Usuario == "Admin" &&
+               model.Password == "Admin123")
             {
                 HttpContext.Session.SetString("Admin", "SI");
 
