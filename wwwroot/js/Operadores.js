@@ -333,5 +333,37 @@
         });
 
     });
+    // ELIMINAR FRENTE
+
+
+    document.querySelectorAll(".btnEliminarFrente").forEach(btn => {
+
+        btn.addEventListener("click", function (e) {
+
+            e.preventDefault();
+
+            const url = this.href;
+            const nombre = this.dataset.nombre || "este frente";
+
+            Swal.fire({
+                title: "¿Eliminar frente?",
+                text: `Se eliminará "${nombre}". Esta acción no se puede deshacer.`,
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#dc3545",
+                cancelButtonColor: "#6c757d",
+                confirmButtonText: "Sí, eliminar",
+                cancelButtonText: "Cancelar"
+            }).then((result) => {
+
+                if (result.isConfirmed) {
+                    window.location.href = url;
+                }
+
+            });
+
+        });
+
+    });
 
 });

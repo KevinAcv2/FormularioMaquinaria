@@ -136,10 +136,7 @@
                                 @foreach (var maquina in ViewBag.Maquinas)
                                 {
                                     <option value="@maquina.Value"
-                                            selected="@(ViewBag.MaquinaId != null &&
-                                                                                                    ViewBag.MaquinaId.ToString() == maquina.Value
-                                                                                                    ? "selected"
-                                                                                                    : null)">
+                                            selected="@(ViewBag.MaquinaId != null && ViewBag.MaquinaId.ToString() == maquina.Value ? "selected": null)">
 
                                         @maquina.Text
 
@@ -164,10 +161,7 @@
                                 @foreach (var frente in ViewBag.Frentes)
                                 {
                                     <option value="@frente.Id"
-                                            selected="@(ViewBag.FrenteId != null &&
-                                                                                                    ViewBag.FrenteId.ToString() == frente.Id.ToString()
-                                                                                                    ? "selected"
-                                                                                                    : null)">
+                                            selected="@(ViewBag.FrenteId != null && ViewBag.FrenteId.ToString() == frente.Id.ToString()? "selected": null)">
 
                                         @frente.Nombre
 
@@ -706,9 +700,7 @@
 </div>
 
 
-<!-- ==================================================
-     MODAL GESTIÓN DE FRENTES
-=================================================== -->
+<!-- MODAL GESTIÓN DE FRENTES -->
 <div class="modal fade"
      id="modalFrentes"
      tabindex="-1"
@@ -774,35 +766,20 @@
 
                 </form>
 
-
                 <hr />
 
-
                 <!-- TABLA DE FRENTES -->
-                <div class="operadores-table-container">
+                <div class="frentes-table-container">
 
                     <table class="table table-hover">
 
                         <thead>
-
                             <tr>
-
-                                <th>
-                                    ID
-                                </th>
-
-                                <th>
-                                    Nombre
-                                </th>
-
-                                <th width="150">
-                                    Acciones
-                                </th>
-
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th width="150">Acciones</th>
                             </tr>
-
                         </thead>
-
 
                         <tbody>
 
@@ -823,8 +800,9 @@
                                         <a asp-controller="FrenteOperacional"
                                            asp-action="Eliminar"
                                            asp-route-id="@frente.Id"
-                                           class="btn btn-sm btn-danger"
-                                           onclick="return confirm('¿Eliminar este frente?')">
+                                           class="btn btn-sm btn-danger btnEliminarFrente"
+                                           data-id="@frente.Id"
+                                           data-nombre="@frente.Nombre">
 
                                             <i class="fa-solid fa-trash"></i>
 
@@ -851,6 +829,7 @@
 
 @section Scripts {
 
-    <script src="~/js/Operadores.js"asp-append-version="true"></script>
+    <script src="~/js/Operadores.js"
+            asp-append-version="true"></script>
 
 }
