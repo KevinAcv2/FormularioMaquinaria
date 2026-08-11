@@ -293,16 +293,13 @@
 
                                         <!-- MÁQUINA -->
                                         <td>
-                                            @(item.Maquina != null
-                                                                                    ? item.Maquina.Nombre
-                                                                                    : "Sin asignar")
+                                            @(item.Maquina != null? item.Maquina.Nombre: "Sin asignar")
                                         </td>
 
 
                                         <!-- FRENTE -->
                                         <td>
-                                            @(item.FrenteOperacional?.Nombre
-                                                                                    ?? "Sin asignar")
+                                            @(item.FrenteOperacional?.Nombre?? "Sin asignar")
                                         </td>
 
 
@@ -854,8 +851,6 @@
 
 @section Scripts {
 
-    <script src="~/js/operadores.js"
-            asp-append-version="true">
-    </script>
+    <script src="~/js/Operadores.js"asp-append-version="true"></script>
 
 }

@@ -956,3 +956,148 @@ body {
         font-size: 14px;
     }
 }
+/* =========================================================
+   BUSCADOR - CORRECCIÓN
+========================================================= */
+
+.operadores-search {
+    width: 100%;
+}
+
+    .operadores-search .input-group {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        width: 100%;
+        align-items: stretch;
+    }
+
+    .operadores-search .input-group-text {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        width: 45px;
+        min-width: 45px;
+        flex: 0 0 45px;
+        padding: 0;
+        border-radius: 10px 0 0 10px !important;
+    }
+
+    .operadores-search .form-control {
+        flex: 1 1 auto !important;
+        width: auto !important;
+        min-width: 0 !important;
+        border-radius: 0 10px 10px 0 !important;
+    }
+
+/* =========================================================
+   MODAL DE FRENTES
+========================================================= */
+
+#modalFrentes .modal-dialog {
+    max-width: 900px;
+}
+
+#modalFrentes .modal-body {
+    overflow-x: hidden;
+}
+
+#modalFrentes table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+#modalFrentes th,
+#modalFrentes td {
+    word-break: normal;
+    overflow-wrap: break-word;
+    white-space: normal;
+}
+
+
+/* =========================================================
+   FRENTES EN CELULAR
+========================================================= */
+
+@media (max-width: 767px) {
+
+    #modalFrentes .modal-dialog {
+        margin: 10px;
+        max-width: none;
+    }
+
+    #modalFrentes .modal-content {
+        border-radius: 16px;
+        overflow: hidden;
+    }
+
+    #modalFrentes .modal-header {
+        padding: 14px;
+    }
+
+    #modalFrentes .modal-title {
+        font-size: 16px;
+    }
+
+    #modalFrentes .modal-body {
+        padding: 12px;
+        max-height: 75vh;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+
+    /* FORMULARIO NUEVO FRENTE */
+
+    #modalFrentes form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+        #modalFrentes form .col-md-9,
+        #modalFrentes form .col-md-3 {
+            width: 100%;
+        }
+
+
+    /* TABLA */
+
+    #modalFrentes table {
+        width: 100%;
+        table-layout: fixed;
+    }
+
+    #modalFrentes th,
+    #modalFrentes td {
+        padding: 10px 6px;
+        font-size: 12px;
+        word-break: break-word;
+        overflow-wrap: break-word;
+    }
+
+
+        #modalFrentes th:first-child,
+        #modalFrentes td:first-child {
+            width: 18%;
+        }
+
+        #modalFrentes th:nth-child(2),
+        #modalFrentes td:nth-child(2) {
+            width: 57%;
+        }
+
+        #modalFrentes th:nth-child(3),
+        #modalFrentes td:nth-child(3) {
+            width: 25%;
+        }
+
+
+        #modalFrentes td .btn {
+            width: 32px;
+            height: 32px;
+            padding: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+}
