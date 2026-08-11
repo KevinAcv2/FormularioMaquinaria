@@ -23,319 +23,152 @@
           asp-append-version="true" />
 </head>
 <body>
-        <div class="d-flex">    
 
-            <!-- SIDEBAR -->
-        <div class="d-flex">
+    <!-- CONTENEDOR PRINCIPAL -->
+    <div class="layout-container">
 
-            <!-- SIDEBAR -->
-            <aside id="sidebar"
-                   class="bg-dark text-white p-3 no-print sidebar">
+        <!-- SIDEBAR -->
+        <aside id="sidebar" class="sidebar no-print">
 
-                <div class="text-center py-4">
+            <!-- LOGO -->
+            <div class="sidebar-header">
 
-                    <div class="mb-3">
-                        <i class="fa-solid fa-truck-monster"
-                           style="font-size:48px;color:#f0ad00;"></i>
-                    </div>
-
-                    <h4 class="fw-bold mb-1">
-                        MAQUINARIAS
-                    </h4>
-
-                    <small class="text-light" style="font-size:13px;">
-                        Sistema de Gestión
-                    </small>
-
+                <div class="sidebar-logo">
+                    <i class="fa-solid fa-truck-monster"></i>
                 </div>
 
-                <hr class="text-secondary" />
+                <h4>MAQUINARIAS</h4>
 
-                <ul class="nav flex-column">
-
-                    <li class="nav-item mb-2">
-                        <a asp-controller="Admin"
-                           asp-action="Index"
-                           class="nav-link text-white">
-
-                            <i class="fa-solid fa-house me-2"></i>
-                            Dashboard
-
-                        </a>
-                    </li>
-
-                    <li class="nav-item mb-2">
-                        <a asp-controller="Operadores"
-                           asp-action="Index"
-                           class="nav-link text-white">
-
-                            <i class="fa-solid fa-user-gear me-2"></i>
-                            Operadores
-
-                        </a>
-                    </li>
-
-                    <li class="nav-item mb-2">
-                        <a asp-controller="Maquinas"
-                           asp-action="Index"
-                           class="nav-link text-white">
-
-                            <i class="fa-solid fa-truck-monster me-2"></i>
-                            Maquinaria
-
-                        </a>
-                    </li>
-
-                    <li class="nav-item mb-2">
-                        <a asp-controller="Reporte"
-                           asp-action="Crear"
-                           class="nav-link text-white">
-
-                            <i class="fa-solid fa-square-plus me-2"></i>
-                            Nuevo Reporte
-
-                        </a>
-                    </li>
-
-                    <li class="nav-item mb-2">
-                        <a asp-controller="Reporte"
-                           asp-action="Historial"
-                           class="nav-link text-white">
-
-                            <i class="fa-solid fa-folder-open me-2"></i>
-                            Historial
-
-                        </a>
-                    </li>
-
-                    <li class="nav-item mb-2">
-                        <a asp-controller="Estadisticas"
-                           asp-action="Index"
-                           class="nav-link text-white">
-
-                            <i class="fa-solid fa-chart-column me-2"></i>
-                            Estadísticas
-
-                        </a>
-                    </li>
-
-                    <li class="nav-item mt-5">
-                        <a asp-controller="Login"
-                           asp-action="Index"
-                           class="nav-link text-danger">
-
-                            <i class="fa-solid fa-right-from-bracket me-2"></i>
-                            Cerrar sesión
-
-                        </a>
-                    </li>
-
-                </ul>
-
-            </aside>
-            <div class="text-center py-4">
-
-                <div class="mb-3">
-
-                    <i class="fa-solid fa-truck-monster"
-                       style="font-size:48px;color:#f0ad00;"></i>
-
-                </div>
-
-                <h4 class="fw-bold mb-1">
-
-                    MAQUINARIAS
-
-                </h4>
-
-                <small class="text-light" style="font-size:13px;">
-
+                <small>
                     Sistema de Gestión
-
                 </small>
 
             </div>
 
-                <hr class="text-secondary" />
+            <hr />
 
-                <ul class="nav flex-column">
+            <!-- MENÚ -->
+            <ul class="nav flex-column">
 
-                    <li class="nav-item mb-2">
+                <li class="nav-item">
+                    <a asp-controller="Admin"
+                       asp-action="Index"
+                       class="nav-link">
 
-                        <a asp-controller="Admin"
-                           asp-action="Index"
-                           class="nav-link text-white">
+                        <i class="fa-solid fa-house"></i>
+                        <span>Dashboard</span>
 
-                            <i class="fa-solid fa-house me-2"></i>
+                    </a>
+                </li>
 
-                            Dashboard
+                <li class="nav-item">
+                    <a asp-controller="Operadores"
+                       asp-action="Index"
+                       class="nav-link">
 
-                        </a>
+                        <i class="fa-solid fa-user-gear"></i>
+                        <span>Operadores</span>
 
-                    </li>
+                    </a>
+                </li>
 
-                    <li class="nav-item mb-2">
+                <li class="nav-item">
+                    <a asp-controller="Maquinas"
+                       asp-action="Index"
+                       class="nav-link">
 
-                        <a asp-controller="Operadores"
-                           asp-action="Index"
-                           class="nav-link text-white">
+                        <i class="fa-solid fa-truck-monster"></i>
+                        <span>Maquinaria</span>
 
-                            <i class="fa-solid fa-user-gear me-2"></i>
+                    </a>
+                </li>
 
-                            Operadores
-
-                        </a>
-
-                    </li>
-
-                    <li class="nav-item mb-2">
-
-                        <a asp-controller="Maquinas"
-                           asp-action="Index"
-                           class="nav-link text-white">
-
-                            <i class="fa-solid fa-truck-monster me-2"></i>
-
-                            Maquinaria
-
-                        </a>
-
-                    </li>
-
-                <li class="nav-item mb-2">
-
+                <li class="nav-item">
                     <a asp-controller="Reporte"
                        asp-action="Crear"
-                       class="nav-link text-white">
+                       class="nav-link">
 
-                        <i class="fa-solid fa-square-plus me-2"></i>
-
-                        Nuevo Reporte
+                        <i class="fa-solid fa-square-plus"></i>
+                        <span>Nuevo Reporte</span>
 
                     </a>
-
                 </li>
 
-                <li class="nav-item mb-2">
-
+                <li class="nav-item">
                     <a asp-controller="Reporte"
                        asp-action="Historial"
-                       class="nav-link text-white">
+                       class="nav-link">
 
-                        <i class="fa-solid fa-folder-open me-2"></i>
-
-                        Historial
+                        <i class="fa-solid fa-folder-open"></i>
+                        <span>Historial</span>
 
                     </a>
-
                 </li>
 
-                <li class="nav-item mb-2">
-
+                <li class="nav-item">
                     <a asp-controller="Estadisticas"
                        asp-action="Index"
-                       class="nav-link text-white">
+                       class="nav-link">
 
-                        <i class="fa-solid fa-chart-column me-2"></i>
-
-                        Estadísticas
+                        <i class="fa-solid fa-chart-column"></i>
+                        <span>Estadísticas</span>
 
                     </a>
-
                 </li>
 
-                <li class="nav-item mt-5">
+                <li class="nav-item cerrar-sesion">
                     <a asp-controller="Login"
                        asp-action="Index"
-                       class="nav-link text-danger">
+                       class="nav-link">
 
-                        <i class="fa-solid fa-right-from-bracket me-2"></i>
-                        Cerrar sesión
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        <span>Cerrar sesión</span>
+
                     </a>
                 </li>
 
-                </ul>
-
-            </aside>
+            </ul>
+        </aside>
 
         <!-- CONTENIDO -->
-            <div class="flex-grow-1 contenido-layout">
-                <!-- NAVBAR -->
-                <nav class="navbar navbar-expand-lg bg-white shadow-sm px-3 py-2 no-print">
+        <div class="contenido-layout">
 
-                    <!-- BOTÓN HAMBURGUESA -->
-                    <button id="btnMenu"
-                            class="btn btn-menu me-3"
-                            type="button"
-                            aria-label="Abrir menú">
+            <!-- NAVBAR -->
+            <nav class="navbar no-print">
 
-                        <i class="fa-solid fa-bars"></i>
+                <!-- HAMBURGUESA -->
+                <button id="btnMenu"
+                        class="btn-menu"
+                        type="button"
+                        aria-label="Abrir menú">
 
-                    </button>
+                    <i class="fa-solid fa-bars"></i>
 
-                    <!-- NOMBRE DEL SISTEMA -->
-                    <div class="mobile-brand">
-                        <strong>MAQUINARIAS</strong>
-                    </div>
+                </button>
 
-                    <!-- ESPACIO IZQUIERDO PARA PC -->
-                    <div class="input-group desktop-search"
-                         style="max-width:280px;">
-                    </div>
-
-                    <!-- DERECHA -->
-                    <div class="ms-auto d-flex align-items-center">
-
-                        @await Component.InvokeAsync("Alertas")
-
-                        <img src="https://ui-avatars.com/api/?name=Administrador&background=0f2f44&color=fff"
-                             class="rounded-circle shadow"
-                             width="38">
-
-                        <div class="ms-2 user-info">
-
-                            <strong>
-                                Administrador
-                            </strong>
-
-                            <br>
-
-                            <small class="text-muted">
-                                En línea
-                            </small>
-
-                        </div>
-
-                    </div>
-
-                </nav>
-
-                <div class="input-group" style="max-width:280px;">
-
+                <!-- NOMBRE -->
+                <div class="mobile-brand">
+                    <strong>MAQUINARIAS</strong>
                 </div>
 
-                <div class="ms-auto d-flex align-items-center">
+                <!-- PARTE DERECHA -->
+                <div class="navbar-right">
 
                     @await Component.InvokeAsync("Alertas")
-                                      
+
                     <img src="https://ui-avatars.com/api/?name=Administrador&background=0f2f44&color=fff"
                          class="rounded-circle shadow"
-                         width="38">
+                         width="38"
+                         alt="Administrador">
 
-                    <div class="ms-2">
+                    <div class="user-info">
 
                         <strong>
-
                             Administrador
-
                         </strong>
 
-                        <br>
-
-                        <small class="text-muted">
-
+                        <small>
                             En línea
-
                         </small>
 
                     </div>
@@ -344,17 +177,17 @@
 
             </nav>
 
-            <main id="contenidoPrincipal"
-                  class="p-4"
-                  style="background:#f4f7fb; min-height:100vh;">
 
-                    @RenderBody()
+            <!-- CONTENIDO DE LA VISTA -->
+            <main id="contenidoPrincipal">
 
-                </main>
+                @RenderBody()
 
-            </div>
+            </main>
 
         </div>
+
+    </div>
 
     <!-- MODAL DETALLE NOTIFICACIÓN -->
 
@@ -648,24 +481,43 @@
         });
 
     </script>
-        <script>
+    <script>
 
-            document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function () {
 
-                const btnMenu = document.getElementById("btnMenu");
-                const sidebar = document.getElementById("sidebar");
+            const btnMenu = document.getElementById("btnMenu");
+            const sidebar = document.getElementById("sidebar");
+            const contenido = document.querySelector(".contenido-layout");
 
-                if (!btnMenu || !sidebar)
-                    return;
+            if (!btnMenu || !sidebar)
+                return;
 
-                btnMenu.addEventListener("click", function () {
+            btnMenu.addEventListener("click", function () {
 
-                    sidebar.classList.toggle("sidebar-open");
+                sidebar.classList.toggle("sidebar-open");
 
-                });
+                if (contenido) {
+                    contenido.classList.toggle("sidebar-visible");
+                }
+
+                const icon = btnMenu.querySelector("i");
+
+                if (sidebar.classList.contains("sidebar-open")) {
+
+                    icon.classList.remove("fa-bars");
+                    icon.classList.add("fa-xmark");
+
+                } else {
+
+                    icon.classList.remove("fa-xmark");
+                    icon.classList.add("fa-bars");
+
+                }
 
             });
 
-        </script>
+        });
+
+    </script>
 </body>
 </html>
