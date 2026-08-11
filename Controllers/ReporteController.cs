@@ -173,12 +173,18 @@ namespace Maquinarias.Controllers
         }
 
         // HISTORIAL DE REPORTES
-        [HttpGet]
-        public async Task<IActionResult> Historial(string buscar, DateTime? desde, DateTime? hasta, string estado)
-        {
-            var consulta = _context.ReportesMaquinaria.AsQueryable();
 
-            // Buscar por operador o máquina
+        [HttpGet]
+        public async Task<IActionResult> Historial(
+            string? buscar,
+            DateTime? desde,
+            DateTime? hasta,
+            string? estado)
+        {
+            var consulta = _context.ReportesMaquinaria
+                .AsQueryable();
+
+            // BUSCAR POR OPERADOR O MÁQUINA
             if (!string.IsNullOrWhiteSpace(buscar))
             {
                 consulta = consulta.Where(r =>
@@ -186,39 +192,53 @@ namespace Maquinarias.Controllers
                     r.NombreMaquina.Contains(buscar));
             }
 
-            // Fecha desde
+            // FECHA DESDE
             if (desde.HasValue)
             {
-                consulta = consulta.Where(r => r.Fecha.Date >= desde.Value.Date);
+                consulta = consulta.Where(r =>
+                    r.Fecha.Date >= desde.Value.Date);
             }
 
-            // Fecha hasta
+            // FECHA HASTA
             if (hasta.HasValue)
             {
-                consulta = consulta.Where(r => r.Fecha.Date <= hasta.Value.Date);
+                consulta = consulta.Where(r =>
+                    r.Fecha.Date <= hasta.Value.Date);
             }
 
-            // Estado
-            if (!string.IsNullOrEmpty(estado))
+            // FILTRAR POR ESTADO
+            if (!string.IsNullOrWhiteSpace(estado))
             {
                 if (estado == "Operativa")
                 {
-                    consulta = consulta.Where(r => r.EstadoMaquina == 1);
+                    consulta = consulta.Where(r =>
+                        r.EstadoMaquina == 1);
                 }
                 else if (estado == "No Operativa")
                 {
-                    consulta = consulta.Where(r => r.EstadoMaquina == 0);
+                    consulta = consulta.Where(r =>
+                        r.EstadoMaquina == 0);
                 }
             }
 
+            // OBTENER REPORTES
             var reportes = await consulta
                 .OrderByDescending(r => r.Fecha)
                 .ToListAsync();
 
+            // CONSERVAR FILTROS
             ViewBag.Buscar = buscar;
-            ViewBag.Desde = desde?.ToString("yyyy-MM-dd");
-            ViewBag.Hasta = hasta?.ToString("yyyy-MM-dd");
+
+            ViewBag.Desde = desde.HasValue
+                ? desde.Value.ToString("yyyy-MM-dd")
+                : "";
+
+            ViewBag.Hasta = hasta.HasValue
+                ? hasta.Value.ToString("yyyy-MM-dd")
+                : "";
+
             ViewBag.Estado = estado;
+
             return View(reportes);
         }
 

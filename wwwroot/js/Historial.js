@@ -1,318 +1,517 @@
-﻿        const modalEvaluacion =
-        new bootstrap.Modal(
-        document.getElementById("modalEvaluacion"));
+﻿document.addEventListener("DOMContentLoaded", function () {
 
-        document
-        .querySelectorAll(".btnEvaluar")
-        .forEach(btn=>{
+    // =====================================================
+    // MODAL EVALUACIÓN
+    // =====================================================
 
-            btn.addEventListener("click",()=>{
+    const elementoModal = document.getElementById("modalEvaluacion");
 
-                document
-                .getElementById("lblOperador")
-                .innerText=btn.dataset.operador;
+    const modalEvaluacion = elementoModal
+        ? bootstrap.Modal.getOrCreateInstance(elementoModal)
+        : null;
 
-                document
-                .getElementById("lblMaquina")
-                .innerText=btn.dataset.maquina;
 
-                document
-                .getElementById("ReporteId")
-                .value= btn.dataset.id;
+    // =====================================================
+    // ABRIR MODAL DE EVALUACIÓN
+    // =====================================================
 
+    document.querySelectorAll(".btnEvaluar").forEach(btn => {
+
+        btn.addEventListener("click", function () {
+
+            const operador = this.dataset.operador;
+            const maquina = this.dataset.maquina;
+            const id = this.dataset.id;
+
+            document.getElementById("lblOperador").innerText = operador;
+            document.getElementById("lblMaquina").innerText = maquina;
+            document.getElementById("ReporteId").value = id;
+
+            // Limpiar evaluación anterior
+            document.querySelectorAll(".rating").forEach(rating => {
+                rating.dataset.valor = 0;
+
+                rating.querySelectorAll("i").forEach(star => {
+                    star.classList.remove("fa-solid");
+                    star.classList.remove("active");
+                    star.classList.add("fa-regular");
+                });
+            });
+
+            document.getElementById("ObservacionSupervisor").value = "";
+
+            if (modalEvaluacion) {
                 modalEvaluacion.show();
+            }
+
+        });
+
+    });
+
+
+    // =====================================================
+    // CREAR ESTRELLAS
+    // =====================================================
+
+    document.querySelectorAll(".rating").forEach(rating => {
+
+        // Evitar crear estrellas duplicadas
+        if (rating.children.length > 0) {
+            return;
+        }
+
+        for (let i = 1; i <= 5; i++) {
+
+            const star = document.createElement("i");
+
+            star.className = "fa-regular fa-star";
+            star.dataset.value = i;
+
+            rating.appendChild(star);
+
+        }
+
+    });
+
+
+    // =====================================================
+    // SELECCIONAR ESTRELLAS
+    // =====================================================
+
+    document.querySelectorAll(".rating").forEach(rating => {
+
+        const stars = rating.querySelectorAll("i");
+
+        stars.forEach(star => {
+
+            star.addEventListener("click", function () {
+
+                const valor = parseInt(this.dataset.value);
+
+                // Guardar valoración
+                rating.dataset.valor = valor;
+
+                stars.forEach(s => {
+
+                    const valorEstrella =
+                        parseInt(s.dataset.value);
+
+                    if (valorEstrella <= valor) {
+
+                        s.classList.remove("fa-regular");
+                        s.classList.add("fa-solid");
+                        s.classList.add("active");
+
+                    }
+                    else {
+
+                        s.classList.remove("fa-solid");
+                        s.classList.remove("active");
+                        s.classList.add("fa-regular");
+
+                    }
+
+                });
 
             });
 
         });
 
-        // Creación de estrellas automáticamente
-        document.querySelectorAll(".rating").forEach(rating => {
+    });
 
-            for (let i = 1; i <= 5; i++) {
 
-                const star = document.createElement("i");
+    // =====================================================
+    // GUARDAR EVALUACIÓN
+    // =====================================================
 
-                star.className = "fa-regular fa-star";
+    const btnGuardar =
+        document.getElementById("btnGuardarEvaluacion");
 
-                star.dataset.value = i;
+    if (btnGuardar) {
 
-                rating.appendChild(star);
+        btnGuardar.addEventListener("click", async function () {
+
+            const reporteId =
+                parseInt(
+                    document.getElementById("ReporteId").value
+                );
+
+            const datos = {
+
+                ReporteMaquinariaId: reporteId,
+
+                Horario:
+                    obtenerValor("Horario"),
+
+                ManejoMaquinaria:
+                    obtenerValor("ManejoMaquinaria"),
+
+                CuidadoEquipo:
+                    obtenerValor("CuidadoEquipo"),
+
+                SeguridadIndustrial:
+                    obtenerValor("SeguridadIndustrial"),
+
+                Productividad:
+                    obtenerValor("Productividad"),
+
+                ReporteNovedades:
+                    obtenerValor("ReporteNovedades"),
+
+                ObservacionSupervisor:
+                    document.getElementById(
+                        "ObservacionSupervisor"
+                    ).value.trim()
+
+            };
+
+
+            // Validar que se haya seleccionado una evaluación
+            if (
+                datos.Horario === 0 ||
+                datos.ManejoMaquinaria === 0 ||
+                datos.CuidadoEquipo === 0 ||
+                datos.SeguridadIndustrial === 0 ||
+                datos.Productividad === 0 ||
+                datos.ReporteNovedades === 0
+            ) {
+
+                Swal.fire({
+                    icon: "warning",
+                    title: "Evaluación incompleta",
+                    text: "Debe calificar todos los criterios antes de guardar.",
+                    confirmButtonColor: "#0f2f44"
+                });
+
+                return;
+            }
+
+
+            try {
+
+                btnGuardar.disabled = true;
+
+                const respuesta =
+                    await fetch("/Evaluacion/Guardar", {
+
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+
+                        body: JSON.stringify(datos)
+
+                    });
+
+
+                if (!respuesta.ok) {
+
+                    const error =
+                        await respuesta.text();
+
+                    throw new Error(
+                        error ||
+                        "No fue posible guardar la evaluación."
+                    );
+
+                }
+
+
+                if (modalEvaluacion) {
+                    modalEvaluacion.hide();
+                }
+
+
+                await Swal.fire({
+
+                    icon: "success",
+
+                    title: "¡Evaluación guardada!",
+
+                    text:
+                        "La evaluación del operador se registró correctamente.",
+
+                    confirmButtonColor: "#0f2f44",
+
+                    confirmButtonText: "Aceptar"
+
+                });
+
+
+                location.reload();
+
+            }
+            catch (error) {
+
+                console.error(
+                    "Error al guardar evaluación:",
+                    error
+                );
+
+                Swal.fire({
+
+                    icon: "error",
+
+                    title: "Error",
+
+                    text:
+                        error.message ||
+                        "No fue posible guardar la evaluación.",
+
+                    confirmButtonColor: "#dc3545"
+
+                });
+
+            }
+            finally {
+
+                btnGuardar.disabled = false;
 
             }
 
         });
 
-        // ACTIVAR ESTRELLAS
+    }
 
-        document.querySelectorAll(".rating").forEach(rating => {
 
-            const stars = rating.querySelectorAll("i");
+    // =====================================================
+    // OBTENER VALOR DE ESTRELLAS
+    // =====================================================
 
-            stars.forEach(star => {
+    function obtenerValor(nombre) {
 
-                star.addEventListener("click", () => {
+        const rating =
+            document.querySelector(
+                `.rating[data-name="${nombre}"]`
+            );
 
-                    const valor = parseInt(star.dataset.value);
+        if (!rating) {
+            return 0;
+        }
 
-                    // Guardar la calificación
-                    rating.dataset.valor = valor;
+        return parseInt(
+            rating.dataset.valor || 0
+        );
 
-                    stars.forEach(s => {
+    }
 
-                        if (parseInt(s.dataset.value) <= valor) {
 
-                            s.classList.remove("fa-regular");
-                            s.classList.add("fa-solid");
-                            s.classList.add("active");
+    // =====================================================
+    // IMPRIMIR HISTORIAL
+    // =====================================================
 
-                        } else {
+    window.imprimirHistorial = async function () {
 
-                            s.classList.remove("fa-solid");
-                            s.classList.remove("active");
-                            s.classList.add("fa-regular");
+        try {
 
-                        }
+            const respuesta =
+                await fetch("/Reporte/ExportarPdfHistorial");
 
-                    });
+            if (!respuesta.ok) {
+
+                Swal.fire({
+
+                    icon: "error",
+
+                    title: "Error",
+
+                    text:
+                        "No fue posible generar el PDF."
 
                 });
 
-            });
+                return;
+            }
 
-        });
 
-        // Selección de estrellas
-                const btnGuardar =
-        document.getElementById("btnGuardarEvaluacion");
+            const blob =
+                await respuesta.blob();
 
-        btnGuardar.addEventListener("click", async () => {
+            const url =
+                URL.createObjectURL(blob);
 
-            const datos = {
 
-                ReporteMaquinariaId:
-                parseInt(document.getElementById("ReporteId").value),
+            const iframe =
+                document.createElement("iframe");
 
-                Horario:
-                obtenerValor("Horario"),
+            iframe.style.position = "fixed";
+            iframe.style.right = "0";
+            iframe.style.bottom = "0";
+            iframe.style.width = "0";
+            iframe.style.height = "0";
+            iframe.style.border = "0";
 
-                ManejoMaquinaria:
-                obtenerValor("ManejoMaquinaria"),
+            iframe.src = url;
 
-                CuidadoEquipo:
-                obtenerValor("CuidadoEquipo"),
+            document.body.appendChild(iframe);
 
-                SeguridadIndustrial:
-                obtenerValor("SeguridadIndustrial"),
 
-                Productividad:
-                obtenerValor("Productividad"),
+            iframe.onload = function () {
 
-                ReporteNovedades:
-                obtenerValor("ReporteNovedades"),
+                setTimeout(() => {
 
-                ObservacionSupervisor:
-                document.getElementById("ObservacionSupervisor").value
+                    try {
+
+                        iframe.contentWindow.focus();
+
+                        iframe.contentWindow.print();
+
+                    }
+                    catch (e) {
+
+                        console.error(
+                            "Error al imprimir:",
+                            e
+                        );
+
+                    }
+
+                }, 800);
 
             };
 
-            const respuesta = await fetch("/Evaluacion/Guardar",{
-
-                method:"POST",
-
-                headers:{
-                    "Content-Type":"application/json"
-                },
-
-                body:JSON.stringify(datos)
-
-            });
-
-            if (respuesta.ok) {
-
-                modalEvaluacion.hide();
-
-                Swal.fire({
-                    icon: 'success',
-                    title: '¡Evaluación guardada!',
-                    text: 'La evaluación del operador se registró correctamente.',
-                    confirmButtonColor: '#0f2f44',
-                    confirmButtonText: 'Aceptar'
-                }).then(() => {
-
-                    location.reload();
-
-            });
-
         }
-        else {
+        catch (e) {
 
-            const error = await respuesta.text();
+            console.error(
+                "Error al imprimir historial:",
+                e
+            );
 
             Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: error,
-                confirmButtonColor: '#dc3545'
-            });
 
-        }
-
-        });
-                function obtenerValor(nombre){
-
-            const rating =
-            document.querySelector(
-            `.rating[data-name="${nombre}"]`);
-
-            return parseInt(
-            rating.dataset.valor || 0);
-
-        }
-
-// Boton Imprimir
-
-async function imprimirHistorial() {
-
-    try {
-
-        const respuesta = await fetch("/Reporte/ExportarPdfHistorial");
-
-        if (!respuesta.ok) {
-            Swal.fire({
                 icon: "error",
+
                 title: "Error",
-                text: "No fue posible generar el PDF."
+
+                text:
+                    "No fue posible imprimir."
+
             });
-            return;
+
         }
 
-        const blob = await respuesta.blob();
+    };
 
-        const url = URL.createObjectURL(blob);
 
-        const iframe = document.createElement("iframe");
+    // =====================================================
+    // ELIMINAR REPORTE
+    // =====================================================
 
-        iframe.style.position = "fixed";
-        iframe.style.right = "0";
-        iframe.style.bottom = "0";
-        iframe.style.width = "0";
-        iframe.style.height = "0";
-        iframe.style.border = "0";
+    document.querySelectorAll(".btnEliminar").forEach(btn => {
 
-        iframe.src = url;
+        btn.addEventListener("click", function () {
 
-        document.body.appendChild(iframe);
+            const id = this.dataset.id;
 
-        iframe.onload = function () {
 
-            setTimeout(() => {
+            Swal.fire({
+
+                title: "¿Eliminar reporte?",
+
+                text:
+                    "Esta acción no se puede deshacer.",
+
+                icon: "warning",
+
+                showCancelButton: true,
+
+                confirmButtonColor: "#dc3545",
+
+                cancelButtonColor: "#6c757d",
+
+                confirmButtonText:
+                    "Sí, eliminar",
+
+                cancelButtonText:
+                    "Cancelar"
+
+            }).then(async result => {
+
+                if (!result.isConfirmed) {
+                    return;
+                }
+
 
                 try {
 
-                    iframe.contentWindow.focus();
-                    iframe.contentWindow.print();
+                    const respuesta =
+                        await fetch(
+                            `/Reporte/Eliminar?id=${encodeURIComponent(id)}`,
+                            {
+                                method: "POST"
+                            }
+                        );
 
-                } catch (e) {
 
-                    console.error(e);
+                    if (!respuesta.ok) {
+
+                        throw new Error(
+                            "No fue posible eliminar el reporte."
+                        );
+
+                    }
+
+
+                    const data =
+                        await respuesta.json();
+
+
+                    if (!data.exito) {
+
+                        throw new Error(
+                            data.mensaje ||
+                            "No fue posible eliminar el reporte."
+                        );
+
+                    }
+
+
+                    await Swal.fire({
+
+                        icon: "success",
+
+                        title:
+                            "Reporte eliminado",
+
+                        text:
+                            "El reporte fue eliminado correctamente.",
+
+                        confirmButtonColor:
+                            "#0f2f44"
+
+                    });
+
+
+                    location.reload();
+
+                }
+                catch (error) {
+
+                    console.error(
+                        "Error al eliminar reporte:",
+                        error
+                    );
+
+                    Swal.fire({
+
+                        icon: "error",
+
+                        title: "Error",
+
+                        text:
+                            error.message ||
+                            "No fue posible eliminar el reporte.",
+
+                        confirmButtonColor:
+                            "#dc3545"
+
+                    });
 
                 }
 
-            }, 800);
-
-        };
-
-    }
-    catch (e) {
-
-        console.error(e);
-
-        Swal.fire({
-            icon: "error",
-            title: "Error",
-            text: "No fue posible imprimir."
-        });
-
-    }
-
-}
-
-// ===============================
-// ELIMINAR REPORTE
-// ===============================
-
-document.querySelectorAll(".btnEliminar").forEach(btn => {
-
-    btn.addEventListener("click", function () {
-
-        let id = this.dataset.id;
-
-        Swal.fire({
-
-            title: "¿Eliminar reporte?",
-
-            text: "Esta acción no se puede deshacer.",
-
-            icon: "warning",
-
-            showCancelButton: true,
-
-            confirmButtonColor: "#d33",
-
-            cancelButtonColor: "#6c757d",
-
-            confirmButtonText: "Sí, eliminar",
-
-            cancelButtonText: "Cancelar"
-
-        }).then((result) => {
-
-            if (!result.isConfirmed)
-                return;
-
-            fetch("/Reporte/Eliminar/" + id, {
-
-                method: "POST"
-
-            })
-                .then(r => r.json())
-                .then(data => {
-
-                    if (data.exito) {
-
-                        Swal.fire({
-
-                            icon: "success",
-
-                            title: "Reporte eliminado",
-
-                            text: "El reporte fue eliminado correctamente.",
-
-                            confirmButtonColor: "#0f2f44"
-
-                        }).then(() => {
-
-                            location.reload();
-
-                        });
-
-                    }
-                    else {
-
-                        Swal.fire({
-
-                            icon: "error",
-
-                            title: "Error",
-
-                            text: "No fue posible eliminar."
-
-                        });
-
-                    }
-
-                });
+            });
 
         });
 
