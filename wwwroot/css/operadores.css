@@ -190,6 +190,13 @@ body {
     border-radius: 10px;
     font-weight: 600;
     white-space: nowrap;
+
+    /* Centrar contenido */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 5px;
 }
 
     .btn-toolbar-custom i {
