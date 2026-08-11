@@ -1,4 +1,6 @@
-﻿/* ENCABEZADO*/
+﻿/* =========================================================
+   ENCABEZADO
+========================================================= */
 
 .historial-header {
     display: flex;
@@ -32,7 +34,10 @@
     gap: 12px;
 }
 
-/* GENERAL */
+
+/* =========================================================
+   GENERAL
+========================================================= */
 
 body {
     background: #eef2f6;
@@ -43,7 +48,7 @@ body {
     border: none;
     border-radius: 20px;
     padding: 25px;
-    box-shadow: 0 5px 15px rgba(0,0,0,.08);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, .08);
     margin-bottom: 1px;
 }
 
@@ -53,6 +58,10 @@ body {
     color: black;
     font-weight: bold;
 }
+
+    .btn-guardar:hover {
+        background: #d89b00;
+    }
 
 .btn-exp {
     height: 48px;
@@ -64,24 +73,174 @@ body {
     gap: 8px;
 }
 
-    .btn-guardar:hover {
-        background: #d89b00;
-    }
-
 .table thead {
     background: #0f2f44;
     color: white;
 }
-/* IMPRESIÓN */
+
+
+/* =========================================================
+   NAVBAR
+========================================================= */
+
+.navbar {
+    position: fixed !important;
+    top: 0;
+    right: 0;
+    z-index: 1040;
+    width: calc(100% - 210px);
+    height: 70px;
+    background: white !important;
+    border-bottom: 1px solid #e5e5e5;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, .08);
+}
+
+#contenidoPrincipal {
+    padding-top: 90px !important;
+}
+
+
+/* =========================================================
+   TOOLBAR OPERADORES
+========================================================= */
+
+.operadores-card {
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.operadores-toolbar {
+    display: grid;
+    grid-template-columns: minmax(220px, 1.5fr) minmax(180px, 1fr) minmax(180px, 1fr) auto;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+
+/* =========================================================
+   BUSCADOR
+========================================================= */
+
+.operadores-search {
+    width: 100%;
+}
+
+    .operadores-search .input-group {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        width: 100%;
+        align-items: stretch;
+    }
+
+    .operadores-search .input-group-text {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        width: 45px;
+        min-width: 45px;
+        flex: 0 0 45px;
+        padding: 0;
+        background: white;
+        color: #6c757d;
+        border-right: none;
+        border-radius: 10px 0 0 10px !important;
+    }
+
+    .operadores-search .form-control {
+        flex: 1 1 auto !important;
+        width: auto !important;
+        min-width: 0 !important;
+        border-left: none;
+        border-radius: 0 10px 10px 0 !important;
+    }
+
+        .operadores-search .form-control:focus {
+            border-left: none;
+        }
+
+
+/* =========================================================
+   FILTROS
+========================================================= */
+
+.operadores-filtro {
+    width: 100%;
+}
+
+    .operadores-filtro .form-select {
+        min-height: 46px;
+        width: 100%;
+        border-radius: 10px;
+    }
+
+
+/* =========================================================
+   ACCIONES
+========================================================= */
+
+.operadores-acciones {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.btn-toolbar-custom {
+    min-height: 46px;
+    border-radius: 10px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+    .btn-toolbar-custom i {
+        margin-right: 5px;
+    }
+
+
+/* =========================================================
+   TABLA OPERADORES
+========================================================= */
+
+.operadores-table-container {
+    width: 100%;
+    max-height: 500px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-radius: 12px;
+}
+
+    .operadores-table-container table {
+        width: 100%;
+        table-layout: fixed;
+    }
+
+    .operadores-table-container th,
+    .operadores-table-container td {
+        vertical-align: middle;
+        white-space: normal;
+        word-break: break-word;
+        overflow-wrap: anywhere;
+    }
+
+    .operadores-table-container thead th {
+        position: sticky;
+        top: 0;
+        z-index: 5;
+        background: #0f2f44;
+        color: white;
+    }
+
+
+/* =========================================================
+   IMPRESIÓN
+========================================================= */
 
 @media print {
 
-    /* Oculta todo lo marcado como no imprimir */
     .no-print {
         display: none !important;
     }
 
-    /* Oculta sidebar y navbar */
     aside,
     nav {
         display: none !important;
@@ -93,44 +252,79 @@ body {
         padding: 0;
     }
 
-    /* El contenido ocupa toda la hoja */
     #contenidoPrincipal {
         margin: 0 !important;
         padding: 0 !important;
         width: 100% !important;
     }
 
-    /* El reporte ocupa toda la página */
     #reporteOperadores {
         width: 100% !important;
         margin: 0 !important;
     }
 
-    /* Sin sombras */
     .card,
     .card-custom {
         box-shadow: none !important;
         border: none !important;
     }
 
-    /* Ocultar botones y filtros */
     .btn,
     .acciones-reporte {
         display: none !important;
     }
 
-    /* Ocultar columna Acciones */
     th.no-print,
     td.no-print {
         display: none !important;
     }
 }
 
-/* DISEÑO RESPONSIVE - CELULAR */
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 1100px) {
+
+    .operadores-toolbar {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .operadores-search {
+        grid-column: 1 / -1;
+    }
+
+    .operadores-acciones {
+        grid-column: 1 / -1;
+        justify-content: flex-start;
+    }
+}
+
+
+/* =========================================================
+   CELULAR
+========================================================= */
 
 @media (max-width: 767px) {
 
-    /* CONTENEDOR GENERAL */
+    /* -----------------------------------------------------
+       NAVBAR
+    ----------------------------------------------------- */
+
+    .navbar {
+        width: 100%;
+        height: 64px;
+    }
+
+    #contenidoPrincipal {
+        padding-top: 80px !important;
+    }
+
+
+    /* -----------------------------------------------------
+       CONTENEDOR GENERAL
+    ----------------------------------------------------- */
 
     #reporteOperadores {
         width: 100%;
@@ -143,7 +337,9 @@ body {
         }
 
 
-    /* ENCABEZADO */
+    /* -----------------------------------------------------
+       ENCABEZADO
+    ----------------------------------------------------- */
 
     .historial-header {
         display: flex !important;
@@ -154,8 +350,8 @@ body {
     }
 
     .titulo-reporte {
-        font-size: 26px;
-        line-height: 1.15;
+        font-size: 24px;
+        line-height: 1.2;
         margin-bottom: 5px;
     }
 
@@ -165,7 +361,9 @@ body {
     }
 
 
-    /* BOTONES EXPORTAR */
+    /* -----------------------------------------------------
+       BOTONES EXPORTAR
+    ----------------------------------------------------- */
 
     .acciones-reporte {
         width: 100%;
@@ -183,7 +381,9 @@ body {
         }
 
 
-    /* TARJETA TOTAL OPERADORES */
+    /* -----------------------------------------------------
+       TOTAL OPERADORES
+    ----------------------------------------------------- */
 
     .row.mb-3 {
         margin-bottom: 15px !important;
@@ -210,11 +410,13 @@ body {
         }
 
 
-    /* TARJETA PRINCIPAL */
+    /* -----------------------------------------------------
+       TARJETA PRINCIPAL
+    ----------------------------------------------------- */
 
     #reporteOperadores > .card {
         border-radius: 16px;
-        box-shadow: 0 4px 14px rgba(0,0,0,.08);
+        box-shadow: 0 4px 14px rgba(0, 0, 0, .08);
     }
 
         #reporteOperadores > .card > .card-body {
@@ -222,189 +424,217 @@ body {
         }
 
 
-    /* FILTROS */
+    /* -----------------------------------------------------
+       TOOLBAR
+    ----------------------------------------------------- */
 
-    #reporteOperadores form .row.align-items-end {
+    .operadores-toolbar {
         display: flex;
         flex-direction: column;
         gap: 10px;
-        margin-bottom: 15px !important;
+        width: 100%;
     }
 
-        #reporteOperadores form .row.align-items-end > .col-lg-7,
-        #reporteOperadores form .row.align-items-end > .col-lg-5 {
+    .operadores-search,
+    .operadores-filtro,
+    .operadores-acciones {
+        width: 100%;
+    }
+
+
+        /* -----------------------------------------------------
+       BUSCADOR
+    ----------------------------------------------------- */
+
+        .operadores-search .input-group {
             width: 100%;
-            max-width: 100%;
-            padding-left: 0;
-            padding-right: 0;
+            display: flex !important;
+            flex-wrap: nowrap !important;
         }
 
-    /* Fila interna de filtros */
+        .operadores-search .input-group-text {
+            width: 45px;
+            min-width: 45px;
+            flex: 0 0 45px;
+        }
 
-    #reporteOperadores .col-lg-7 .row {
-        display: flex;
-        flex-direction: column;
+        .operadores-search .form-control {
+            flex: 1 1 auto !important;
+            min-width: 0 !important;
+        }
+
+
+        /* -----------------------------------------------------
+       FILTROS
+    ----------------------------------------------------- */
+
+        .operadores-filtro select {
+            width: 100%;
+            min-height: 45px;
+        }
+
+
+    /* -----------------------------------------------------
+       BOTONES
+    ----------------------------------------------------- */
+
+    .operadores-acciones {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr;
         gap: 8px;
     }
 
-        #reporteOperadores .col-lg-7 .row > div {
+        .operadores-acciones .btn {
             width: 100%;
-            padding-left: 0;
-            padding-right: 0;
+            margin: 0 !important;
+            min-height: 45px;
         }
 
-    #reporteOperadores .form-control,
-    #reporteOperadores .form-select {
+
+    /* -----------------------------------------------------
+       TABLA COMO TARJETAS
+    ----------------------------------------------------- */
+
+    .operadores-table-container {
         width: 100%;
-        height: 45px;
-        font-size: 14px;
-        border-radius: 10px;
+        max-height: 450px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
     }
 
-
-    /* BOTONES DE FILTROS */
-
-    #reporteOperadores .col-lg-5 .d-flex {
-        width: 100%;
-        display: grid !important;
-        grid-template-columns: 1fr 1fr;
-        gap: 8px !important;
-    }
-
-    #reporteOperadores .btn-toolbar-custom,
-    #reporteOperadores .col-lg-5 .btn {
-        width: 100%;
-        height: 45px;
-        padding: 8px 6px;
-        font-size: 13px;
-        border-radius: 10px;
-    }
-
-
-    /* TABLA -> TARJETAS */
-
-    #reporteOperadores table {
-        width: 100%;
-        border-collapse: separate;
-        border-spacing: 0 12px;
-        margin-top: 5px;
-    }
-
-        /* Ocultar encabezado de tabla */
-
-        #reporteOperadores table thead {
-            display: none;
-        }
-
-        /* Cada fila se convierte en tarjeta */
-
-        #reporteOperadores table tbody tr {
-            display: block;
+        .operadores-table-container table {
             width: 100%;
-            background: #fff;
-            border-radius: 16px;
-            box-shadow: 0 4px 12px rgba(0,0,0,.08);
-            padding: 12px 15px;
-            margin-bottom: 12px;
+            min-width: 0 !important;
+            table-layout: fixed;
+            border-collapse: separate;
+            border-spacing: 0 12px;
         }
 
-        /* Cada celda */
-
-        #reporteOperadores table tbody td {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            width: 100%;
-            padding: 7px 0;
-            border: none;
-            font-size: 14px;
-            text-align: right;
-        }
-
-            /* Separadores */
-
-            #reporteOperadores table tbody td:not(:last-child) {
-                border-bottom: 1px solid #eef1f4;
+            .operadores-table-container table thead {
+                display: none;
             }
 
-            /* Etiquetas de cada campo */
-
-            #reporteOperadores table tbody td:nth-child(1)::before {
-                content: "ID";
-                font-weight: 700;
-                color: #6c757d;
+            .operadores-table-container table tbody tr {
+                display: block;
+                width: 100%;
+                background: #fff;
+                border-radius: 16px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, .08);
+                padding: 12px 15px;
+                margin-bottom: 12px;
             }
 
-            #reporteOperadores table tbody td:nth-child(2)::before {
-                content: "Nombre";
-                font-weight: 700;
-                color: #6c757d;
+            .operadores-table-container table tbody td {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                width: 100%;
+                padding: 7px 0;
+                border: none;
+                font-size: 14px;
+                text-align: right;
+                white-space: normal;
+                word-break: break-word;
+                overflow-wrap: anywhere;
             }
 
-            #reporteOperadores table tbody td:nth-child(3)::before {
-                content: "Máquina";
-                font-weight: 700;
-                color: #6c757d;
-            }
-
-            #reporteOperadores table tbody td:nth-child(4)::before {
-                content: "Frente";
-                font-weight: 700;
-                color: #6c757d;
-            }
-
-            /* ID */
-
-            #reporteOperadores table tbody td:nth-child(1) {
-                color: #0f2f44;
-                font-weight: 600;
-            }
-
-            /* Nombre */
-
-            #reporteOperadores table tbody td:nth-child(2) {
-                color: #0f2f44;
-                font-weight: 700;
-            }
-
-            /* Máquina y frente */
-
-            #reporteOperadores table tbody td:nth-child(3),
-            #reporteOperadores table tbody td:nth-child(4) {
-                color: #495057;
-            }
+                .operadores-table-container table tbody td:not(:last-child) {
+                    border-bottom: 1px solid #eef1f4;
+                }
 
 
-            /* ACCIONES EDITAR / ELIMINAR */
+                /* -----------------------------------------------------
+       ETIQUETAS
+    ----------------------------------------------------- */
 
-            #reporteOperadores table tbody td:last-child {
-                justify-content: flex-end;
-                gap: 8px;
-                padding-top: 12px;
-                margin-top: 4px;
-                border-top: 1px solid #eef1f4;
-            }
-
-                #reporteOperadores table tbody td:last-child::before {
-                    content: "Acciones";
-                    margin-right: auto;
+                .operadores-table-container table tbody td:nth-child(1)::before {
+                    content: "ID";
                     font-weight: 700;
                     color: #6c757d;
                 }
 
+                .operadores-table-container table tbody td:nth-child(2)::before {
+                    content: "Nombre";
+                    font-weight: 700;
+                    color: #6c757d;
+                }
+
+                .operadores-table-container table tbody td:nth-child(3)::before {
+                    content: "Máquina";
+                    font-weight: 700;
+                    color: #6c757d;
+                }
+
+                .operadores-table-container table tbody td:nth-child(4)::before {
+                    content: "Frente";
+                    font-weight: 700;
+                    color: #6c757d;
+                }
+
+
+                /* -----------------------------------------------------
+       COLORES
+    ----------------------------------------------------- */
+
+                .operadores-table-container table tbody td:nth-child(1) {
+                    color: #0f2f44;
+                    font-weight: 600;
+                }
+
+                .operadores-table-container table tbody td:nth-child(2) {
+                    color: #0f2f44;
+                    font-weight: 700;
+                }
+
+                .operadores-table-container table tbody td:nth-child(3),
+                .operadores-table-container table tbody td:nth-child(4) {
+                    color: #495057;
+                }
+
+
+                /* -----------------------------------------------------
+       ACCIONES EDITAR / ELIMINAR
+    ----------------------------------------------------- */
+
+                .operadores-table-container table tbody td:last-child {
+                    justify-content: flex-end;
+                    gap: 8px;
+                    padding-top: 12px;
+                    margin-top: 4px;
+                    border-top: 1px solid #eef1f4;
+                }
+
+                    .operadores-table-container table tbody td:last-child::before {
+                        content: "Acciones";
+                        margin-right: auto;
+                        font-weight: 700;
+                        color: #6c757d;
+                    }
+
+        .operadores-table-container td .btn {
+            width: 32px;
+            height: 32px;
+            padding: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin: 2px;
+            flex-shrink: 0;
+        }
+
     #reporteOperadores .btnEditar,
     #reporteOperadores .btnEliminar {
-        width: 42px;
-        height: 42px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
+        width: 32px;
+        height: 32px;
         border-radius: 10px;
-        font-size: 15px;
+        font-size: 13px;
     }
 
 
-    /* MODALES */
+    /* -----------------------------------------------------
+       MODALES GENERALES
+    ----------------------------------------------------- */
 
     .modal-dialog {
         margin: 10px;
@@ -441,588 +671,13 @@ body {
     }
 
 
-    /* MODAL GESTIÓN DE FRENTES */
-
-    #modalFrentes .modal-dialog {
-        margin: 8px;
-        max-width: calc(100% - 16px);
-    }
-
-    #modalFrentes form {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-    }
-
-        #modalFrentes form .col-md-9,
-        #modalFrentes form .col-md-3 {
-            width: 100%;
-            padding: 0;
-        }
-
-        #modalFrentes form .btn {
-            width: 100%;
-            height: 44px;
-        }
-
-    #modalFrentes table thead {
-        display: none;
-    }
-
-    #modalFrentes table tbody tr {
-        display: block;
-        padding: 12px;
-        margin-bottom: 10px;
-        background: #fff;
-        border-radius: 12px;
-        box-shadow: 0 3px 10px rgba(0,0,0,.08);
-    }
-
-    #modalFrentes table tbody td {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border: none;
-        padding: 6px 0;
-    }
-
-        #modalFrentes table tbody td:nth-child(1)::before {
-            content: "ID";
-            font-weight: 700;
-            color: #6c757d;
-        }
-
-        #modalFrentes table tbody td:nth-child(2)::before {
-            content: "Nombre";
-            font-weight: 700;
-            color: #6c757d;
-        }
-
-        #modalFrentes table tbody td:nth-child(3)::before {
-            content: "Acciones";
-            font-weight: 700;
-            color: #6c757d;
-        }
-
-
-    /* EVITAR DESBORDAMIENTO HORIZONTAL */
-
-    html,
-    body {
-        max-width: 100%;
-        overflow-x: hidden;
-    }
-}
-
-/* TOOLBAR OPERADORES */
-
-.operadores-card {
-    border-radius: 20px;
-    overflow: hidden;
-}
-
-.operadores-toolbar {
-    display: grid;
-    grid-template-columns: minmax(220px, 1.5fr) minmax(180px, 1fr) minmax(180px, 1fr) auto;
-    gap: 12px;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-/* BUSCADOR */
-
-.operadores-search .input-group-text {
-    background: white;
-    border-right: none;
-    color: #6c757d;
-}
-
-.operadores-search .form-control {
-    border-left: none;
-}
-
-    .operadores-search .form-control:focus {
-        border-left: none;
-    }
-
-/* FILTROS */
-
-.operadores-filtro .form-select {
-    min-height: 46px;
-    border-radius: 10px;
-}
-
-/* ACCIONES */
-
-.operadores-acciones {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-}
-
-.btn-toolbar-custom {
-    min-height: 46px;
-    border-radius: 10px;
-    font-weight: 600;
-    white-space: nowrap;
-}
-
-    .btn-toolbar-custom i {
-        margin-right: 5px;
-    }
-
-
-/* TABLA CON SCROLL */
-
-.operadores-table-container {
-    width: 100%;
-    max-height: 55vh;
-    overflow: auto;
-    border-radius: 12px;
-}
-
-    /* Mantener encabezado visible */
-
-    .operadores-table-container thead th {
-        position: sticky;
-        top: 0;
-        z-index: 10;
-        background: #0f2f44;
-        color: white;
-        white-space: nowrap;
-    }
-
-    /* Evita que las columnas se aplasten */
-
-    .operadores-table-container table {
-        min-width: 750px;
-    }
-
-    /* Espaciado */
-
-    .operadores-table-container td,
-    .operadores-table-container th {
-        vertical-align: middle;
-    }
-
-
-/* NAVBAR SIEMPRE VISIBLE */
-
-.navbar {
-    position: fixed !important;
-    top: 0;
-    right: 0;
-    z-index: 1040;
-    width: calc(100% - 210px);
-    height: 70px;
-    background: white !important;
-    border-bottom: 1px solid #e5e5e5;
-    box-shadow: 0 2px 10px rgba(0,0,0,.08);
-}
-
-/* Espacio para que el contenido no quede debajo del navbar */
-
-#contenidoPrincipal {
-    padding-top: 90px !important;
-}
-
-
-/* RESPONSIVE */
-
-@media (max-width: 1100px) {
-
-    .operadores-toolbar {
-        grid-template-columns: 1fr 1fr;
-    }
-
-    .operadores-search {
-        grid-column: 1 / -1;
-    }
-
-    .operadores-acciones {
-        grid-column: 1 / -1;
-        justify-content: flex-start;
-    }
-}
-
-
-/* CELULAR */
-
-@media (max-width: 767px) {
-
-    /* NAVBAR */
-
-    .navbar {
-        width: 100%;
-        height: 64px;
-    }
-
-    #contenidoPrincipal {
-        padding-top: 80px !important;
-    }
-
-
-    /* TOOLBAR */
-
-    .operadores-toolbar {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        width: 100%;
-    }
-
-    .operadores-search,
-    .operadores-filtro,
-    .operadores-acciones {
-        width: 100%;
-    }
-
-
-    /* ACCIONES */
-
-    .operadores-acciones {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 8px;
-    }
-
-    .btn-toolbar-custom {
-        width: 100%;
-        min-height: 45px;
-    }
-
-
-    /* TABLA */
-
-    .operadores-table-container {
-        max-height: 58vh;
-        overflow-x: auto;
-        overflow-y: auto;
-    }
-
-        .operadores-table-container table {
-            min-width: 750px;
-        }
-}
-
-
-/* PANTALLAS MUY PEQUEÑAS */
-
-@media (max-width: 400px) {
-
-    .operadores-acciones {
-        grid-template-columns: 1fr 1fr;
-    }
-
-    .btn-toolbar-custom span {
-        font-size: 13px;
-    }
-}
-/* =========================================================
-   AJUSTE FINAL - OPERADORES
-   PC + CELULAR
-========================================================= */
-
-
-/* CONTENEDOR DE LA TABLA */
-
-.operadores-table-container {
-    width: 100%;
-    max-height: 500px;
-    overflow-y: auto;
-    overflow-x: hidden;
-    border-radius: 12px;
-}
-
-
-    /* TABLA */
-
-    .operadores-table-container table {
-        width: 100%;
-        table-layout: fixed;
-    }
-
-
-    /* EVITAR QUE EL CONTENIDO PROVOQUE SCROLL HORIZONTAL */
-
-    .operadores-table-container th,
-    .operadores-table-container td {
-        white-space: normal;
-        word-break: break-word;
-        overflow-wrap: anywhere;
-    }
-
-
-    /* ENCABEZADO DE TABLA */
-
-    .operadores-table-container thead th {
-        position: sticky;
-        top: 0;
-        z-index: 5;
-    }
-
-
-/* =========================================================
-   BUSCADOR
-========================================================= */
-
-.operadores-search {
-    width: 100%;
-}
-
-    .operadores-search .input-group {
-        display: flex;
-        width: 100%;
-    }
-
-    .operadores-search .input-group-text {
-        flex: 0 0 45px;
-        width: 45px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 10px 0 0 10px;
-    }
-
-    .operadores-search .form-control {
-        min-width: 0;
-        width: 100%;
-        border-radius: 0 10px 10px 0;
-    }
-
-
-/* =========================================================
-   CELULAR
-========================================================= */
-
-@media (max-width: 767px) {
-
-    /* BARRA DE FILTROS */
-
-    .operadores-toolbar {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        width: 100%;
-    }
-
-
-    /* BUSCADOR */
-
-    .operadores-search {
-        width: 100%;
-    }
-
-
-        .operadores-search .input-group {
-            width: 100%;
-            display: flex;
-            flex-wrap: nowrap;
-        }
-
-
-        .operadores-search .input-group-text {
-            flex: 0 0 45px;
-            width: 45px;
-            min-width: 45px;
-        }
-
-
-        .operadores-search .form-control {
-            flex: 1 1 auto;
-            min-width: 0;
-        }
-
-
-    /* FILTROS */
-
-    .operadores-filtro {
-        width: 100%;
-    }
-
-        .operadores-filtro select {
-            width: 100%;
-        }
-
-
-    /* BOTONES */
-
-    .operadores-acciones {
-        display: grid !important;
-        grid-template-columns: 1fr 1fr;
-        gap: 8px;
-        width: 100%;
-    }
-
-
-        .operadores-acciones .btn {
-            width: 100%;
-            margin: 0 !important;
-        }
-
-
-    /* TABLA */
-
-    .operadores-table-container {
-        width: 100%;
-        max-height: 450px;
-        overflow-y: auto;
-        overflow-x: hidden;
-        -webkit-overflow-scrolling: touch;
-    }
-
-
-        .operadores-table-container table {
-            width: 100%;
-            min-width: 0 !important;
-            table-layout: fixed;
-        }
-
-
-        /* COLUMNAS */
-
-        .operadores-table-container th,
-        .operadores-table-container td {
-            padding: 10px 6px;
-            font-size: 12px;
-            white-space: normal;
-            word-break: break-word;
-            overflow-wrap: anywhere;
-        }
-
-
-            /* ID */
-
-            .operadores-table-container th:first-child,
-            .operadores-table-container td:first-child {
-                width: 12%;
-            }
-
-
-            /* NOMBRE */
-
-            .operadores-table-container th:nth-child(2),
-            .operadores-table-container td:nth-child(2) {
-                width: 22%;
-            }
-
-
-            /* MÁQUINA */
-
-            .operadores-table-container th:nth-child(3),
-            .operadores-table-container td:nth-child(3) {
-                width: 20%;
-            }
-
-
-            /* FRENTE */
-
-            .operadores-table-container th:nth-child(4),
-            .operadores-table-container td:nth-child(4) {
-                width: 28%;
-            }
-
-
-            /* ACCIONES */
-
-            .operadores-table-container th:nth-child(5),
-            .operadores-table-container td:nth-child(5) {
-                width: 18%;
-            }
-
-
-            /* BOTONES EDITAR / ELIMINAR */
-
-            .operadores-table-container td .btn {
-                width: 30px;
-                height: 30px;
-                padding: 0;
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                margin: 2px;
-            }
-
-
-    /* TÍTULO */
-
-    .titulo-reporte {
-        font-size: 24px;
-        line-height: 1.2;
-    }
-
-
-    .subtitulo-reporte {
-        font-size: 14px;
-    }
-}
-/* =========================================================
-   BUSCADOR - CORRECCIÓN
-========================================================= */
-
-.operadores-search {
-    width: 100%;
-}
-
-    .operadores-search .input-group {
-        display: flex !important;
-        flex-wrap: nowrap !important;
-        width: 100%;
-        align-items: stretch;
-    }
-
-    .operadores-search .input-group-text {
-        display: flex !important;
-        align-items: center;
-        justify-content: center;
-        width: 45px;
-        min-width: 45px;
-        flex: 0 0 45px;
-        padding: 0;
-        border-radius: 10px 0 0 10px !important;
-    }
-
-    .operadores-search .form-control {
-        flex: 1 1 auto !important;
-        width: auto !important;
-        min-width: 0 !important;
-        border-radius: 0 10px 10px 0 !important;
-    }
-
-/* =========================================================
-   MODAL DE FRENTES
-========================================================= */
-
-#modalFrentes .modal-dialog {
-    max-width: 900px;
-}
-
-#modalFrentes .modal-body {
-    overflow-x: hidden;
-}
-
-#modalFrentes table {
-    width: 100%;
-    table-layout: fixed;
-}
-
-#modalFrentes th,
-#modalFrentes td {
-    word-break: normal;
-    overflow-wrap: break-word;
-    white-space: normal;
-}
-
-
-/* =========================================================
-   FRENTES EN CELULAR
-========================================================= */
-
-@media (max-width: 767px) {
+    /* -----------------------------------------------------
+       MODAL GESTIÓN DE FRENTES
+    ----------------------------------------------------- */
 
     #modalFrentes .modal-dialog {
         margin: 10px;
-        max-width: none;
+        max-width: calc(100% - 20px);
     }
 
     #modalFrentes .modal-content {
@@ -1057,47 +712,143 @@ body {
         #modalFrentes form .col-md-9,
         #modalFrentes form .col-md-3 {
             width: 100%;
+            padding: 0;
+        }
+
+        #modalFrentes form .btn {
+            width: 100%;
+            height: 44px;
         }
 
 
-    /* TABLA */
+    /* TABLA DE FRENTES */
 
     #modalFrentes table {
         width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 10px;
         table-layout: fixed;
     }
 
-    #modalFrentes th,
-    #modalFrentes td {
-        padding: 10px 6px;
-        font-size: 12px;
-        word-break: break-word;
-        overflow-wrap: break-word;
+        #modalFrentes table thead {
+            display: none;
+        }
+
+        #modalFrentes table tbody tr {
+            display: block;
+            width: 100%;
+            padding: 10px 12px;
+            margin-bottom: 10px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, .08);
+        }
+
+        #modalFrentes table tbody td {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 7px 0;
+            border: none;
+            font-size: 13px;
+            word-break: break-word;
+            overflow-wrap: break-word;
+        }
+
+            #modalFrentes table tbody td:nth-child(1)::before {
+                content: "ID";
+                font-weight: 700;
+                color: #6c757d;
+            }
+
+            #modalFrentes table tbody td:nth-child(2)::before {
+                content: "Nombre";
+                font-weight: 700;
+                color: #6c757d;
+            }
+
+            #modalFrentes table tbody td:nth-child(3)::before {
+                content: "Acciones";
+                font-weight: 700;
+                color: #6c757d;
+            }
+
+            #modalFrentes table tbody td:not(:last-child) {
+                border-bottom: 1px solid #eef1f4;
+            }
+
+            #modalFrentes table tbody td:last-child {
+                justify-content: flex-end;
+                gap: 8px;
+                padding-top: 10px;
+                margin-top: 4px;
+                border-top: 1px solid #eef1f4;
+            }
+
+            #modalFrentes table tbody td .btn {
+                width: 32px;
+                height: 32px;
+                padding: 0;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+            }
+
+
+    /* -----------------------------------------------------
+       EVITAR DESBORDAMIENTO HORIZONTAL
+    ----------------------------------------------------- */
+
+    html,
+    body {
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+}
+
+
+/* =========================================================
+   PANTALLAS MUY PEQUEÑAS
+========================================================= */
+
+@media (max-width: 400px) {
+
+    .operadores-acciones {
+        grid-template-columns: 1fr 1fr;
     }
 
+    .btn-toolbar-custom span {
+        font-size: 13px;
+    }
 
-        #modalFrentes th:first-child,
-        #modalFrentes td:first-child {
-            width: 18%;
-        }
-
-        #modalFrentes th:nth-child(2),
-        #modalFrentes td:nth-child(2) {
-            width: 57%;
-        }
-
-        #modalFrentes th:nth-child(3),
-        #modalFrentes td:nth-child(3) {
-            width: 25%;
-        }
+    .titulo-reporte {
+        font-size: 22px;
+    }
+}
 
 
-        #modalFrentes td .btn {
-            width: 32px;
-            height: 32px;
-            padding: 0;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
+/* =========================================================
+   MODAL DE FRENTES - ESCRITORIO
+========================================================= */
+
+#modalFrentes .modal-dialog {
+    max-width: 900px;
+}
+
+#modalFrentes .modal-body {
+    overflow-x: hidden;
+}
+
+#modalFrentes table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+#modalFrentes th,
+#modalFrentes td {
+    word-break: normal;
+    overflow-wrap: break-word;
+    white-space: normal;
 }
