@@ -1,4 +1,6 @@
-﻿/* ENCABEZADO*/
+﻿/* =========================================================
+   ENCABEZADO
+========================================================= */
 
 .historial-header {
     display: flex;
@@ -32,64 +34,13 @@
     gap: 12px;
 }
 
+
+/* =========================================================
+   GENERAL
+========================================================= */
+
 body {
     background: #eef2f6;
-}
-
-/* IMPRESIÓN */
-
-@media print {
-    /* Oculta todo lo marcado como no imprimir */
-    .no-print {
-        display: none !important;
-    }
-    /* Oculta sidebar y navbar */
-    aside,
-    nav {
-        display: none !important;
-    }
-
-    body {
-        background: white !important;
-        margin: 0;
-        padding: 0;
-    }
-    /* El contenido ocupa toda la hoja */
-    #contenidoPrincipal {
-        margin: 0 !important;
-        padding: 0 !important;
-        width: 100% !important;
-    }
-    /* El reporte ocupa toda la página */
-    #reporteOperadores {
-        width: 100% !important;
-        margin: 0 !important;
-    }
-    /* Sin sombras */
-    .card,
-    .card-custom {
-        box-shadow: none !important;
-        border: none !important;
-    }
-    /* Ocultar botones y filtros */
-    .btn,
-    .acciones-reporte {
-        display: none !important;
-    }
-    /* Ocultar columna Acciones */
-    th.no-print,
-    td.no-print {
-        display: none !important;
-    }
-}
-
-.header-card {
-    background: linear-gradient(135deg,#0f2f44,#174d6d);
-    color: white;
-    border-radius: 20px;
-    padding: 25px;
-    margin-bottom: 25px;
-    box-shadow: 0 10px 20px rgba(0,0,0,.15);
 }
 
 .card-custom {
@@ -97,8 +48,8 @@ body {
     border: none;
     border-radius: 20px;
     padding: 25px;
-    box-shadow: 0 5px 15px rgba(0,0,0,.08);
-    margin-bottom: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, .08);
+    margin-bottom: 1px;
 }
 
 .btn-guardar {
@@ -112,18 +63,6 @@ body {
         background: #d89b00;
     }
 
-.table thead {
-    background: #0f2f44;
-    color: white;
-}
-
-.badge-activa {
-    background: #198754;
-    color: white;
-    padding: 8px 12px;
-    border-radius: 10px;
-}
-
 .btn-exp {
     height: 48px;
     border-radius: 12px;
@@ -134,22 +73,635 @@ body {
     gap: 8px;
 }
 
-@media (max-width:768px) {
+.table thead {
+    background: #0f2f44;
+    color: white;
+}
 
-    .header-card {
-        text-align: center;
+
+/* =========================================================
+   NAVBAR
+========================================================= */
+
+.navbar {
+    position: fixed !important;
+    top: 0;
+    right: 0;
+    z-index: 1040;
+    width: calc(100% - 210px);
+    height: 70px;
+    background: white !important;
+    border-bottom: 1px solid #e5e5e5;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, .08);
+}
+
+#contenidoPrincipal {
+    padding-top: 90px !important;
+}
+
+
+/* =========================================================
+   TOOLBAR MAQUINARIA
+========================================================= */
+
+.maquinaria-card {
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.maquinaria-toolbar {
+    display: grid;
+    grid-template-columns: minmax(220px, 1.5fr) minmax(180px, 1fr) auto;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+
+/* =========================================================
+   BUSCADOR
+========================================================= */
+
+.maquinaria-search {
+    width: 100%;
+}
+
+    .maquinaria-search .input-group {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        width: 100%;
+        align-items: stretch;
     }
 
+    .maquinaria-search .input-group-text {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        width: 45px;
+        min-width: 45px;
+        flex: 0 0 45px;
+        padding: 0;
+        background: white;
+        color: #6c757d;
+        border-right: none;
+        border-radius: 10px 0 0 10px !important;
+    }
+
+    .maquinaria-search .form-control {
+        flex: 1 1 auto !important;
+        width: auto !important;
+        min-width: 0 !important;
+        border-left: none;
+        border-radius: 0 10px 10px 0 !important;
+    }
+
+        .maquinaria-search .form-control:focus {
+            border-left: none;
+        }
+
+
+/* =========================================================
+   FILTROS
+========================================================= */
+
+.maquinaria-filtro {
+    width: 100%;
+}
+
+    .maquinaria-filtro .form-select {
+        min-height: 46px;
+        width: 100%;
+        border-radius: 10px;
+    }
+
+
+/* =========================================================
+   ACCIONES
+========================================================= */
+
+.maquinaria-acciones {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.btn-toolbar-custom {
+    min-height: 46px;
+    border-radius: 10px;
+    font-weight: 600;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 5px;
+}
+
+    .btn-toolbar-custom i {
+        margin-right: 5px;
+    }
+
+
+/* =========================================================
+   TABLA MAQUINARIA
+========================================================= */
+
+.maquinaria-table-container {
+    width: 100%;
+    max-height: 500px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-radius: 12px;
+}
+
+    .maquinaria-table-container table {
+        width: 100%;
+        table-layout: fixed;
+    }
+
+    .maquinaria-table-container th,
+    .maquinaria-table-container td {
+        vertical-align: middle;
+        white-space: normal;
+        word-break: break-word;
+        overflow-wrap: anywhere;
+    }
+
+    .maquinaria-table-container thead th {
+        position: sticky;
+        top: 0;
+        z-index: 5;
+        background: #0f2f44;
+        color: white;
+    }
+
+
+/* =========================================================
+   IMPRESIÓN
+========================================================= */
+
+@media print {
+
+    .no-print {
+        display: none !important;
+    }
+
+    aside,
+    nav {
+        display: none !important;
+    }
+
+    body {
+        background: white !important;
+        margin: 0;
+        padding: 0;
+    }
+
+    #contenidoPrincipal {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+    }
+
+    #reporteMaquinaria {
+        width: 100% !important;
+        margin: 0 !important;
+    }
+
+    .card,
     .card-custom {
+        box-shadow: none !important;
+        border: none !important;
+    }
+
+    .btn,
+    .acciones-reporte {
+        display: none !important;
+    }
+
+    th.no-print,
+    td.no-print {
+        display: none !important;
+    }
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 1100px) {
+
+    .maquinaria-toolbar {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .maquinaria-search {
+        grid-column: 1 / -1;
+    }
+
+    .maquinaria-acciones {
+        grid-column: 1 / -1;
+        justify-content: flex-start;
+    }
+}
+
+
+/* =========================================================
+   CELULAR
+========================================================= */
+
+@media (max-width: 767px) {
+
+    /* -----------------------------------------------------
+       NAVBAR
+    ----------------------------------------------------- */
+
+    .navbar {
+        width: 100%;
+        height: 64px;
+    }
+
+    #contenidoPrincipal {
+        padding-top: 80px !important;
+    }
+
+
+    /* -----------------------------------------------------
+       CONTENEDOR GENERAL
+    ----------------------------------------------------- */
+
+    #reporteMaquinaria {
+        width: 100%;
+        overflow: hidden;
+    }
+
+        #reporteMaquinaria .container-fluid {
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+
+    /* -----------------------------------------------------
+       ENCABEZADO
+    ----------------------------------------------------- */
+
+    .historial-header {
+        display: flex !important;
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 15px;
+        margin-bottom: 20px !important;
+    }
+
+    .titulo-reporte {
+        font-size: 24px;
+        line-height: 1.2;
+        margin-bottom: 5px;
+    }
+
+    .subtitulo-reporte {
+        font-size: 14px;
+        margin-bottom: 0;
+    }
+
+
+    /* -----------------------------------------------------
+       BOTONES EXPORTAR
+    ----------------------------------------------------- */
+
+    .acciones-reporte {
+        width: 100%;
+        display: flex !important;
+        flex-wrap: wrap;
+        gap: 8px !important;
+    }
+
+        .acciones-reporte .btn-exp {
+            flex: 1 1 calc(50% - 8px);
+            width: calc(50% - 8px);
+            height: 44px;
+            font-size: 13px;
+            padding: 8px 10px;
+        }
+
+
+    /* -----------------------------------------------------
+       TOTAL MAQUINARIA
+    ----------------------------------------------------- */
+
+    .row.mb-1 {
+        margin-bottom: 15px !important;
+    }
+
+        .row.mb-1 > .col-md-4 {
+            width: 100%;
+        }
+
+    .card-custom {
+        width: 100%;
+        padding: 20px 15px;
+        margin-bottom: 0;
+    }
+
+        .card-custom h5 {
+            font-size: 15px;
+            margin-bottom: 8px;
+        }
+
+        .card-custom h2 {
+            font-size: 30px;
+            margin-bottom: 0;
+        }
+
+
+    /* -----------------------------------------------------
+       TARJETA PRINCIPAL
+    ----------------------------------------------------- */
+
+    #reporteMaquinaria > .card {
+        border-radius: 16px;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, .08);
+    }
+
+        #reporteMaquinaria > .card > .card-body {
+            padding: 15px;
+        }
+
+
+    /* -----------------------------------------------------
+       TOOLBAR
+    ----------------------------------------------------- */
+
+    .maquinaria-toolbar {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+    }
+
+    .maquinaria-search,
+    .maquinaria-filtro,
+    .maquinaria-acciones {
+        width: 100%;
+    }
+
+
+        /* -----------------------------------------------------
+       BUSCADOR
+    ----------------------------------------------------- */
+
+        .maquinaria-search .input-group {
+            width: 100%;
+            display: flex !important;
+            flex-wrap: nowrap !important;
+        }
+
+        .maquinaria-search .input-group-text {
+            width: 45px;
+            min-width: 45px;
+            flex: 0 0 45px;
+        }
+
+        .maquinaria-search .form-control {
+            flex: 1 1 auto !important;
+            min-width: 0 !important;
+        }
+
+
+        /* -----------------------------------------------------
+       FILTROS
+    ----------------------------------------------------- */
+
+        .maquinaria-filtro select {
+            width: 100%;
+            min-height: 45px;
+        }
+
+
+    /* -----------------------------------------------------
+       BOTONES
+    ----------------------------------------------------- */
+
+    .maquinaria-acciones {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+
+        .maquinaria-acciones .btn {
+            width: 100%;
+            margin: 0 !important;
+            min-height: 45px;
+        }
+
+
+    /* -----------------------------------------------------
+       TABLA COMO TARJETAS
+    ----------------------------------------------------- */
+
+    .maquinaria-table-container {
+        width: 100%;
+        max-height: 450px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+    }
+
+        .maquinaria-table-container table {
+            width: 100%;
+            min-width: 0 !important;
+            table-layout: fixed;
+            border-collapse: separate;
+            border-spacing: 0 12px;
+        }
+
+            .maquinaria-table-container table thead {
+                display: none;
+            }
+
+            .maquinaria-table-container table tbody tr {
+                display: block;
+                width: 100%;
+                background: #fff;
+                border-radius: 16px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, .08);
+                padding: 12px 15px;
+                margin-bottom: 12px;
+            }
+
+            .maquinaria-table-container table tbody td {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                width: 100%;
+                padding: 7px 0;
+                border: none;
+                font-size: 14px;
+                text-align: right;
+                white-space: normal;
+                word-break: break-word;
+                overflow-wrap: anywhere;
+            }
+
+                .maquinaria-table-container table tbody td:not(:last-child) {
+                    border-bottom: 1px solid #eef1f4;
+                }
+
+
+                /* -----------------------------------------------------
+       ETIQUETAS
+    ----------------------------------------------------- */
+
+                .maquinaria-table-container table tbody td:nth-child(1)::before {
+                    content: "ID";
+                    font-weight: 700;
+                    color: #6c757d;
+                }
+
+                .maquinaria-table-container table tbody td:nth-child(2)::before {
+                    content: "Máquina";
+                    font-weight: 700;
+                    color: #6c757d;
+                }
+
+                .maquinaria-table-container table tbody td:nth-child(3)::before {
+                    content: "Estado";
+                    font-weight: 700;
+                    color: #6c757d;
+                }
+
+                .maquinaria-table-container table tbody td:nth-child(4)::before {
+                    content: "Acciones";
+                    font-weight: 700;
+                    color: #6c757d;
+                }
+
+
+                /* -----------------------------------------------------
+       COLORES
+    ----------------------------------------------------- */
+
+                .maquinaria-table-container table tbody td:nth-child(1) {
+                    color: #0f2f44;
+                    font-weight: 600;
+                }
+
+                .maquinaria-table-container table tbody td:nth-child(2) {
+                    color: #0f2f44;
+                    font-weight: 700;
+                }
+
+                .maquinaria-table-container table tbody td:nth-child(3) {
+                    color: #495057;
+                }
+
+
+                /* -----------------------------------------------------
+       ACCIONES EDITAR / ELIMINAR
+    ----------------------------------------------------- */
+
+                .maquinaria-table-container table tbody td:last-child {
+                    justify-content: flex-end;
+                    gap: 8px;
+                    padding-top: 12px;
+                    margin-top: 4px;
+                    border-top: 1px solid #eef1f4;
+                }
+
+                    .maquinaria-table-container table tbody td:last-child::before {
+                        content: "Acciones";
+                        margin-right: auto;
+                        font-weight: 700;
+                        color: #6c757d;
+                    }
+
+        .maquinaria-table-container td .btn {
+            width: 32px;
+            height: 32px;
+            padding: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin: 2px;
+            flex-shrink: 0;
+        }
+
+    #reporteMaquinaria .btnEditar,
+    #reporteMaquinaria .btnEliminar {
+        width: 32px;
+        height: 32px;
+        border-radius: 10px;
+        font-size: 13px;
+    }
+
+
+    /* -----------------------------------------------------
+       MODALES
+    ----------------------------------------------------- */
+
+    .modal-dialog {
+        margin: 10px;
+        max-width: calc(100% - 20px);
+    }
+
+    .modal-content {
+        border-radius: 16px;
+        border: none;
+    }
+
+    .modal-header {
         padding: 15px;
     }
 
-    .btn {
-        width: 100%;
-        margin-bottom: 8px;
+    .modal-body {
+        padding: 15px;
     }
 
-    .table {
-        font-size: 14px;
+    .modal-footer {
+        display: flex;
+        flex-direction: column-reverse;
+        gap: 8px;
+        padding: 15px;
+    }
+
+        .modal-footer .btn {
+            width: 100%;
+            min-height: 44px;
+        }
+
+    .modal-title {
+        font-size: 17px;
+    }
+
+
+    /* -----------------------------------------------------
+       EVITAR DESBORDAMIENTO HORIZONTAL
+    ----------------------------------------------------- */
+
+    html,
+    body {
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+}
+
+
+/* =========================================================
+   PANTALLAS MUY PEQUEÑAS
+========================================================= */
+
+@media (max-width: 400px) {
+
+    .maquinaria-acciones {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .btn-toolbar-custom span {
+        font-size: 13px;
+    }
+
+    .titulo-reporte {
+        font-size: 22px;
     }
 }

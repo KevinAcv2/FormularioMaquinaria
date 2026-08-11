@@ -4,16 +4,27 @@
     ViewData["Title"] = "Gestión de Maquinaria";
 }
 
-<link rel="stylesheet" href="~/css/maquinaria.css" asp-append-version="true" />
+<link rel="stylesheet"
+      href="~/css/maquinaria.css"
+      asp-append-version="true" />
+
 
 <div class="container-fluid">
 
-    <!-- ENCABEZADO -->
+    <!-- ================================================= -->
+    <!-- CONTENIDO PRINCIPAL -->
+    <!-- ================================================= -->
+
     <div id="reporteMaquinaria">
 
-        <div class="historial-header mb-4 d-flex justify-content-between align-items-start">
+        <!-- ================================================= -->
+        <!-- ENCABEZADO -->
+        <!-- ================================================= -->
+
+        <div class="historial-header">
 
             <div>
+
                 <h1 class="titulo-reporte">
                     🚜 Gestión de Maquinaria
                 </h1>
@@ -21,24 +32,34 @@
                 <p class="subtitulo-reporte">
                     Administración de maquinaria registrada.
                 </p>
+
             </div>
 
+
             <!-- EXPORTACIONES -->
-            <div class="acciones-reporte no-print d-flex gap-2">
+
+            <div class="acciones-reporte no-print">
 
                 <a asp-action="ExportarExcel"
                    class="btn btn-success btn-exp">
 
                     <i class="fa-solid fa-file-excel"></i>
-                    Exportar Excel
+
+                    <span>
+                        Exportar Excel
+                    </span>
 
                 </a>
+
 
                 <a asp-action="ExportarPdf"
                    class="btn btn-danger btn-exp">
 
                     <i class="fa-solid fa-file-pdf"></i>
-                    Exportar PDF
+
+                    <span>
+                        Exportar PDF
+                    </span>
 
                 </a>
 
@@ -47,7 +68,10 @@
         </div>
 
 
-        <!-- TOTAL MAQUINAS -->
+        <!-- ================================================= -->
+        <!-- TOTAL MAQUINARIA -->
+        <!-- ================================================= -->
+
         <div class="row mb-3">
 
             <div class="col-md-4">
@@ -68,106 +92,126 @@
 
         </div>
 
-    </div>
+
+        <!-- ================================================= -->
+        <!-- TARJETA PRINCIPAL -->
+        <!-- ================================================= -->
+
+        <div class="maquinaria-card card shadow-sm border-0">
+
+            <div class="card-body">
 
 
-    <!-- TARJETA PRINCIPAL -->
-    <div class="card shadow-sm border-0">
+                <!-- ================================================= -->
+                <!-- TOOLBAR -->
+                <!-- ================================================= -->
 
-        <div class="card-body">
+                <form asp-action="Index"
+                      method="get">
 
-
-            <!-- ============================= -->
-            <!-- FILTROS -->
-            <!-- ============================= -->
-
-            <form asp-action="Index"
-                  method="get">
-
-                <div class="row align-items-end mb-4 no-print">
+                    <div class="maquinaria-toolbar no-print">
 
 
-                    <!-- CAMPOS -->
-                    <div class="col-lg-8">
+                        <!-- ================================================= -->
+                        <!-- BUSCADOR -->
+                        <!-- ================================================= -->
 
-                        <div class="row g-2">
+                        <div class="maquinaria-search">
 
+                            <div class="input-group">
 
-                            <!-- BUSCAR -->
-                            <div class="col-4">
+                                <span class="input-group-text">
+
+                                    <i class="fa-solid fa-magnifying-glass"></i>
+
+                                </span>
 
                                 <input type="text"
                                        name="buscar"
                                        class="form-control"
-                                       placeholder="🔍 Buscar maquinaria..."
+                                       placeholder="Buscar maquinaria..."
                                        value="@ViewBag.Buscar" />
-
-                            </div>
-
-
-                            <!-- ESTADO -->
-                            <div class="col-4">
-
-                                <select name="estado"
-                                        class="form-select">
-
-                                    <option value="">
-                                        Estado
-                                    </option>
-
-                                    <option value="1"
-                                            selected="@(ViewBag.Estado?.ToString() == "1" ? "selected" : null)">
-                                        OPERATIVA
-                                    </option>
-
-                                    <option value="0"
-                                            selected="@(ViewBag.Estado?.ToString() == "0" ? "selected" : null)">
-                                        NO OPERATIVA
-                                    </option>
-
-                                </select>
 
                             </div>
 
                         </div>
 
-                    </div>
+
+                        <!-- ================================================= -->
+                        <!-- FILTRO ESTADO -->
+                        <!-- ================================================= -->
+
+                        <div class="maquinaria-filtro">
+
+                            <select name="estado"
+                                    class="form-select">
+
+                                <option value="">
+                                    Estado
+                                </option>
+
+                                <option value="1"
+                                        selected="@(ViewBag.Estado?.ToString() == "1" ? "selected" : null)">
+                                    OPERATIVA
+                                </option>
+
+                                <option value="0"
+                                        selected="@(ViewBag.Estado?.ToString() == "0" ? "selected" : null)">
+                                    NO OPERATIVA
+                                </option>
+
+                            </select>
+
+                        </div>
 
 
-                    <!-- BOTONES -->
-                    <div class="col-lg-4">
+                        <!-- ================================================= -->
+                        <!-- ACCIONES -->
+                        <!-- ================================================= -->
 
-                        <div class="d-flex justify-content-end gap-2">
+                        <div class="maquinaria-acciones">
 
 
                             <!-- BUSCAR -->
+
                             <button type="submit"
                                     class="btn btn-primary btn-toolbar-custom">
 
                                 <i class="fa-solid fa-magnifying-glass"></i>
-                                Buscar
+
+                                <span>
+                                    Buscar
+                                </span>
 
                             </button>
 
 
                             <!-- LIMPIAR -->
+
                             <a asp-action="Index"
                                class="btn btn-secondary btn-toolbar-custom">
 
                                 <i class="fa-solid fa-rotate"></i>
-                                Limpiar
+
+                                <span>
+                                    Limpiar
+                                </span>
 
                             </a>
 
 
                             <!-- NUEVA -->
+
                             <button type="button"
                                     class="btn btn-success btn-toolbar-custom"
                                     data-bs-toggle="modal"
                                     data-bs-target="#modalNuevaMaquina">
 
                                 <i class="fa-solid fa-plus"></i>
-                                Nueva
+
+                                <span>
+                                    Nueva
+                                </span>
 
                             </button>
 
@@ -175,122 +219,142 @@
 
                     </div>
 
-                </div>
-
-            </form>
+                </form>
 
 
-            <!-- ============================= -->
-            <!-- TABLA -->
-            <!-- ============================= -->
+                <!-- ================================================= -->
+                <!-- TABLA -->
+                <!-- ================================================= -->
 
-            <div class="table-responsive">
+                <div class="maquinaria-table-container">
 
-                <table class="table table-hover align-middle">
-
-                    <thead>
-
-                        <tr>
-
-                            <th>
-                                ID
-                            </th>
-
-                            <th>
-                                Máquina
-                            </th>
-
-                            <th>
-                                Estado
-                            </th>
-
-                            <th class="no-print text-center">
-                                Acciones
-                            </th>
-
-                        </tr>
-
-                    </thead>
+                    <table class="table table-hover align-middle">
 
 
-                    <tbody>
+                        <!-- ENCABEZADO -->
 
-                        @foreach (var item in Model)
-                        {
+                        <thead>
 
                             <tr>
 
-                                <!-- ID -->
-                                <td>
-                                    @item.Id
-                                </td>
+                                <th>
+                                    ID
+                                </th>
 
+                                <th>
+                                    Máquina
+                                </th>
 
-                                <!-- NOMBRE -->
-                                <td>
-                                    @item.Nombre
-                                </td>
+                                <th>
+                                    Estado
+                                </th>
 
-
-                                <!-- ESTADO -->
-                                <td>
-
-                                    @if (item.Estado == "1")
-                                    {
-
-                                        <span class="badge bg-success">
-                                            OPERATIVA
-                                        </span>
-
-                                    }
-                                    else
-                                    {
-
-                                        <span class="badge bg-danger">
-                                            NO OPERATIVA
-                                        </span>
-
-                                    }
-
-                                </td>
-
-
-                                <!-- ACCIONES -->
-                                <td class="text-center no-print">
-
-
-                                    <!-- EDITAR -->
-                                    <button type="button"
-                                            class="btn btn-warning btn-sm btnEditar"
-                                            data-id="@item.Id"
-                                            data-nombre="@item.Nombre"
-                                            data-estado="@item.Estado"
-                                            title="Editar">
-
-                                        <i class="fa-solid fa-pencil"></i>
-
-                                    </button>
-
-
-                                    <!-- ELIMINAR -->
-                                    <a href="#"
-                                       class="btn btn-danger btn-sm btnEliminar"
-                                       data-id="@item.Id"
-                                       title="Eliminar">
-
-                                        <i class="fa-solid fa-trash"></i>
-
-                                    </a>
-
-                                </td>
+                                <th class="no-print text-center">
+                                    Acciones
+                                </th>
 
                             </tr>
 
-                        }
+                        </thead>
 
-                    </tbody>
 
-                </table>
+                        <!-- CUERPO -->
+
+                        <tbody>
+
+                            @foreach (var item in Model)
+                            {
+
+                                <tr>
+
+
+                                    <!-- ================================================= -->
+                                    <!-- ID -->
+                                    <!-- ================================================= -->
+
+                                    <td>
+                                        @item.Id
+                                    </td>
+
+
+                                    <!-- ================================================= -->
+                                    <!-- MÁQUINA -->
+                                    <!-- ================================================= -->
+
+                                    <td>
+                                        @item.Nombre
+                                    </td>
+
+
+                                    <!-- ================================================= -->
+                                    <!-- ESTADO -->
+                                    <!-- ================================================= -->
+
+                                    <td>
+
+                                        @if (item.Estado == "1")
+                                        {
+
+                                            <span class="badge bg-success">
+                                                OPERATIVA
+                                            </span>
+
+                                        }
+                                        else
+                                        {
+
+                                            <span class="badge bg-danger">
+                                                NO OPERATIVA
+                                            </span>
+
+                                        }
+
+                                    </td>
+
+
+                                    <!-- ================================================= -->
+                                    <!-- ACCIONES -->
+                                    <!-- ================================================= -->
+
+                                    <td class="text-center no-print">
+
+
+                                        <!-- EDITAR -->
+
+                                        <button type="button"
+                                                class="btn btn-warning btn-sm btnEditar"
+                                                data-id="@item.Id"
+                                                data-nombre="@item.Nombre"
+                                                data-estado="@item.Estado"
+                                                title="Editar">
+
+                                            <i class="fa-solid fa-pencil"></i>
+
+                                        </button>
+
+
+                                        <!-- ELIMINAR -->
+
+                                        <a href="#"
+                                           class="btn btn-danger btn-sm btnEliminar"
+                                           data-id="@item.Id"
+                                           title="Eliminar">
+
+                                            <i class="fa-solid fa-trash"></i>
+
+                                        </a>
+
+                                    </td>
+
+                                </tr>
+
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
 
             </div>
 
@@ -302,9 +366,9 @@
 
 
 
-<!-- ================================================= -->
+<!-- ========================================================= -->
 <!-- MODAL NUEVA MÁQUINA -->
-<!-- ================================================= -->
+<!-- ========================================================= -->
 
 <div class="modal fade"
      id="modalNuevaMaquina"
@@ -317,6 +381,7 @@
 
 
             <!-- HEADER -->
+
             <div class="modal-header">
 
                 <h5 class="modal-title fw-bold">
@@ -336,16 +401,20 @@
 
 
             <!-- FORMULARIO -->
+
             <form id="formNuevaMaquina">
 
                 <div class="modal-body">
 
 
                     <!-- NOMBRE -->
+
                     <div class="mb-3">
 
                         <label class="form-label fw-bold">
+
                             Nombre / Tipo Maquinaria
+
                         </label>
 
                         <input type="text"
@@ -358,10 +427,13 @@
 
 
                     <!-- ESTADO -->
+
                     <div class="mb-3">
 
                         <label class="form-label fw-bold">
+
                             Estado de la Máquina
+
                         </label>
 
                         <select id="EstadoMaquina"
@@ -388,6 +460,7 @@
 
 
                 <!-- FOOTER -->
+
                 <div class="modal-footer">
 
                     <button type="button"
@@ -397,6 +470,7 @@
                         Cancelar
 
                     </button>
+
 
                     <button type="submit"
                             class="btn btn-success">
@@ -419,9 +493,9 @@
 
 
 
-<!-- ================================================= -->
+<!-- ========================================================= -->
 <!-- MODAL EDITAR MÁQUINA -->
-<!-- ================================================= -->
+<!-- ========================================================= -->
 
 <div class="modal fade"
      id="modalEditarMaquina"
@@ -434,6 +508,7 @@
 
 
             <!-- HEADER -->
+
             <div class="modal-header">
 
                 <h5 class="modal-title fw-bold">
@@ -453,6 +528,7 @@
 
 
             <!-- FORMULARIO -->
+
             <form id="formEditarMaquina">
 
                 <input type="hidden"
@@ -463,10 +539,13 @@
 
 
                     <!-- NOMBRE -->
+
                     <div class="mb-3">
 
                         <label class="form-label fw-bold">
+
                             Nombre / Tipo Maquinaria
+
                         </label>
 
                         <input type="text"
@@ -478,10 +557,13 @@
 
 
                     <!-- ESTADO -->
+
                     <div class="mb-3">
 
                         <label class="form-label fw-bold">
+
                             Estado
+
                         </label>
 
                         <select id="EditarEstado"
@@ -504,6 +586,7 @@
 
 
                 <!-- FOOTER -->
+
                 <div class="modal-footer">
 
                     <button type="button"
@@ -513,6 +596,7 @@
                         Cancelar
 
                     </button>
+
 
                     <button type="submit"
                             class="btn btn-warning">
@@ -532,8 +616,6 @@
     </div>
 
 </div>
-
-
 
 @section Scripts
 {
