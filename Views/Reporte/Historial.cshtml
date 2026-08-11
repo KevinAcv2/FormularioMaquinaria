@@ -12,6 +12,7 @@
       href="~/css/evaluacion-modal.css"
       asp-append-version="true" />
 
+
 <div class="container-fluid">
 
     <!-- ===================================================== -->
@@ -20,9 +21,10 @@
 
     <div id="reporteHistorial">
 
-        <div class="historial-header mb-4">
+        <div class="historial-header">
 
             <div>
+
                 <h1 class="titulo-reporte">
                     📝 Historial de Reportes
                 </h1>
@@ -30,33 +32,48 @@
                 <p class="subtitulo-reporte">
                     Consulta todos los reportes registrados en el sistema.
                 </p>
+
             </div>
 
+
+            <!-- ================================================= -->
             <!-- EXPORTACIONES -->
+            <!-- ================================================= -->
 
             <div class="acciones-reporte no-print">
+
+                <!-- IMPRIMIR -->
 
                 <button type="button"
                         class="btn btn-outline-primary btn-exportar"
                         onclick="imprimirHistorial()">
 
                     <i class="fa-solid fa-print"></i>
+
                     Imprimir
 
                 </button>
+
+
+                <!-- EXCEL -->
 
                 <a asp-action="ExportarExcel"
                    class="btn btn-success btn-exportar">
 
                     <i class="fa-solid fa-file-excel"></i>
+
                     Exportar Excel
 
                 </a>
+
+
+                <!-- PDF -->
 
                 <a asp-action="ExportarPdfHistorial"
                    class="btn btn-danger btn-exportar">
 
                     <i class="fa-solid fa-file-pdf"></i>
+
                     Exportar PDF
 
                 </a>
@@ -74,6 +91,7 @@
 
             <div class="card-body">
 
+
                 <!-- ================================================= -->
                 <!-- FILTROS -->
                 <!-- ================================================= -->
@@ -83,14 +101,19 @@
 
                     <div class="historial-toolbar no-print">
 
-                        <!-- BUSCAR -->
+
+                        <!-- ================================================= -->
+                        <!-- BUSCADOR -->
+                        <!-- ================================================= -->
 
                         <div class="historial-search">
 
                             <div class="input-group">
 
                                 <span class="input-group-text">
+
                                     <i class="fa-solid fa-magnifying-glass"></i>
+
                                 </span>
 
                                 <input type="text"
@@ -104,7 +127,9 @@
                         </div>
 
 
-                        <!-- DESDE -->
+                        <!-- ================================================= -->
+                        <!-- FECHA DESDE -->
+                        <!-- ================================================= -->
 
                         <div class="historial-filtro">
 
@@ -116,7 +141,9 @@
                         </div>
 
 
-                        <!-- HASTA -->
+                        <!-- ================================================= -->
+                        <!-- FECHA HASTA -->
+                        <!-- ================================================= -->
 
                         <div class="historial-filtro">
 
@@ -128,7 +155,9 @@
                         </div>
 
 
+                        <!-- ================================================= -->
                         <!-- ESTADO -->
+                        <!-- ================================================= -->
 
                         <div class="historial-filtro">
 
@@ -140,14 +169,14 @@
                                 </option>
 
                                 <option value="Operativa"
-                                        selected="@(ViewBag.Estado == "Operativa")">
+                                        selected="@(ViewBag.Estado == "Operativa" ? "selected" : null)">
 
                                     Operativa
 
                                 </option>
 
                                 <option value="No Operativa"
-                                        selected="@(ViewBag.Estado == "No Operativa")">
+                                        selected="@(ViewBag.Estado == "No Operativa" ? "selected" : null)">
 
                                     No Operativa
 
@@ -158,30 +187,43 @@
                         </div>
 
 
-                        <!-- ACCIONES -->
+                        <!-- ================================================= -->
+                        <!-- BOTONES -->
+                        <!-- ================================================= -->
 
                         <div class="historial-acciones">
+
+                            <!-- BUSCAR -->
 
                             <button type="submit"
                                     class="btn btn-primary btn-toolbar-custom">
 
                                 <i class="fa-solid fa-magnifying-glass"></i>
+
                                 Buscar
 
                             </button>
+
+
+                            <!-- LIMPIAR -->
 
                             <a asp-action="Historial"
                                class="btn btn-secondary btn-toolbar-custom">
 
                                 <i class="fa-solid fa-rotate"></i>
+
                                 Limpiar
 
                             </a>
+
+
+                            <!-- NUEVO -->
 
                             <a asp-action="Crear"
                                class="btn btn-success btn-toolbar-custom">
 
                                 <i class="fa-solid fa-plus"></i>
+
                                 Nuevo
 
                             </a>
@@ -193,13 +235,17 @@
                 </form>
 
 
-                <!-- ================================================= -->
+                <!-- ===================================================== -->
                 <!-- TABLA -->
-                <!-- ================================================= -->
+                <!-- ===================================================== -->
 
                 <div class="historial-table-container">
 
                     <table class="table table-hover align-middle">
+
+                        <!-- ================================================= -->
+                        <!-- ENCABEZADO TABLA -->
+                        <!-- ================================================= -->
 
                         <thead>
 
@@ -234,45 +280,68 @@
                         </thead>
 
 
+                        <!-- ================================================= -->
+                        <!-- CUERPO TABLA -->
+                        <!-- ================================================= -->
+
                         <tbody>
 
                             @if (Model != null && Model.Any())
                             {
 
-                                @foreach (var item in Model)
+                                foreach (var item in Model)
                                 {
 
                                     <tr>
 
+
+                                        <!-- ================================= -->
                                         <!-- FECHA -->
+                                        <!-- ================================= -->
 
                                         <td>
+
                                             @item.Fecha.ToString("dd/MM/yyyy")
+
                                         </td>
 
 
+                                        <!-- ================================= -->
                                         <!-- OPERADOR -->
+                                        <!-- ================================= -->
 
                                         <td>
+
                                             @item.NombreOperador
+
                                         </td>
 
 
+                                        <!-- ================================= -->
                                         <!-- MÁQUINA -->
+                                        <!-- ================================= -->
 
                                         <td>
+
                                             @item.NombreMaquina
+
                                         </td>
 
 
+                                        <!-- ================================= -->
                                         <!-- HORAS -->
+                                        <!-- ================================= -->
 
                                         <td>
+
                                             @item.HorasTrabajadas
+
                                         </td>
 
 
+                                        <!-- ================================= -->
                                         <!-- ESTADO -->
+                                        <!-- ================================= -->
 
                                         <td>
 
@@ -280,7 +349,9 @@
                                             {
 
                                                 <span class="badge bg-success">
+
                                                     Operativa
+
                                                 </span>
 
                                             }
@@ -288,7 +359,9 @@
                                             {
 
                                                 <span class="badge bg-danger">
+
                                                     No Operativa
+
                                                 </span>
 
                                             }
@@ -296,11 +369,14 @@
                                         </td>
 
 
+                                        <!-- ================================= -->
                                         <!-- ACCIONES -->
+                                        <!-- ================================= -->
 
                                         <td class="text-center no-print">
 
-                                            <!-- VER -->
+
+                                            <!-- VER REPORTE -->
 
                                             <a asp-action="Ver"
                                                asp-route-id="@item.Id"
@@ -347,6 +423,10 @@
                             else
                             {
 
+                                <!-- ========================================= -->
+                                <!-- SIN REPORTES -->
+                                <!-- ========================================= -->
+
                                 <tr>
 
                                     <td colspan="6"
@@ -355,7 +435,9 @@
                                         <i class="fa-solid fa-inbox fa-2x text-muted mb-2"></i>
 
                                         <p class="mb-0 text-muted">
+
                                             No se encontraron reportes.
+
                                         </p>
 
                                     </td>
@@ -390,7 +472,10 @@
 
             <div class="modal-content">
 
-                <!-- HEADER -->
+
+                <!-- ================================================= -->
+                <!-- HEADER MODAL -->
+                <!-- ================================================= -->
 
                 <div class="modal-header">
 
@@ -410,7 +495,9 @@
                 </div>
 
 
-                <!-- BODY -->
+                <!-- ================================================= -->
+                <!-- BODY MODAL -->
+                <!-- ================================================= -->
 
                 <div class="modal-body">
 
@@ -418,7 +505,9 @@
                            id="ReporteId" />
 
 
-                    <!-- INFORMACIÓN DEL REPORTE -->
+                    <!-- ============================================= -->
+                    <!-- INFORMACIÓN -->
+                    <!-- ============================================= -->
 
                     <div class="alert alert-light border mb-4">
 
@@ -432,9 +521,11 @@
 
                                 <p id="lblOperador"
                                    class="mb-0">
+
                                 </p>
 
                             </div>
+
 
                             <div class="col-md-6">
 
@@ -444,6 +535,7 @@
 
                                 <p id="lblMaquina"
                                    class="mb-0">
+
                                 </p>
 
                             </div>
@@ -453,7 +545,9 @@
                     </div>
 
 
+                    <!-- ============================================= -->
                     <!-- HORARIO -->
+                    <!-- ============================================= -->
 
                     <div class="evaluacion-item">
 
@@ -468,7 +562,9 @@
                     </div>
 
 
+                    <!-- ============================================= -->
                     <!-- MANEJO -->
+                    <!-- ============================================= -->
 
                     <div class="evaluacion-item">
 
@@ -483,7 +579,9 @@
                     </div>
 
 
+                    <!-- ============================================= -->
                     <!-- CUIDADO -->
+                    <!-- ============================================= -->
 
                     <div class="evaluacion-item">
 
@@ -498,7 +596,9 @@
                     </div>
 
 
+                    <!-- ============================================= -->
                     <!-- SEGURIDAD -->
+                    <!-- ============================================= -->
 
                     <div class="evaluacion-item">
 
@@ -513,7 +613,9 @@
                     </div>
 
 
+                    <!-- ============================================= -->
                     <!-- PRODUCTIVIDAD -->
+                    <!-- ============================================= -->
 
                     <div class="evaluacion-item">
 
@@ -528,7 +630,9 @@
                     </div>
 
 
+                    <!-- ============================================= -->
                     <!-- NOVEDADES -->
+                    <!-- ============================================= -->
 
                     <div class="evaluacion-item">
 
@@ -543,24 +647,32 @@
                     </div>
 
 
+                    <!-- ============================================= -->
                     <!-- OBSERVACIONES -->
+                    <!-- ============================================= -->
 
                     <div class="mt-4">
 
                         <label class="fw-bold">
+
                             Observaciones
+
                         </label>
 
                         <textarea id="ObservacionSupervisor"
                                   class="form-control"
-                                  rows="4"></textarea>
+                                  rows="4">
+
+                        </textarea>
 
                     </div>
 
                 </div>
 
 
-                <!-- FOOTER -->
+                <!-- ================================================= -->
+                <!-- FOOTER MODAL -->
+                <!-- ================================================= -->
 
                 <div class="modal-footer">
 
@@ -571,6 +683,7 @@
                         Cancelar
 
                     </button>
+
 
                     <button type="button"
                             id="btnGuardarEvaluacion"
