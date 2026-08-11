@@ -177,3 +177,110 @@ body {
     border: none;
     backdrop-filter: blur(10px);
 }
+
+/* =========================================
+   LAYOUT PRINCIPAL
+========================================= */
+
+.sidebar {
+    width: 210px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    overflow-y: auto;
+    z-index: 1050;
+    background: linear-gradient(180deg, #0f2f44, #174d6d);
+    box-shadow: 4px 0 15px rgba(0, 0, 0, .15);
+    transition: transform .3s ease;
+}
+
+.contenido-layout {
+    margin-left: 210px;
+}
+
+
+/* NAVBAR */
+
+.navbar {
+    background: white !important;
+    height: 70px;
+    border-bottom: 1px solid #e5e5e5;
+    position: sticky !important;
+    top: 0;
+    z-index: 999;
+}
+
+.btn-menu {
+    display: none;
+    border: none;
+    background: transparent;
+    font-size: 22px;
+    color: #0f2f44;
+}
+
+.mobile-brand {
+    display: none;
+}
+
+
+/* TABLET / CELULAR */
+
+@media (max-width: 767px) {
+
+    /* SIDEBAR OCULTO */
+    .sidebar {
+        transform: translateX(-100%);
+    }
+
+        /* SIDEBAR ABIERTO */
+        .sidebar.sidebar-open {
+            transform: translateX(0);
+        }
+
+    /* CONTENIDO OCUPA TODO */
+    .contenido-layout {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    /* NAVBAR */
+    .navbar {
+        height: 64px;
+        padding: 0 15px !important;
+    }
+
+    /* BOTÓN HAMBURGUESA */
+    .btn-menu {
+        display: block;
+    }
+
+    /* NOMBRE */
+    .mobile-brand {
+        display: block;
+        color: #0f2f44;
+        font-size: 18px;
+        letter-spacing: .5px;
+    }
+
+    /* OCULTAR DATOS DEL ADMINISTRADOR */
+    .user-info {
+        display: none;
+    }
+
+    /* AVATAR */
+    .navbar img {
+        display: none;
+    }
+
+    /* BÚSQUEDA */
+    .desktop-search {
+        display: none;
+    }
+
+    /* CONTENIDO */
+    main {
+        padding: 15px !important;
+        min-height: calc(100vh - 64px) !important;
+    }
+}
