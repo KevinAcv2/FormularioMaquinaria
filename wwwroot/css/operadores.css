@@ -718,3 +718,241 @@ body {
         font-size: 13px;
     }
 }
+/* =========================================================
+   AJUSTE FINAL - OPERADORES
+   PC + CELULAR
+========================================================= */
+
+
+/* CONTENEDOR DE LA TABLA */
+
+.operadores-table-container {
+    width: 100%;
+    max-height: 500px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-radius: 12px;
+}
+
+
+    /* TABLA */
+
+    .operadores-table-container table {
+        width: 100%;
+        table-layout: fixed;
+    }
+
+
+    /* EVITAR QUE EL CONTENIDO PROVOQUE SCROLL HORIZONTAL */
+
+    .operadores-table-container th,
+    .operadores-table-container td {
+        white-space: normal;
+        word-break: break-word;
+        overflow-wrap: anywhere;
+    }
+
+
+    /* ENCABEZADO DE TABLA */
+
+    .operadores-table-container thead th {
+        position: sticky;
+        top: 0;
+        z-index: 5;
+    }
+
+
+/* =========================================================
+   BUSCADOR
+========================================================= */
+
+.operadores-search {
+    width: 100%;
+}
+
+    .operadores-search .input-group {
+        display: flex;
+        width: 100%;
+    }
+
+    .operadores-search .input-group-text {
+        flex: 0 0 45px;
+        width: 45px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px 0 0 10px;
+    }
+
+    .operadores-search .form-control {
+        min-width: 0;
+        width: 100%;
+        border-radius: 0 10px 10px 0;
+    }
+
+
+/* =========================================================
+   CELULAR
+========================================================= */
+
+@media (max-width: 767px) {
+
+    /* BARRA DE FILTROS */
+
+    .operadores-toolbar {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+    }
+
+
+    /* BUSCADOR */
+
+    .operadores-search {
+        width: 100%;
+    }
+
+
+        .operadores-search .input-group {
+            width: 100%;
+            display: flex;
+            flex-wrap: nowrap;
+        }
+
+
+        .operadores-search .input-group-text {
+            flex: 0 0 45px;
+            width: 45px;
+            min-width: 45px;
+        }
+
+
+        .operadores-search .form-control {
+            flex: 1 1 auto;
+            min-width: 0;
+        }
+
+
+    /* FILTROS */
+
+    .operadores-filtro {
+        width: 100%;
+    }
+
+        .operadores-filtro select {
+            width: 100%;
+        }
+
+
+    /* BOTONES */
+
+    .operadores-acciones {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        width: 100%;
+    }
+
+
+        .operadores-acciones .btn {
+            width: 100%;
+            margin: 0 !important;
+        }
+
+
+    /* TABLA */
+
+    .operadores-table-container {
+        width: 100%;
+        max-height: 450px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+    }
+
+
+        .operadores-table-container table {
+            width: 100%;
+            min-width: 0 !important;
+            table-layout: fixed;
+        }
+
+
+        /* COLUMNAS */
+
+        .operadores-table-container th,
+        .operadores-table-container td {
+            padding: 10px 6px;
+            font-size: 12px;
+            white-space: normal;
+            word-break: break-word;
+            overflow-wrap: anywhere;
+        }
+
+
+            /* ID */
+
+            .operadores-table-container th:first-child,
+            .operadores-table-container td:first-child {
+                width: 12%;
+            }
+
+
+            /* NOMBRE */
+
+            .operadores-table-container th:nth-child(2),
+            .operadores-table-container td:nth-child(2) {
+                width: 22%;
+            }
+
+
+            /* MÁQUINA */
+
+            .operadores-table-container th:nth-child(3),
+            .operadores-table-container td:nth-child(3) {
+                width: 20%;
+            }
+
+
+            /* FRENTE */
+
+            .operadores-table-container th:nth-child(4),
+            .operadores-table-container td:nth-child(4) {
+                width: 28%;
+            }
+
+
+            /* ACCIONES */
+
+            .operadores-table-container th:nth-child(5),
+            .operadores-table-container td:nth-child(5) {
+                width: 18%;
+            }
+
+
+            /* BOTONES EDITAR / ELIMINAR */
+
+            .operadores-table-container td .btn {
+                width: 30px;
+                height: 30px;
+                padding: 0;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                margin: 2px;
+            }
+
+
+    /* TÍTULO */
+
+    .titulo-reporte {
+        font-size: 24px;
+        line-height: 1.2;
+    }
+
+
+    .subtitulo-reporte {
+        font-size: 14px;
+    }
+}
