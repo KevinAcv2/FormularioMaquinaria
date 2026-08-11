@@ -5,40 +5,48 @@
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    // =====================================================
+    // =========================================================
     // SIDEBAR / MENÚ
-    // =====================================================
+    // =========================================================
 
     const btnMenu = document.getElementById("btnMenu");
+    const btnCerrarSidebar = document.getElementById("btnCerrarSidebar");
+
     const sidebar = document.getElementById("sidebar");
     const contenido = document.querySelector(".contenido-layout");
+
+
+    // =========================================================
+    // ABRIR SIDEBAR
+    // =========================================================
 
     if (btnMenu && sidebar) {
 
         btnMenu.addEventListener("click", () => {
 
-            sidebar.classList.toggle("sidebar-open");
+            sidebar.classList.add("sidebar-open");
 
             if (contenido) {
-                contenido.classList.toggle("sidebar-visible");
+                contenido.classList.add("sidebar-visible");
             }
 
-            const icon = btnMenu.querySelector("i");
+        });
 
-            if (icon) {
+    }
 
-                if (sidebar.classList.contains("sidebar-open")) {
 
-                    icon.classList.remove("fa-bars");
-                    icon.classList.add("fa-xmark");
+    // =========================================================
+    // CERRAR SIDEBAR
+    // =========================================================
 
-                } else {
+    if (btnCerrarSidebar && sidebar) {
 
-                    icon.classList.remove("fa-xmark");
-                    icon.classList.add("fa-bars");
+        btnCerrarSidebar.addEventListener("click", () => {
 
-                }
+            sidebar.classList.remove("sidebar-open");
 
+            if (contenido) {
+                contenido.classList.remove("sidebar-visible");
             }
 
         });
