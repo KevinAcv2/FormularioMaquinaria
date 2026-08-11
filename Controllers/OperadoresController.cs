@@ -621,7 +621,6 @@ public class OperadoresController : Controller
                 });
             });
 
-
         var bytes = pdf.GeneratePdf();
 
         return File(
