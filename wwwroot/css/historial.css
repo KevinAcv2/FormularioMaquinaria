@@ -1,59 +1,294 @@
-﻿
+﻿/* ========================================================= */
+/* HISTORIAL DE REPORTES */
+/* ========================================================= */
+
+.historial-page {
+    width: 100%;
+}
+
+
+/* ========================================================= */
+/* ENCABEZADO */
+/* ========================================================= */
 
 .historial-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 25px;
+    gap: 25px;
 }
-
-    .historial-header h2 {
-        color: #0f2f44;
-        font-weight: 700;
-        margin: 0;
-    }
-
-    .historial-header p {
-        color: #6c757d;
-        margin-top: 6px;
-    }
 
 .titulo-reporte {
     color: #0f2f44;
     font-weight: 700;
+    margin: 0;
 }
 
 .subtitulo-reporte {
     color: #6c757d;
+    margin-top: 8px;
+    margin-bottom: 0;
 }
 
 
-/* =========================================================
-   GENERAL
-========================================================= */
+/* ========================================================= */
+/* EXPORTACIONES */
+/* ========================================================= */
 
-body {
-    background: #eef2f6;
+.acciones-reporte {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
-.card {
-    border: none;
+.btn-exportar {
+    min-height: 48px;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+
+/* ========================================================= */
+/* TARJETA */
+/* ========================================================= */
+
+.historial-card {
     border-radius: 18px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, .08);
+    overflow: hidden;
 }
 
-.card-body {
-    padding: 25px;
+    .historial-card .card-body {
+        padding: 24px;
+    }
+
+
+/* ========================================================= */
+/* TOOLBAR */
+/* ========================================================= */
+
+.historial-toolbar {
+    display: grid;
+    grid-template-columns: minmax(250px, 1.5fr) minmax(170px, 1fr) minmax(170px, 1fr) minmax(170px, 1fr) auto;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 24px;
 }
 
 
-/* =========================================================
-   TABLA
-========================================================= */
+/* ========================================================= */
+/* BUSCAR */
+/* ========================================================= */
+
+.historial-input-group {
+    height: 48px;
+}
+
+    .historial-input-group .input-group-text {
+        width: 52px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #fff;
+        border: 1px solid #d9e2ec;
+        border-right: none;
+        border-radius: 12px 0 0 12px;
+        font-size: 18px;
+        color: #172b3a;
+    }
+
+    .historial-input-group .form-control {
+        height: 48px;
+        border-left: none;
+        border-radius: 0 12px 12px 0;
+        font-size: 15px;
+    }
+
+
+/* ========================================================= */
+/* FILTROS */
+/* ========================================================= */
+
+.form-control,
+.form-select {
+    height: 48px;
+    border-radius: 12px;
+    border: 1px solid #d9e2ec;
+    box-shadow: none;
+    font-size: 15px;
+}
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: #0f2f44;
+        box-shadow: 0 0 0 .15rem rgba(15, 47, 68, .15);
+    }
+
+
+/* ========================================================= */
+/* FECHAS */
+/* ========================================================= */
+
+.date-input-wrapper {
+    position: relative;
+    height: 48px;
+    border: 1px solid #d9e2ec;
+    border-radius: 12px;
+    background: #fff;
+    overflow: hidden;
+}
+
+.date-control {
+    width: 100%;
+    height: 100%;
+    border: none !important;
+    border-radius: 12px !important;
+    background: transparent;
+    padding-left: 50px;
+    color: #333;
+    box-shadow: none !important;
+}
+
+
+/* ICONO CALENDARIO */
+
+.date-icon {
+    position: absolute;
+    left: 17px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    color: #172b3a;
+    font-size: 17px;
+    pointer-events: none;
+}
+
+
+/* TEXTO FECHA */
+
+.date-placeholder {
+    position: absolute;
+    left: 48px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6c757d;
+    font-size: 15px;
+    pointer-events: none;
+    z-index: 2;
+}
+
+    .date-placeholder.oculto {
+        display: none;
+    }
+
+
+/* ========================================================= */
+/* ESTADO */
+/* ========================================================= */
+
+.select-wrapper {
+    position: relative;
+}
+
+.status-icon {
+    position: absolute;
+    left: 17px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    color: #172b3a;
+    font-size: 16px;
+    pointer-events: none;
+}
+
+.select-wrapper .form-select {
+    padding-left: 48px;
+}
+
+
+/* ========================================================= */
+/* BOTONES BUSCAR / LIMPIAR / NUEVO */
+/* ========================================================= */
+
+.historial-acciones {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.btn-toolbar-custom {
+    height: 42px;
+    min-width: 105px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    border-radius: 11px;
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+
+/* AZUL */
+
+.btn-primary {
+    background: #0f2f44;
+    border: none;
+}
+
+    .btn-primary:hover {
+        background: #174d6d;
+    }
+
+
+/* VERDE */
+
+.btn-success {
+    background: #28a745;
+    border: none;
+}
+
+    .btn-success:hover {
+        background: #208638;
+    }
+
+
+/* GRIS */
+
+.btn-secondary {
+    background: #6c757d;
+    border: none;
+    color: white;
+}
+
+    .btn-secondary:hover {
+        background: #5c636a;
+        color: white;
+    }
+
+
+/* ========================================================= */
+/* TABLA */
+/* ========================================================= */
+
+.historial-table-container {
+    width: 100%;
+    overflow-x: auto;
+    border-radius: 12px;
+}
 
 .table {
     margin: 0;
-    width: 100%;
+    min-width: 760px;
 }
 
     .table thead {
@@ -65,6 +300,7 @@ body {
             font-size: 14px;
             font-weight: 600;
             padding: 16px;
+            white-space: nowrap;
         }
 
     .table tbody td {
@@ -81,9 +317,20 @@ body {
         }
 
 
-/* =========================================================
-   BOTONES
-========================================================= */
+/* ========================================================= */
+/* BADGES */
+/* ========================================================= */
+
+.estado-badge {
+    padding: 6px 10px;
+    border-radius: 7px;
+    font-size: 12px;
+}
+
+
+/* ========================================================= */
+/* BOTONES DE ACCIONES */
+/* ========================================================= */
 
 .btn-sm {
     width: 38px;
@@ -93,653 +340,343 @@ body {
     justify-content: center;
     align-items: center;
     padding: 0;
+    margin: 2px;
 }
 
     .btn-sm i {
         font-size: 14px;
     }
 
-.btn {
-    height: 48px;
-    border-radius: 12px;
-    font-weight: 600;
-}
 
-.btn-exportar {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    text-decoration: none;
-}
+/* ========================================================= */
+/* RESPONSIVE */
+/* ========================================================= */
 
-.btn-texto i {
-    margin-right: 6px;
-}
-
-
-/* =========================================================
-   COLORES BOTONES
-========================================================= */
-
-.btn-primary {
-    background: #0f2f44;
-    border: none;
-}
-
-    .btn-primary:hover {
-        background: #174d6d;
-    }
-
-.btn-success {
-    background: #28a745;
-    border: none;
-}
-
-    .btn-success:hover {
-        background: #208638;
-    }
-
-.btn-danger {
-    border: none;
-}
-
-.btn-secondary {
-    border: none;
-}
-
-
-/* =========================================================
-   FILTROS
-========================================================= */
-
-.form-control,
-.form-select {
-    height: 48px;
-    border-radius: 12px;
-    border: 1px solid #d9e2ec;
-    box-shadow: none;
-}
-
-    .form-control:focus,
-    .form-select:focus {
-        border-color: #0f2f44;
-        box-shadow: 0 0 0 .15rem rgba(15, 47, 68, .15);
-    }
-
-
-/* =========================================================
-   BOTONES DE LA BARRA DE FILTROS
-========================================================= */
-
-.btn-toolbar-custom {
-    height: 42px;
-    min-width: 105px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    font-size: 14px;
-    font-weight: 600;
-    white-space: nowrap;
-}
-
-
-/* =========================================================
-   ACCIONES DEL ENCABEZADO
-========================================================= */
-
-.acciones-reporte {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-}
-
-
-/* =========================================================
-   CONTENEDOR TABLA
-========================================================= */
-
-.historial-table-container {
-    width: 100%;
-    max-height: 500px;
-    overflow-y: auto;
-    overflow-x: hidden;
-    border-radius: 12px;
-}
-
-    .historial-table-container table {
-        width: 100%;
-        table-layout: fixed;
-    }
-
-    .historial-table-container th,
-    .historial-table-container td {
-        vertical-align: middle;
-        white-space: normal;
-        word-break: break-word;
-        overflow-wrap: anywhere;
-    }
-
-    .historial-table-container thead th {
-        position: sticky;
-        top: 0;
-        z-index: 5;
-        background: #0f2f44;
-        color: white;
-    }
-
-
-/* =========================================================
-   IMPRESIÓN
-========================================================= */
-
-@media print {
-
-    .no-print {
-        display: none !important;
-    }
-
-    aside,
-    nav {
-        display: none !important;
-    }
-
-    body {
-        background: white !important;
-        margin: 0;
-        padding: 0;
-    }
-
-    #contenidoPrincipal {
-        margin: 0 !important;
-        padding: 0 !important;
-        width: 100% !important;
-    }
-
-    #reporteHistorial {
-        width: 100% !important;
-        margin: 0 !important;
-    }
-
-    .card {
-        box-shadow: none !important;
-        border: none !important;
-    }
-
-    .btn,
-    .acciones-reporte {
-        display: none !important;
-    }
-
-    th.no-print,
-    td.no-print {
-        display: none !important;
-    }
-}
-
-
-/* =========================================================
-   TABLET
-========================================================= */
-
-@media (max-width: 1100px) {
+@media (max-width: 992px) {
 
     .historial-header {
         align-items: flex-start;
-    }
-
-    .historial-header {
-        flex-wrap: wrap;
-        gap: 15px;
+        flex-direction: column;
     }
 
     .acciones-reporte {
-        flex-wrap: wrap;
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
     }
 
-    .row.align-items-end {
-        gap: 10px;
+        .acciones-reporte .btn-exportar:first-child {
+            grid-column: 1 / -1;
+        }
+
+    .historial-toolbar {
+        grid-template-columns: 1fr 1fr;
     }
+
+    .historial-search {
+        grid-column: 1 / -1;
+    }
+
+    .historial-acciones {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+    }
+
+        .historial-acciones .btn-toolbar-custom {
+            width: 100%;
+        }
 }
 
 
-/* =========================================================
-   CELULAR
-========================================================= */
+/* ========================================================= */
+/* MÓVIL */
+/* ========================================================= */
 
-@media (max-width: 767px) {
+@media (max-width: 576px) {
 
-    /* -----------------------------------------------------
-       NAVBAR
-    ----------------------------------------------------- */
-
-    .navbar {
-        width: 100%;
-        height: 64px;
-    }
-
-    #contenidoPrincipal {
-        padding-top: 80px !important;
+    .historial-page {
+        padding-left: 14px;
+        padding-right: 14px;
     }
 
 
-    /* -----------------------------------------------------
-       EVITAR DESBORDAMIENTO
-    ----------------------------------------------------- */
-
-    html,
-    body {
-        max-width: 100%;
-        overflow-x: hidden;
-    }
-
-    .container-fluid {
-        width: 100%;
-        padding-left: 10px;
-        padding-right: 10px;
-    }
-
-
-    /* -----------------------------------------------------
-       ENCABEZADO
-    ----------------------------------------------------- */
+    /* =========================== */
+    /* TITULO */
+    /* =========================== */
 
     .historial-header {
-        display: flex !important;
-        flex-direction: column;
-        align-items: flex-start !important;
-        gap: 15px;
-        margin-bottom: 20px !important;
-        width: 100%;
+        margin-bottom: 22px;
+        gap: 18px;
     }
 
     .titulo-reporte {
-        font-size: 24px;
-        line-height: 1.2;
-        margin-bottom: 5px;
+        font-size: 30px;
+        line-height: 1.15;
     }
 
     .subtitulo-reporte {
-        font-size: 14px;
-        margin-bottom: 0;
-        line-height: 1.4;
+        font-size: 16px;
+        line-height: 1.45;
     }
 
 
-    /* -----------------------------------------------------
-       BOTONES EXPORTAR
-    ----------------------------------------------------- */
+    /* =========================== */
+    /* EXPORTACIONES */
+    /* =========================== */
 
     .acciones-reporte {
         width: 100%;
-        display: grid !important;
-        grid-template-columns: 1fr 1fr;
-        gap: 8px !important;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
     }
 
         .acciones-reporte .btn-exportar {
             width: 100%;
-            min-width: 0;
-            height: 44px;
-            font-size: 13px;
-            padding: 8px 10px;
+            min-height: 58px;
+            border-radius: 16px;
+            font-size: 17px;
         }
-
-            /* Imprimir ocupa todo el ancho */
 
             .acciones-reporte .btn-exportar:first-child {
-                grid-column: 1 / -1;
+                width: 100%;
             }
 
 
-    /* -----------------------------------------------------
-       TARJETA PRINCIPAL
-    ----------------------------------------------------- */
+    /* =========================== */
+    /* TARJETA */
+    /* =========================== */
 
-    .card {
-        width: 100%;
-        border-radius: 16px;
-        box-shadow: 0 4px 14px rgba(0, 0, 0, .08);
+    .historial-card {
+        border-radius: 22px;
     }
 
-    .card-body {
-        padding: 15px;
-    }
-
-
-        /* -----------------------------------------------------
-       FILTROS
-    ----------------------------------------------------- */
-
-        .card-body form {
-            width: 100%;
+        .historial-card .card-body {
+            padding: 18px;
         }
 
-    .row.align-items-end {
+
+    /* =========================== */
+    /* FILTROS */
+    /* =========================== */
+
+    .historial-toolbar {
         display: flex;
         flex-direction: column;
-        gap: 10px;
-        width: 100%;
-        margin-left: 0;
-        margin-right: 0;
-    }
-
-        .row.align-items-end > .col-lg-8,
-        .row.align-items-end > .col-lg-4 {
-            width: 100%;
-            padding-left: 0;
-            padding-right: 0;
-        }
-
-    .row.g-2 {
-        display: flex;
-        flex-direction: column;
-        gap: 8px !important;
-        width: 100%;
-    }
-
-        .row.g-2 > div {
-            width: 100%;
-            padding-left: 0;
-            padding-right: 0;
-        }
-
-
-    /* -----------------------------------------------------
-       CAMPOS
-    ----------------------------------------------------- */
-
-    .form-control,
-    .form-select {
-        width: 100%;
-        height: 48px;
-        min-height: 48px;
-        font-size: 14px;
-    }
-
-
-    /* -----------------------------------------------------
-       BOTONES BUSCAR / LIMPIAR / NUEVO
-    ----------------------------------------------------- */
-
-    .col-lg-4 .d-flex {
-        display: grid !important;
-        grid-template-columns: 1fr 1fr;
-        gap: 8px !important;
-        width: 100%;
-    }
-
-    .btn-toolbar-custom {
-        width: 100%;
-        min-width: 0;
-        min-height: 45px;
-        height: 45px;
-        margin: 0 !important;
-    }
-
-    .col-lg-4 .btn-success {
-        grid-column: 1 / -1;
-    }
-
-
-    /* -----------------------------------------------------
-       TABLA
-    ----------------------------------------------------- */
-
-    .historial-table-container {
-        width: 100%;
-        max-height: none;
-        overflow-x: hidden;
-        overflow-y: visible;
-        -webkit-overflow-scrolling: touch;
-    }
-
-        .historial-table-container table {
-            width: 100%;
-            min-width: 0 !important;
-            table-layout: fixed;
-            border-collapse: separate;
-            border-spacing: 0 12px;
-        }
-
-            .historial-table-container table thead {
-                display: none;
-            }
-
-
-            /* -----------------------------------------------------
-       CADA REPORTE COMO TARJETA
-    ----------------------------------------------------- */
-
-            .historial-table-container table tbody tr {
-                display: block;
-                width: 100%;
-                background: #fff;
-                border-radius: 16px;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, .08);
-                padding: 12px 15px;
-                margin-bottom: 12px;
-            }
-
-
-            /* -----------------------------------------------------
-       CELDAS
-    ----------------------------------------------------- */
-
-            .historial-table-container table tbody td {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                width: 100%;
-                padding: 8px 0;
-                border: none;
-                font-size: 14px;
-                text-align: right;
-                white-space: normal;
-                word-break: break-word;
-                overflow-wrap: anywhere;
-                min-height: 38px;
-            }
-
-                .historial-table-container table tbody td:not(:last-child) {
-                    border-bottom: 1px solid #eef1f4;
-                }
-
-
-                /* -----------------------------------------------------
-       ETIQUETAS DE LOS CAMPOS
-    ----------------------------------------------------- */
-
-                .historial-table-container table tbody td:nth-child(1)::before {
-                    content: "Fecha";
-                    font-weight: 700;
-                    color: #6c757d;
-                    margin-right: 15px;
-                    flex-shrink: 0;
-                }
-
-                .historial-table-container table tbody td:nth-child(2)::before {
-                    content: "Operador";
-                    font-weight: 700;
-                    color: #6c757d;
-                    margin-right: 15px;
-                    flex-shrink: 0;
-                }
-
-                .historial-table-container table tbody td:nth-child(3)::before {
-                    content: "Máquina";
-                    font-weight: 700;
-                    color: #6c757d;
-                    margin-right: 15px;
-                    flex-shrink: 0;
-                }
-
-                .historial-table-container table tbody td:nth-child(4)::before {
-                    content: "Horas";
-                    font-weight: 700;
-                    color: #6c757d;
-                    margin-right: 15px;
-                    flex-shrink: 0;
-                }
-
-                .historial-table-container table tbody td:nth-child(5)::before {
-                    content: "Estado";
-                    font-weight: 700;
-                    color: #6c757d;
-                    margin-right: 15px;
-                    flex-shrink: 0;
-                }
-
-
-                /* -----------------------------------------------------
-       COLORES
-    ----------------------------------------------------- */
-
-                .historial-table-container table tbody td:nth-child(1),
-                .historial-table-container table tbody td:nth-child(4) {
-                    color: #495057;
-                    font-weight: 600;
-                }
-
-                .historial-table-container table tbody td:nth-child(2),
-                .historial-table-container table tbody td:nth-child(3) {
-                    color: #0f2f44;
-                    font-weight: 700;
-                }
-
-
-                /* -----------------------------------------------------
-       ESTADO
-    ----------------------------------------------------- */
-
-                .historial-table-container table tbody td:nth-child(5) {
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-                }
-
-        .historial-table-container .badge {
-            font-size: 12px;
-            padding: 6px 10px;
-            border-radius: 8px;
-        }
-
-
-        /* -----------------------------------------------------
-       ACCIONES
-    ----------------------------------------------------- */
-
-        .historial-table-container table tbody td:last-child {
-            justify-content: flex-end;
-            gap: 8px;
-            padding-top: 12px;
-            margin-top: 4px;
-            border-top: 1px solid #eef1f4;
-            border-bottom: none !important;
-        }
-
-            .historial-table-container table tbody td:last-child::before {
-                content: "Acciones";
-                display: block;
-                margin-right: auto;
-                font-weight: 700;
-                color: #6c757d;
-            }
-
-        .historial-table-container td .btn {
-            width: 36px;
-            height: 36px;
-            padding: 0;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            margin: 2px;
-            flex-shrink: 0;
-            border-radius: 10px;
-        }
-
-
-    /* -----------------------------------------------------
-       MODAL EVALUACIÓN
-    ----------------------------------------------------- */
-
-    #modalEvaluacion .modal-dialog {
-        margin: 10px;
-        max-width: calc(100% - 20px);
-    }
-
-    #modalEvaluacion .modal-content {
-        border-radius: 16px;
-        border: none;
-    }
-
-    #modalEvaluacion .modal-header {
-        padding: 15px;
-    }
-
-    #modalEvaluacion .modal-body {
-        padding: 15px;
-        max-height: 75vh;
-        overflow-y: auto;
-    }
-
-    #modalEvaluacion .modal-footer {
-        display: flex;
-        flex-direction: column-reverse;
         gap: 8px;
-        padding: 15px;
+        margin-bottom: 20px;
     }
 
-        #modalEvaluacion .modal-footer .btn {
-            width: 100%;
-            min-height: 44px;
+    .historial-search,
+    .historial-filtro,
+    .historial-acciones {
+        width: 100%;
+    }
+
+
+    /* BUSCADOR */
+
+    .historial-input-group {
+        height: 58px;
+    }
+
+        .historial-input-group .input-group-text {
+            height: 58px;
+            width: 58px;
+            border-radius: 14px 0 0 14px;
         }
 
-    #modalEvaluacion .modal-title {
+        .historial-input-group .form-control {
+            height: 58px;
+            border-radius: 0 14px 14px 0;
+            font-size: 16px;
+        }
+
+
+    /* FECHAS */
+
+    .date-input-wrapper {
+        height: 58px;
+        border-radius: 14px;
+    }
+
+    .date-control {
+        height: 58px;
+        padding-left: 50px;
+        font-size: 16px;
+    }
+
+    .date-icon {
+        left: 18px;
+        font-size: 18px;
+    }
+
+    .date-placeholder {
+        left: 50px;
+        font-size: 16px;
+    }
+
+
+    /* ESTADO */
+
+    .select-wrapper {
+        height: 58px;
+    }
+
+        .select-wrapper .form-select {
+            height: 58px;
+            border-radius: 14px;
+            font-size: 16px;
+            padding-left: 50px;
+        }
+
+    .status-icon {
+        left: 18px;
         font-size: 17px;
     }
 
 
-    /* -----------------------------------------------------
-       INFORMACIÓN DEL OPERADOR EN MODAL
-    ----------------------------------------------------- */
+    /* =========================== */
+    /* BOTONES */
+    /* =========================== */
 
-    #modalEvaluacion .modal-body .row {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
+    .historial-acciones {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+        margin-top: 4px;
     }
 
-    #modalEvaluacion .modal-body .col-md-6 {
-        width: 100%;
+        .historial-acciones .btn-toolbar-custom {
+            width: 100%;
+            min-width: 0;
+            height: 52px;
+            border-radius: 13px;
+            font-size: 14px;
+            padding: 0 6px;
+        }
+
+            .historial-acciones .btn-toolbar-custom i {
+                font-size: 14px;
+            }
+
+
+    /* =========================== */
+    /* TABLA */
+    /* =========================== */
+
+    .historial-table-container {
+        overflow-x: auto;
+        margin-top: 10px;
+    }
+
+    .table {
+        min-width: 760px;
+    }
+}
+
+/* =========================================================
+   BOTONES DE EXPORTACIÓN
+   ========================================================= */
+
+.acciones-reporte {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    max-width: 450px;
+}
+
+
+/* IMPRIMIR */
+
+.accion-imprimir {
+    width: 100%;
+}
+
+.btn-imprimir {
+    width: 100%;
+}
+
+
+/* EXCEL + PDF */
+
+.acciones-exportar {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+}
+
+    .acciones-exportar .btn-exportar {
+        flex: 1;
+    }
+
+
+/* BOTONES */
+
+.btn-exportar {
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+
+/* =========================================================
+   ESCRITORIO
+   ========================================================= */
+
+@media (min-width: 769px) {
+
+    .acciones-reporte {
+        width: auto;
+        max-width: none;
+    }
+
+    .accion-imprimir {
+        width: auto;
+    }
+
+    .btn-imprimir {
+        width: auto;
+    }
+
+    .acciones-exportar {
+        width: auto;
     }
 }
 
 
 /* =========================================================
-   PANTALLAS MUY PEQUEÑAS
-========================================================= */
+   MÓVIL
+   ========================================================= */
 
-@media (max-width: 400px) {
+@media (max-width: 768px) {
 
-    .titulo-reporte {
-        font-size: 22px;
+    .historial-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 20px;
     }
 
     .acciones-reporte {
-        grid-template-columns: 1fr;
+        max-width: 100%;
+        gap: 12px;
     }
 
-        .acciones-reporte .btn-exportar:first-child {
-            grid-column: auto;
+    .acciones-exportar {
+        gap: 14px;
+    }
+
+        .acciones-exportar .btn-exportar {
+            min-width: 0;
+            font-size: 15px;
         }
-
-    .btn-toolbar-custom {
-        font-size: 13px;
-    }
-
-    .historial-table-container table tbody td {
-        font-size: 13px;
-    }
 }

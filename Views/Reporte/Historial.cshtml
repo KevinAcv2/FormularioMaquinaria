@@ -13,7 +13,7 @@
       asp-append-version="true" />
 
 
-<div class="container-fluid">
+<div class="container-fluid historial-page">
 
     <!-- ===================================================== -->
     <!-- ENCABEZADO -->
@@ -23,7 +23,7 @@
 
         <div class="historial-header">
 
-            <div>
+            <div class="historial-titulo">
 
                 <h1 class="titulo-reporte">
                     📝 Historial de Reportes
@@ -43,40 +43,41 @@
             <div class="acciones-reporte no-print">
 
                 <!-- IMPRIMIR -->
+                <div class="accion-imprimir">
 
-                <button type="button"
-                        class="btn btn-outline-primary btn-exportar"
-                        onclick="imprimirHistorial()">
+                    <button type="button"
+                            class="btn btn-outline-primary btn-exportar btn-imprimir"
+                            onclick="imprimirHistorial()">
 
-                    <i class="fa-solid fa-print"></i>
+                        <i class="fa-solid fa-print"></i>
+                        Imprimir
 
-                    Imprimir
+                    </button>
 
-                </button>
-
-
-                <!-- EXCEL -->
-
-                <a asp-action="ExportarExcel"
-                   class="btn btn-success btn-exportar">
-
-                    <i class="fa-solid fa-file-excel"></i>
-
-                    Exportar Excel
-
-                </a>
+                </div>
 
 
-                <!-- PDF -->
+                <!-- EXPORTACIONES -->
+                <div class="acciones-exportar">
 
-                <a asp-action="ExportarPdfHistorial"
-                   class="btn btn-danger btn-exportar">
+                    <a asp-action="ExportarExcel"
+                       class="btn btn-success btn-exportar">
 
-                    <i class="fa-solid fa-file-pdf"></i>
+                        <i class="fa-solid fa-file-excel"></i>
+                        Exportar Excel
 
-                    Exportar PDF
+                    </a>
 
-                </a>
+
+                    <a asp-action="ExportarPdfHistorial"
+                       class="btn btn-danger btn-exportar">
+
+                        <i class="fa-solid fa-file-pdf"></i>
+                        Exportar PDF
+
+                    </a>
+
+                </div>
 
             </div>
 
@@ -87,7 +88,7 @@
         <!-- TARJETA PRINCIPAL -->
         <!-- ===================================================== -->
 
-        <div class="card shadow-sm border-0">
+        <div class="card historial-card border-0">
 
             <div class="card-body">
 
@@ -97,23 +98,22 @@
                 <!-- ================================================= -->
 
                 <form asp-action="Historial"
-                      method="get">
+                      method="get"
+                      class="historial-form">
 
                     <div class="historial-toolbar no-print">
 
 
-                        <!-- ================================================= -->
-                        <!-- BUSCADOR -->
-                        <!-- ================================================= -->
+                        <!-- ============================== -->
+                        <!-- BUSCAR -->
+                        <!-- ============================== -->
 
                         <div class="historial-search">
 
-                            <div class="input-group">
+                            <div class="input-group historial-input-group">
 
                                 <span class="input-group-text">
-
                                     <i class="fa-solid fa-magnifying-glass"></i>
-
                                 </span>
 
                                 <input type="text"
@@ -127,104 +127,125 @@
                         </div>
 
 
-                        <!-- ================================================= -->
+                        <!-- ============================== -->
                         <!-- FECHA DESDE -->
-                        <!-- ================================================= -->
+                        <!-- ============================== -->
 
-                        <div class="historial-filtro">
+                        <div class="historial-filtro date-filter">
 
-                            <input type="date"
-                                   name="desde"
-                                   class="form-control"
-                                   value="@ViewBag.Desde" />
+                            <div class="date-input-wrapper">
+
+                                <i class="fa-regular fa-calendar-days date-icon"></i>
+
+                                <span class="date-placeholder">
+                                    Fecha desde
+                                </span>
+
+                                <input type="date"
+                                       name="desde"
+                                       class="form-control date-control"
+                                       value="@ViewBag.Desde" />
+
+                            </div>
 
                         </div>
 
 
-                        <!-- ================================================= -->
+                        <!-- ============================== -->
                         <!-- FECHA HASTA -->
-                        <!-- ================================================= -->
+                        <!-- ============================== -->
 
-                        <div class="historial-filtro">
+                        <div class="historial-filtro date-filter">
 
-                            <input type="date"
-                                   name="hasta"
-                                   class="form-control"
-                                   value="@ViewBag.Hasta" />
+                            <div class="date-input-wrapper">
+
+                                <i class="fa-regular fa-calendar-days date-icon"></i>
+
+                                <span class="date-placeholder">
+                                    Fecha hasta
+                                </span>
+
+                                <input type="date"
+                                       name="hasta"
+                                       class="form-control date-control"
+                                       value="@ViewBag.Hasta" />
+
+                            </div>
 
                         </div>
 
 
-                        <!-- ================================================= -->
+                        <!-- ============================== -->
                         <!-- ESTADO -->
-                        <!-- ================================================= -->
+                        <!-- ============================== -->
 
                         <div class="historial-filtro">
 
-                            <select name="estado"
-                                    class="form-select">
+                            <div class="select-wrapper">
 
-                                <option value="">
-                                    Estado
-                                </option>
+                                <i class="fa-solid fa-list status-icon"></i>
 
-                                <option value="Operativa"
-                                        selected="@(ViewBag.Estado == "Operativa" ? "selected" : null)">
+                                <select name="estado"
+                                        class="form-select">
 
-                                    Operativa
+                                    <option value="">
+                                        Estado
+                                    </option>
 
-                                </option>
+                                    <option value="Operativa"
+                                            selected="@(ViewBag.Estado == "Operativa")">
 
-                                <option value="No Operativa"
-                                        selected="@(ViewBag.Estado == "No Operativa" ? "selected" : null)">
+                                        Operativa
 
-                                    No Operativa
+                                    </option>
 
-                                </option>
+                                    <option value="No Operativa"
+                                            selected="@(ViewBag.Estado == "No Operativa")">
 
-                            </select>
+                                        No Operativa
+
+                                    </option>
+
+                                </select>
+
+                            </div>
 
                         </div>
 
 
-                        <!-- ================================================= -->
+                        <!-- ============================== -->
                         <!-- BOTONES -->
-                        <!-- ================================================= -->
+                        <!-- ============================== -->
 
                         <div class="historial-acciones">
 
-                            <!-- BUSCAR -->
 
                             <button type="submit"
                                     class="btn btn-primary btn-toolbar-custom">
 
                                 <i class="fa-solid fa-magnifying-glass"></i>
 
-                                Buscar
+                                <span>Buscar</span>
 
                             </button>
 
-
-                            <!-- LIMPIAR -->
 
                             <a asp-action="Historial"
                                class="btn btn-secondary btn-toolbar-custom">
 
                                 <i class="fa-solid fa-rotate"></i>
 
-                                Limpiar
+                                <span>Limpiar</span>
 
                             </a>
 
-
-                            <!-- NUEVO -->
 
                             <a asp-action="Crear"
                                class="btn btn-success btn-toolbar-custom">
 
                                 <i class="fa-solid fa-plus"></i>
 
-                                Nuevo
+                                <span>Nuevo</span>
 
                             </a>
 
@@ -235,41 +256,27 @@
                 </form>
 
 
-                <!-- ===================================================== -->
+                <!-- ================================================= -->
                 <!-- TABLA -->
-                <!-- ===================================================== -->
+                <!-- ================================================= -->
 
                 <div class="historial-table-container">
 
                     <table class="table table-hover align-middle">
 
-                        <!-- ================================================= -->
-                        <!-- ENCABEZADO TABLA -->
-                        <!-- ================================================= -->
-
                         <thead>
 
                             <tr>
 
-                                <th>
-                                    Fecha
-                                </th>
+                                <th>Fecha</th>
 
-                                <th>
-                                    Operador
-                                </th>
+                                <th>Operador</th>
 
-                                <th>
-                                    Máquina
-                                </th>
+                                <th>Máquina</th>
 
-                                <th>
-                                    Horas
-                                </th>
+                                <th>Horas</th>
 
-                                <th>
-                                    Estado
-                                </th>
+                                <th>Estado</th>
 
                                 <th class="text-center no-print">
                                     Acciones
@@ -280,88 +287,69 @@
                         </thead>
 
 
-                        <!-- ================================================= -->
-                        <!-- CUERPO TABLA -->
-                        <!-- ================================================= -->
-
                         <tbody>
 
                             @if (Model != null && Model.Any())
                             {
 
-                                foreach (var item in Model)
+                                @foreach (var item in Model)
                                 {
 
                                     <tr>
 
-
-                                        <!-- ================================= -->
                                         <!-- FECHA -->
-                                        <!-- ================================= -->
 
-                                        <td>
+                                        <td data-label="Fecha">
 
                                             @item.Fecha.ToString("dd/MM/yyyy")
 
                                         </td>
 
 
-                                        <!-- ================================= -->
                                         <!-- OPERADOR -->
-                                        <!-- ================================= -->
 
-                                        <td>
+                                        <td data-label="Operador">
 
                                             @item.NombreOperador
 
                                         </td>
 
 
-                                        <!-- ================================= -->
                                         <!-- MÁQUINA -->
-                                        <!-- ================================= -->
 
-                                        <td>
+                                        <td data-label="Máquina">
 
                                             @item.NombreMaquina
 
                                         </td>
 
 
-                                        <!-- ================================= -->
                                         <!-- HORAS -->
-                                        <!-- ================================= -->
 
-                                        <td>
+                                        <td data-label="Horas">
 
                                             @item.HorasTrabajadas
 
                                         </td>
 
 
-                                        <!-- ================================= -->
                                         <!-- ESTADO -->
-                                        <!-- ================================= -->
 
-                                        <td>
+                                        <td data-label="Estado">
 
                                             @if (item.EstadoMaquina == 1)
                                             {
 
-                                                <span class="badge bg-success">
-
+                                                <span class="badge bg-success estado-badge">
                                                     Operativa
-
                                                 </span>
 
                                             }
                                             else
                                             {
 
-                                                <span class="badge bg-danger">
-
+                                                <span class="badge bg-danger estado-badge">
                                                     No Operativa
-
                                                 </span>
 
                                             }
@@ -369,14 +357,13 @@
                                         </td>
 
 
-                                        <!-- ================================= -->
                                         <!-- ACCIONES -->
-                                        <!-- ================================= -->
 
-                                        <td class="text-center no-print">
+                                        <td class="text-center no-print acciones-tabla"
+                                            data-label="Acciones">
 
 
-                                            <!-- VER REPORTE -->
+                                            <!-- VER -->
 
                                             <a asp-action="Ver"
                                                asp-route-id="@item.Id"
@@ -423,10 +410,6 @@
                             else
                             {
 
-                                <!-- ========================================= -->
-                                <!-- SIN REPORTES -->
-                                <!-- ========================================= -->
-
                                 <tr>
 
                                     <td colspan="6"
@@ -435,9 +418,7 @@
                                         <i class="fa-solid fa-inbox fa-2x text-muted mb-2"></i>
 
                                         <p class="mb-0 text-muted">
-
                                             No se encontraron reportes.
-
                                         </p>
 
                                     </td>
@@ -473,9 +454,7 @@
             <div class="modal-content">
 
 
-                <!-- ================================================= -->
-                <!-- HEADER MODAL -->
-                <!-- ================================================= -->
+                <!-- HEADER -->
 
                 <div class="modal-header">
 
@@ -495,9 +474,7 @@
                 </div>
 
 
-                <!-- ================================================= -->
-                <!-- BODY MODAL -->
-                <!-- ================================================= -->
+                <!-- BODY -->
 
                 <div class="modal-body">
 
@@ -505,9 +482,7 @@
                            id="ReporteId" />
 
 
-                    <!-- ============================================= -->
                     <!-- INFORMACIÓN -->
-                    <!-- ============================================= -->
 
                     <div class="alert alert-light border mb-4">
 
@@ -521,11 +496,9 @@
 
                                 <p id="lblOperador"
                                    class="mb-0">
-
                                 </p>
 
                             </div>
-
 
                             <div class="col-md-6">
 
@@ -535,7 +508,6 @@
 
                                 <p id="lblMaquina"
                                    class="mb-0">
-
                                 </p>
 
                             </div>
@@ -545,9 +517,7 @@
                     </div>
 
 
-                    <!-- ============================================= -->
                     <!-- HORARIO -->
-                    <!-- ============================================= -->
 
                     <div class="evaluacion-item">
 
@@ -562,9 +532,7 @@
                     </div>
 
 
-                    <!-- ============================================= -->
                     <!-- MANEJO -->
-                    <!-- ============================================= -->
 
                     <div class="evaluacion-item">
 
@@ -579,9 +547,7 @@
                     </div>
 
 
-                    <!-- ============================================= -->
                     <!-- CUIDADO -->
-                    <!-- ============================================= -->
 
                     <div class="evaluacion-item">
 
@@ -596,9 +562,7 @@
                     </div>
 
 
-                    <!-- ============================================= -->
                     <!-- SEGURIDAD -->
-                    <!-- ============================================= -->
 
                     <div class="evaluacion-item">
 
@@ -613,9 +577,7 @@
                     </div>
 
 
-                    <!-- ============================================= -->
                     <!-- PRODUCTIVIDAD -->
-                    <!-- ============================================= -->
 
                     <div class="evaluacion-item">
 
@@ -630,9 +592,7 @@
                     </div>
 
 
-                    <!-- ============================================= -->
                     <!-- NOVEDADES -->
-                    <!-- ============================================= -->
 
                     <div class="evaluacion-item">
 
@@ -647,32 +607,24 @@
                     </div>
 
 
-                    <!-- ============================================= -->
                     <!-- OBSERVACIONES -->
-                    <!-- ============================================= -->
 
                     <div class="mt-4">
 
                         <label class="fw-bold">
-
                             Observaciones
-
                         </label>
 
                         <textarea id="ObservacionSupervisor"
                                   class="form-control"
-                                  rows="4">
-
-                        </textarea>
+                                  rows="4"></textarea>
 
                     </div>
 
                 </div>
 
 
-                <!-- ================================================= -->
-                <!-- FOOTER MODAL -->
-                <!-- ================================================= -->
+                <!-- FOOTER -->
 
                 <div class="modal-footer">
 
@@ -683,7 +635,6 @@
                         Cancelar
 
                     </button>
-
 
                     <button type="button"
                             id="btnGuardarEvaluacion"

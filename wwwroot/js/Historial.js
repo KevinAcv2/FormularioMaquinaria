@@ -514,6 +514,37 @@
             });
 
         });
+        // =====================================================
+        // FECHAS
+        // =====================================================
+
+        document.addEventListener("DOMContentLoaded", function () {
+
+            document.querySelectorAll(".date-input-wrapper").forEach(wrapper => {
+
+                const input = wrapper.querySelector(".date-control");
+                const placeholder = wrapper.querySelector(".date-placeholder");
+
+                function actualizarFecha() {
+
+                    if (input.value) {
+                        placeholder.classList.add("oculto");
+                    }
+                    else {
+                        placeholder.classList.remove("oculto");
+                    }
+
+                }
+
+                actualizarFecha();
+
+                input.addEventListener("change", actualizarFecha);
+
+                input.addEventListener("input", actualizarFecha);
+
+            });
+
+        });
 
     });
 
