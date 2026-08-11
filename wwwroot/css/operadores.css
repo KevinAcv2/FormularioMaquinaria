@@ -125,3 +125,391 @@ body {
         display: none !important;
     }
 }
+
+/* DISEÑO RESPONSIVE - CELULAR */
+
+@media (max-width: 767px) {
+
+    /* CONTENEDOR GENERAL */
+
+    #reporteOperadores {
+        width: 100%;
+        overflow: hidden;
+    }
+
+        #reporteOperadores .container-fluid {
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+
+    /* ENCABEZADO */
+
+    .historial-header {
+        display: flex !important;
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 15px;
+        margin-bottom: 20px !important;
+    }
+
+    .titulo-reporte {
+        font-size: 26px;
+        line-height: 1.15;
+        margin-bottom: 5px;
+    }
+
+    .subtitulo-reporte {
+        font-size: 14px;
+        margin-bottom: 0;
+    }
+
+
+    /* BOTONES EXPORTAR */
+
+    .acciones-reporte {
+        width: 100%;
+        display: flex !important;
+        flex-wrap: wrap;
+        gap: 8px !important;
+    }
+
+        .acciones-reporte .btn-exp {
+            flex: 1 1 calc(50% - 8px);
+            width: calc(50% - 8px);
+            height: 44px;
+            font-size: 13px;
+            padding: 8px 10px;
+        }
+
+
+    /* TARJETA TOTAL OPERADORES */
+
+    .row.mb-3 {
+        margin-bottom: 15px !important;
+    }
+
+        .row.mb-3 > .col-md-4 {
+            width: 100%;
+        }
+
+    .card-custom {
+        width: 100%;
+        padding: 20px 15px;
+        margin-bottom: 0;
+    }
+
+        .card-custom h5 {
+            font-size: 15px;
+            margin-bottom: 8px;
+        }
+
+        .card-custom h2 {
+            font-size: 30px;
+            margin-bottom: 0;
+        }
+
+
+    /* TARJETA PRINCIPAL */
+
+    #reporteOperadores > .card {
+        border-radius: 16px;
+        box-shadow: 0 4px 14px rgba(0,0,0,.08);
+    }
+
+        #reporteOperadores > .card > .card-body {
+            padding: 15px;
+        }
+
+
+    /* FILTROS */
+
+    #reporteOperadores form .row.align-items-end {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 15px !important;
+    }
+
+        #reporteOperadores form .row.align-items-end > .col-lg-7,
+        #reporteOperadores form .row.align-items-end > .col-lg-5 {
+            width: 100%;
+            max-width: 100%;
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+    /* Fila interna de filtros */
+
+    #reporteOperadores .col-lg-7 .row {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+        #reporteOperadores .col-lg-7 .row > div {
+            width: 100%;
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+    #reporteOperadores .form-control,
+    #reporteOperadores .form-select {
+        width: 100%;
+        height: 45px;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+
+
+    /* BOTONES DE FILTROS */
+
+    #reporteOperadores .col-lg-5 .d-flex {
+        width: 100%;
+        display: grid !important;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px !important;
+    }
+
+    #reporteOperadores .btn-toolbar-custom,
+    #reporteOperadores .col-lg-5 .btn {
+        width: 100%;
+        height: 45px;
+        padding: 8px 6px;
+        font-size: 13px;
+        border-radius: 10px;
+    }
+
+
+    /* TABLA -> TARJETAS */
+
+    #reporteOperadores table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 12px;
+        margin-top: 5px;
+    }
+
+        /* Ocultar encabezado de tabla */
+
+        #reporteOperadores table thead {
+            display: none;
+        }
+
+        /* Cada fila se convierte en tarjeta */
+
+        #reporteOperadores table tbody tr {
+            display: block;
+            width: 100%;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,.08);
+            padding: 12px 15px;
+            margin-bottom: 12px;
+        }
+
+        /* Cada celda */
+
+        #reporteOperadores table tbody td {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 7px 0;
+            border: none;
+            font-size: 14px;
+            text-align: right;
+        }
+
+            /* Separadores */
+
+            #reporteOperadores table tbody td:not(:last-child) {
+                border-bottom: 1px solid #eef1f4;
+            }
+
+            /* Etiquetas de cada campo */
+
+            #reporteOperadores table tbody td:nth-child(1)::before {
+                content: "ID";
+                font-weight: 700;
+                color: #6c757d;
+            }
+
+            #reporteOperadores table tbody td:nth-child(2)::before {
+                content: "Nombre";
+                font-weight: 700;
+                color: #6c757d;
+            }
+
+            #reporteOperadores table tbody td:nth-child(3)::before {
+                content: "Máquina";
+                font-weight: 700;
+                color: #6c757d;
+            }
+
+            #reporteOperadores table tbody td:nth-child(4)::before {
+                content: "Frente";
+                font-weight: 700;
+                color: #6c757d;
+            }
+
+            /* ID */
+
+            #reporteOperadores table tbody td:nth-child(1) {
+                color: #0f2f44;
+                font-weight: 600;
+            }
+
+            /* Nombre */
+
+            #reporteOperadores table tbody td:nth-child(2) {
+                color: #0f2f44;
+                font-weight: 700;
+            }
+
+            /* Máquina y frente */
+
+            #reporteOperadores table tbody td:nth-child(3),
+            #reporteOperadores table tbody td:nth-child(4) {
+                color: #495057;
+            }
+
+
+            /* ACCIONES EDITAR / ELIMINAR */
+
+            #reporteOperadores table tbody td:last-child {
+                justify-content: flex-end;
+                gap: 8px;
+                padding-top: 12px;
+                margin-top: 4px;
+                border-top: 1px solid #eef1f4;
+            }
+
+                #reporteOperadores table tbody td:last-child::before {
+                    content: "Acciones";
+                    margin-right: auto;
+                    font-weight: 700;
+                    color: #6c757d;
+                }
+
+    #reporteOperadores .btnEditar,
+    #reporteOperadores .btnEliminar {
+        width: 42px;
+        height: 42px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        font-size: 15px;
+    }
+
+
+    /* MODALES */
+
+    .modal-dialog {
+        margin: 10px;
+        max-width: calc(100% - 20px);
+    }
+
+    .modal-content {
+        border-radius: 16px;
+        border: none;
+    }
+
+    .modal-header {
+        padding: 15px;
+    }
+
+    .modal-body {
+        padding: 15px;
+    }
+
+    .modal-footer {
+        display: flex;
+        flex-direction: column-reverse;
+        gap: 8px;
+        padding: 15px;
+    }
+
+        .modal-footer .btn {
+            width: 100%;
+            min-height: 44px;
+        }
+
+    .modal-title {
+        font-size: 17px;
+    }
+
+
+    /* MODAL GESTIÓN DE FRENTES */
+
+    #modalFrentes .modal-dialog {
+        margin: 8px;
+        max-width: calc(100% - 16px);
+    }
+
+    #modalFrentes form {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+        #modalFrentes form .col-md-9,
+        #modalFrentes form .col-md-3 {
+            width: 100%;
+            padding: 0;
+        }
+
+        #modalFrentes form .btn {
+            width: 100%;
+            height: 44px;
+        }
+
+    #modalFrentes table thead {
+        display: none;
+    }
+
+    #modalFrentes table tbody tr {
+        display: block;
+        padding: 12px;
+        margin-bottom: 10px;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 3px 10px rgba(0,0,0,.08);
+    }
+
+    #modalFrentes table tbody td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border: none;
+        padding: 6px 0;
+    }
+
+        #modalFrentes table tbody td:nth-child(1)::before {
+            content: "ID";
+            font-weight: 700;
+            color: #6c757d;
+        }
+
+        #modalFrentes table tbody td:nth-child(2)::before {
+            content: "Nombre";
+            font-weight: 700;
+            color: #6c757d;
+        }
+
+        #modalFrentes table tbody td:nth-child(3)::before {
+            content: "Acciones";
+            font-weight: 700;
+            color: #6c757d;
+        }
+
+
+    /* EVITAR DESBORDAMIENTO HORIZONTAL */
+
+    html,
+    body {
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+}
