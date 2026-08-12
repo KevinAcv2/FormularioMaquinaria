@@ -1,64 +1,69 @@
-﻿using System.Text;
-using System.Text.Json;
+﻿using Tesseract;
 
 namespace Maquinarias.Services
 {
     public class OcrService
     {
-        private readonly IConfiguration _configuration;
-        private readonly HttpClient _httpClient;
+        private readonly IWebHostEnvironment _environment;
 
-        public OcrService(
-            IConfiguration configuration,
-            HttpClient httpClient)
+        public OcrService(IWebHostEnvironment environment)
         {
-            _configuration = configuration;
-            _httpClient = httpClient;
+            _environment = environment;
         }
 
         public async Task<string> LeerTextoAsync(IFormFile imagen)
         {
-            var apiKey = _configuration["OcrSpace:ApiKey"]
-                ?? throw new InvalidOperationException("La API Key 'OcrSpace:ApiKey' no está configurada en appsettings.json.");
+            if (imagen == null || imagen.Length == 0)
+                return "";
 
+            string tessdataPath = Path.Combine(
+                _environment.ContentRootPath,
+                "tessdata"
+            );
 
-            using var content =
-                new MultipartFormDataContent();
+            if (!Directory.Exists(tessdataPath))
+                throw new DirectoryNotFoundException(
+                    $"No se encontró la carpeta tessdata: {tessdataPath}"
+                );
 
-            using var stream =
-                imagen.OpenReadStream();
+            string archivoTemporal = Path.Combine(
+                Path.GetTempPath(),
+                $"{Guid.NewGuid()}.png"
+            );
 
-            content.Add(
-                new StreamContent(stream),
-                "file",
-                imagen.FileName);
+            try
+            {
+                // Guardar temporalmente la imagen
+                using (var stream = new FileStream(
+                    archivoTemporal,
+                    FileMode.Create))
+                {
+                    await imagen.CopyToAsync(stream);
+                }
 
-            content.Add(
-                new StringContent(apiKey),
-                "apikey");
+                using var engine = new TesseractEngine(
+                    tessdataPath,
+                    "eng",
+                    EngineMode.Default
+                );
 
-            content.Add(
-                new StringContent("spa"),
-                "language");
+                using var img = Pix.LoadFromFile(archivoTemporal);
 
-            var response =
-                await _httpClient.PostAsync(
-                    "https://api.ocr.space/parse/image",
-                    content);
+                using var page = engine.Process(
+                    img,
+                    PageSegMode.SingleLine
+                );
 
-            var json =
-                await response.Content.ReadAsStringAsync();
-
-            using JsonDocument doc =
-                JsonDocument.Parse(json);
-
-            var texto =
-                doc.RootElement
-                .GetProperty("ParsedResults")[0]
-                .GetProperty("ParsedText")
-                .GetString();
-
-            return texto ?? "";
+                return page.GetText() ?? "";
+            }
+            finally
+            {
+                // Eliminar imagen temporal
+                if (System.IO.File.Exists(archivoTemporal))
+                {
+                    System.IO.File.Delete(archivoTemporal);
+                }
+            }
         }
     }
 }
