@@ -1,169 +1,89 @@
-﻿using Tesseract;
+﻿using System.Text.Json;
 
 namespace Maquinarias.Services
 {
     public class OcrService
     {
-        private readonly IWebHostEnvironment _environment;
+        private readonly IConfiguration _configuration;
+        private readonly HttpClient _httpClient;
 
-        public OcrService(IWebHostEnvironment environment)
+        public OcrService(
+            IConfiguration configuration,
+            HttpClient httpClient)
         {
-            _environment = environment;
+            _configuration = configuration;
+            _httpClient = httpClient;
         }
 
         public async Task<string> LeerTextoAsync(IFormFile imagen)
         {
-            Console.WriteLine("OCR: inicio");
-
             if (imagen == null || imagen.Length == 0)
-            {
-                Console.WriteLine("OCR: imagen vacía");
                 return "";
+
+            var apiKey = _configuration["OcrSpace:ApiKey"];
+
+            if (string.IsNullOrWhiteSpace(apiKey))
+            {
+                throw new InvalidOperationException(
+                    "La API Key de OCR.space no está configurada.");
             }
 
-            Console.WriteLine(
-                $"OCR: imagen recibida. Nombre={imagen.FileName}, Tamaño={imagen.Length}"
-            );
+            using var content = new MultipartFormDataContent();
 
-            string tessdataPath = Path.Combine(
-                _environment.ContentRootPath,
-                "tessdata"
-            );
+            using var stream = imagen.OpenReadStream();
 
-            Console.WriteLine(
-                $"OCR: ContentRootPath={_environment.ContentRootPath}"
-            );
+            content.Add(
+                new StreamContent(stream),
+                "file",
+                imagen.FileName);
 
-            Console.WriteLine(
-                $"OCR: tessdataPath={tessdataPath}"
-            );
+            content.Add(
+                new StringContent(apiKey),
+                "apikey");
 
-            Console.WriteLine(
-                $"OCR: existe carpeta={Directory.Exists(tessdataPath)}"
-            );
+            content.Add(
+                new StringContent("spa"),
+                "language");
 
-            string trainedDataPath =
-                Path.Combine(tessdataPath, "eng.traineddata");
+            content.Add(
+                new StringContent("true"),
+                "isOverlayRequired");
 
-            Console.WriteLine(
-                $"OCR: eng.traineddata existe={System.IO.File.Exists(trainedDataPath)}"
-            );
+            var response = await _httpClient.PostAsync(
+                "https://api.ocr.space/parse/image",
+                content);
 
-            string archivoTemporal = Path.Combine(
-                Path.GetTempPath(),
-                $"{Guid.NewGuid()}.png"
-            );
+            var json = await response.Content.ReadAsStringAsync();
 
-            try
+            if (!response.IsSuccessStatusCode)
             {
-                Console.WriteLine(
-                    $"OCR: guardando imagen temporal {archivoTemporal}"
-                );
-
-                using (var stream = new FileStream(
-                    archivoTemporal,
-                    FileMode.Create))
-                {
-                    await imagen.CopyToAsync(stream);
-                }
-
-                Console.WriteLine(
-                    "OCR: imagen temporal guardada"
-                );
-
-                Console.WriteLine(
-                    "OCR: creando TesseractEngine"
-                );
-
-                using var engine = new TesseractEngine(
-                    tessdataPath,
-                    "eng",
-                    EngineMode.Default
-                );
-
-                Console.WriteLine(
-                    "OCR: TesseractEngine creado correctamente"
-                );
-
-                Console.WriteLine(
-                    "OCR: cargando imagen"
-                );
-
-                using var img = Pix.LoadFromFile(
-                    archivoTemporal
-                );
-
-                Console.WriteLine(
-                    "OCR: imagen cargada correctamente"
-                );
-
-                Console.WriteLine(
-                    "OCR: procesando imagen"
-                );
-
-                using var page = engine.Process(
-                    img,
-                    PageSegMode.SingleLine
-                );
-
-                Console.WriteLine(
-                    "OCR: imagen procesada correctamente"
-                );
-
-                var texto = page.GetText() ?? "";
-
-                Console.WriteLine(
-                    $"OCR: texto detectado={texto}"
-                );
-
-                return texto;
+                throw new Exception(
+                    $"OCR.space respondió HTTP {(int)response.StatusCode}: {json}");
             }
-            catch (Exception ex)
+
+            using var document = JsonDocument.Parse(json);
+
+            var root = document.RootElement;
+
+            if (root.TryGetProperty("IsErroredOnProcessing", out var error))
             {
-                Console.WriteLine(
-                    "===================================="
-                );
-
-                Console.WriteLine(
-                    "OCR: ERROR"
-                );
-
-                Console.WriteLine(
-                    $"OCR: Tipo={ex.GetType().FullName}"
-                );
-
-                Console.WriteLine(
-                    $"OCR: Mensaje={ex.Message}"
-                );
-
-                Console.WriteLine(
-                    $"OCR: StackTrace={ex.StackTrace}"
-                );
-
-                if (ex.InnerException != null)
+                if (error.GetBoolean())
                 {
-                    Console.WriteLine(
-                        $"OCR: InnerException={ex.InnerException.Message}"
-                    );
-                }
-
-                Console.WriteLine(
-                    "===================================="
-                );
-
-                throw;
-            }
-            finally
-            {
-                if (System.IO.File.Exists(archivoTemporal))
-                {
-                    System.IO.File.Delete(archivoTemporal);
-
-                    Console.WriteLine(
-                        "OCR: archivo temporal eliminado"
-                    );
+                    return "";
                 }
             }
+
+            if (!root.TryGetProperty("ParsedResults", out var resultados))
+                return "";
+
+            if (resultados.GetArrayLength() == 0)
+                return "";
+
+            var texto = resultados[0]
+                .GetProperty("ParsedText")
+                .GetString();
+
+            return texto ?? "";
         }
     }
 }

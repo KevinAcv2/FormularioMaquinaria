@@ -8,27 +8,25 @@
 
 	<ItemGroup>
 		<PackageReference Include="ClosedXML" Version="0.105.0" />
+
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.8" />
+
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.8">
 			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<IncludeAssets>
+				runtime; build; native; contentfiles; analyzers; buildtransitive
+			</IncludeAssets>
 		</PackageReference>
+
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.8" />
+
 		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.2" />
+
 		<PackageReference Include="QuestPDF" Version="2026.7.0" />
-		<PackageReference Include="Tesseract" Version="5.2.0" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<Folder Include="wwwroot\uploads\" />
-	</ItemGroup>
-
-	<!-- ARCHIVOS DE TESSERACT -->
-	<ItemGroup>
-		<Content Include="tessdata\eng.traineddata">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
-		</Content>
 	</ItemGroup>
 
 </Project>
