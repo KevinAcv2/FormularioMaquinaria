@@ -252,6 +252,32 @@ document.addEventListener("DOMContentLoaded", function () {
                 body: formData
             });
 
+            // Pruebaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+            console.log("OCR status:", respuesta.status);
+            console.log("OCR content-type:", respuesta.headers.get("content-type"));
+
+            let respuestaTexto = await respuesta.text();
+
+            console.log("OCR respuesta:", respuestaTexto);
+
+            let datos;
+
+            try {
+                datos = JSON.parse(respuestaTexto);
+            } catch (error) {
+                Swal.close();
+
+                Swal.fire({
+                    icon: "error",
+                    title: "Respuesta inválida del servidor",
+                    text: "El servidor no devolvió una respuesta JSON válida."
+                });
+
+                console.error("Error JSON:", error);
+                return;
+            }
+
             let datos = await respuesta.json();
 
             Swal.close();
@@ -644,64 +670,4 @@ document.addEventListener("DOMContentLoaded", function () {
         formulario.reset();
 
     });
-
-    // FINALIZAR NOVEDAD
-    document
-        .getElementById("btnFinalizarNovedad")
-        .addEventListener("click", async function () {
-
-            const maquina =
-                document.getElementById("nombreMaquina").value;
-
-            const observacion =
-                document.getElementById("ObservacionFin").value;
-
-            const evidencia =
-                document.getElementById("EvidenciaFin").files[0];
-
-            let formData = new FormData();
-
-            formData.append("maquina", maquina);
-            formData.append("observacionFin", observacion);
-
-            if (evidencia)
-                formData.append("evidenciaFin", evidencia);
-
-            let respuesta = await fetch(
-                "/Reporte/FinalizarNovedad",
-                {
-                    method: "POST",
-                    body: formData
-                });
-
-            let datos = await respuesta.json();
-
-            if (!datos.exito) {
-
-                Swal.fire({
-                    icon: "error",
-                    title: "Error",
-                    text: datos.mensaje
-                });
-
-                return;
-            }
-
-            bootstrap.Modal
-                .getInstance(
-                    document.getElementById("modalFinalizarNovedad"))
-                .hide();
-
-            Swal.fire({
-                icon: "success",
-                title: "Novedad finalizada",
-                text: "Ahora puede continuar con el reporte."
-            });
-
-            // Limpiar el modal
-            document.getElementById("ObservacionFin").value = "";
-            document.getElementById("EvidenciaFin").value = "";
-
-        });
-
 });
