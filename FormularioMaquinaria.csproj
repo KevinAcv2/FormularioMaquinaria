@@ -13,21 +13,22 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.8" />
-
 		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.2" />
-
 		<PackageReference Include="QuestPDF" Version="2026.7.0" />
-
 		<PackageReference Include="Tesseract" Version="5.2.0" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="tessdata\" />
 		<Folder Include="wwwroot\uploads\" />
 	</ItemGroup>
 
-	<!-- TESSERACT -->
+	<!-- ARCHIVOS DE TESSERACT -->
+	<ItemGroup>
+		<Content Include="tessdata\eng.traineddata">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
+		</Content>
+	</ItemGroup>
 
 </Project>
