@@ -1,6 +1,7 @@
 ﻿# ============================
 # ETAPA DE COMPILACIÓN
 # ============================
+
 FROM mcr.microsoft.com/dotnet/sdk:10.0-preview AS build
 
 WORKDIR /src
@@ -13,14 +14,27 @@ COPY . .
 
 RUN dotnet publish "FormularioMaquinaria.csproj" -c Release -o /app/publish
 
+
 # ============================
 # ETAPA DE EJECUCIÓN
 # ============================
+
 FROM mcr.microsoft.com/dotnet/aspnet:10.0-preview
 
 WORKDIR /app
 
+# Instalar dependencias necesarias para Tesseract
+RUN apt-get update \
+    && apt-get install -y \
+        libleptonica-dev \
+        libtesseract-dev \
+        tesseract-ocr \
+    && rm -rf /var/lib/apt/lists/*
+
 COPY --from=build /app/publish .
+
+# Copiar archivos de entrenamiento de Tesseract
+COPY tessdata ./tessdata
 
 ENV ASPNETCORE_URLS=http://+:8080
 
