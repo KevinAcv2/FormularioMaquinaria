@@ -23,17 +23,20 @@ FROM mcr.microsoft.com/dotnet/aspnet:10.0-preview
 
 WORKDIR /app
 
-# Instalar dependencias necesarias para Tesseract
+# Dependencias nativas de Tesseract
 RUN apt-get update \
     && apt-get install -y \
         libleptonica-dev \
         libtesseract-dev \
         tesseract-ocr \
+    && echo "===== LEPTONICA =====" \
+    && ls -la /usr/lib/x86_64-linux-gnu/liblept* \
+    && echo "===== TESSERACT =====" \
+    && ls -la /usr/lib/x86_64-linux-gnu/libtess* \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=build /app/publish .
 
-# Copiar archivos de entrenamiento de Tesseract
 COPY tessdata ./tessdata
 
 ENV ASPNETCORE_URLS=http://+:8080
