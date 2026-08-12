@@ -5,73 +5,60 @@ namespace Maquinarias.Services
     public class OcrService
     {
         private readonly IWebHostEnvironment _environment;
-        private readonly ILogger<OcrService> _logger;
 
-        public OcrService(
-            IWebHostEnvironment environment,
-            ILogger<OcrService> logger)
+        public OcrService(IWebHostEnvironment environment)
         {
             _environment = environment;
-            _logger = logger;
         }
 
         public async Task<string> LeerTextoAsync(IFormFile imagen)
         {
-            _logger.LogInformation("OCR: inicio");
+            Console.WriteLine("OCR: inicio");
 
             if (imagen == null || imagen.Length == 0)
             {
-                _logger.LogWarning("OCR: imagen vacía");
+                Console.WriteLine("OCR: imagen vacía");
                 return "";
             }
 
-            _logger.LogInformation(
-                "OCR: imagen recibida. Nombre={Nombre}, Tamaño={Tamano}",
-                imagen.FileName,
-                imagen.Length);
+            Console.WriteLine(
+                $"OCR: imagen recibida. Nombre={imagen.FileName}, Tamaño={imagen.Length}"
+            );
 
             string tessdataPath = Path.Combine(
                 _environment.ContentRootPath,
-                "tessdata");
+                "tessdata"
+            );
 
-            _logger.LogInformation(
-                "OCR: tessdataPath={Path}",
-                tessdataPath);
+            Console.WriteLine(
+                $"OCR: ContentRootPath={_environment.ContentRootPath}"
+            );
 
-            if (!Directory.Exists(tessdataPath))
-            {
-                _logger.LogError(
-                    "OCR: NO existe tessdata en {Path}",
-                    tessdataPath);
+            Console.WriteLine(
+                $"OCR: tessdataPath={tessdataPath}"
+            );
 
-                throw new DirectoryNotFoundException(
-                    $"No se encontró la carpeta tessdata: {tessdataPath}");
-            }
+            Console.WriteLine(
+                $"OCR: existe carpeta={Directory.Exists(tessdataPath)}"
+            );
 
-            string trainedData = Path.Combine(
-                tessdataPath,
-                "eng.traineddata");
+            string trainedDataPath =
+                Path.Combine(tessdataPath, "eng.traineddata");
 
-            _logger.LogInformation(
-                "OCR: eng.traineddata existe={Existe}",
-                File.Exists(trainedData));
-
-            if (!File.Exists(trainedData))
-            {
-                throw new FileNotFoundException(
-                    "No se encontró eng.traineddata",
-                    trainedData);
-            }
+            Console.WriteLine(
+                $"OCR: eng.traineddata existe={System.IO.File.Exists(trainedDataPath)}"
+            );
 
             string archivoTemporal = Path.Combine(
                 Path.GetTempPath(),
-                $"{Guid.NewGuid()}.png");
+                $"{Guid.NewGuid()}.png"
+            );
 
             try
             {
-                _logger.LogInformation(
-                    "OCR: guardando imagen temporal {Archivo}",
-                    archivoTemporal);
+                Console.WriteLine(
+                    $"OCR: guardando imagen temporal {archivoTemporal}"
+                );
 
                 using (var stream = new FileStream(
                     archivoTemporal,
@@ -80,46 +67,91 @@ namespace Maquinarias.Services
                     await imagen.CopyToAsync(stream);
                 }
 
-                _logger.LogInformation(
-                    "OCR: imagen temporal guardada");
+                Console.WriteLine(
+                    "OCR: imagen temporal guardada"
+                );
 
-                _logger.LogInformation(
-                    "OCR: creando TesseractEngine");
+                Console.WriteLine(
+                    "OCR: creando TesseractEngine"
+                );
 
                 using var engine = new TesseractEngine(
                     tessdataPath,
                     "eng",
-                    EngineMode.Default);
+                    EngineMode.Default
+                );
 
-                _logger.LogInformation(
-                    "OCR: TesseractEngine creado correctamente");
+                Console.WriteLine(
+                    "OCR: TesseractEngine creado correctamente"
+                );
 
-                _logger.LogInformation(
-                    "OCR: cargando imagen con Pix");
+                Console.WriteLine(
+                    "OCR: cargando imagen"
+                );
 
                 using var img = Pix.LoadFromFile(
-                    archivoTemporal);
+                    archivoTemporal
+                );
 
-                _logger.LogInformation(
-                    "OCR: imagen cargada correctamente");
+                Console.WriteLine(
+                    "OCR: imagen cargada correctamente"
+                );
 
-                _logger.LogInformation(
-                    "OCR: procesando imagen");
+                Console.WriteLine(
+                    "OCR: procesando imagen"
+                );
 
                 using var page = engine.Process(
                     img,
-                    PageSegMode.SingleLine);
+                    PageSegMode.SingleLine
+                );
 
-                _logger.LogInformation(
-                    "OCR: procesamiento terminado");
+                Console.WriteLine(
+                    "OCR: imagen procesada correctamente"
+                );
 
-                string texto = page.GetText() ?? "";
+                var texto = page.GetText() ?? "";
 
-                _logger.LogInformation(
-                    "OCR: texto detectado={Texto}",
-                    texto);
+                Console.WriteLine(
+                    $"OCR: texto detectado={texto}"
+                );
 
                 return texto;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(
+                    "===================================="
+                );
+
+                Console.WriteLine(
+                    "OCR: ERROR"
+                );
+
+                Console.WriteLine(
+                    $"OCR: Tipo={ex.GetType().FullName}"
+                );
+
+                Console.WriteLine(
+                    $"OCR: Mensaje={ex.Message}"
+                );
+
+                Console.WriteLine(
+                    $"OCR: StackTrace={ex.StackTrace}"
+                );
+
+                if (ex.InnerException != null)
+                {
+                    Console.WriteLine(
+                        $"OCR: InnerException={ex.InnerException.Message}"
+                    );
+                }
+
+                Console.WriteLine(
+                    "===================================="
+                );
+
+                throw;
             }
             finally
             {
@@ -127,8 +159,9 @@ namespace Maquinarias.Services
                 {
                     System.IO.File.Delete(archivoTemporal);
 
-                    _logger.LogInformation(
-                        "OCR: archivo temporal eliminado");
+                    Console.WriteLine(
+                        "OCR: archivo temporal eliminado"
+                    );
                 }
             }
         }
