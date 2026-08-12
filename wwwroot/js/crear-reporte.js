@@ -227,10 +227,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
         });
 
-    // FOTO HORÓMETRO INICIAL - PRUEBA IPHONE
+    // FOTO HORÓMETRO INICIAL - PRUEBA SERVIDOR
 
     document.getElementById("fotoInicial")
-        .addEventListener("change", function () {
+        .addEventListener("change", async function () {
 
             const archivo = this.files[0];
 
@@ -243,15 +243,55 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             Swal.fire({
-                icon: "success",
-                title: "¡Imagen recibida!",
-                html: `
-                <p><strong>Nombre:</strong> ${archivo.name}</p>
-                <p><strong>Tamaño:</strong> ${archivo.size} bytes</p>
-                <p><strong>Tipo:</strong> ${archivo.type}</p>
-            `,
-                confirmButtonText: "Continuar"
+                title: "Enviando imagen...",
+                text: "Probando conexión con el servidor",
+                allowOutsideClick: false,
+                didOpen: () => Swal.showLoading()
             });
+
+            try {
+
+                const formData = new FormData();
+
+                formData.append("imagen", archivo);
+
+                const respuesta = await fetch("/Reporte/LeerHorometro", {
+                    method: "POST",
+                    body: formData
+                });
+
+                console.log("HTTP:", respuesta.status);
+                console.log("OK:", respuesta.ok);
+
+                const textoRespuesta = await respuesta.text();
+
+                Swal.close();
+
+                Swal.fire({
+                    icon: respuesta.ok ? "success" : "error",
+                    title: respuesta.ok
+                        ? "Servidor respondió"
+                        : "Error del servidor",
+                    html: `
+                    <p><strong>HTTP:</strong> ${respuesta.status}</p>
+                    <p><strong>Respuesta:</strong></p>
+                    <pre style="text-align:left; white-space:pre-wrap;">
+${textoRespuesta}
+                    </pre>
+                `
+                });
+
+            } catch (error) {
+
+                Swal.close();
+
+                Swal.fire({
+                    icon: "error",
+                    title: "Error de conexión",
+                    text: error.message
+                });
+
+            }
 
         });
 
