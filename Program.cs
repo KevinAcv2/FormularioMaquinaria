@@ -33,10 +33,11 @@ else
 }
 
 builder.Services.AddDbContext<AppDbContext>(options =>
+
     options.UseNpgsql(connectionString));
 
 builder.Services.AddSession();
-builder.Services.AddHttpClient<OcrService>();
+builder.Services.AddScoped<OcrService>();
 
 var app = builder.Build();
 
