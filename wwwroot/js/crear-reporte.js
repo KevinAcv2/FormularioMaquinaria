@@ -227,97 +227,125 @@ document.addEventListener("DOMContentLoaded", function () {
 
         });
 
-    // FOTO HORÓMETRO INICIAL
+    // FOTO HORÓMETRO INICIAL - PRUEBA IPHONE
+
     document.getElementById("fotoInicial")
-        .addEventListener("change", async function () {
+        .addEventListener("change", function () {
 
-            let archivo = this.files[0];
+            const archivo = this.files[0];
 
-            if (!archivo)
+            if (!archivo) {
+                Swal.fire({
+                    icon: "warning",
+                    title: "No se recibió ninguna imagen"
+                });
                 return;
+            }
 
             Swal.fire({
-                title: "Leyendo horómetro...",
-                text: "La IA está analizando la imagen.",
-                allowOutsideClick: false,
-                didOpen: () => Swal.showLoading()
+                icon: "success",
+                title: "¡Imagen recibida!",
+                html: `
+                <p><strong>Nombre:</strong> ${archivo.name}</p>
+                <p><strong>Tamaño:</strong> ${archivo.size} bytes</p>
+                <p><strong>Tipo:</strong> ${archivo.type}</p>
+            `,
+                confirmButtonText: "Continuar"
             });
-
-            let formData = new FormData();
-
-            formData.append("imagen", archivo);
-
-            let respuesta = await fetch("/Reporte/LeerHorometro", {
-                method: "POST",
-                body: formData
-            });
-
-            // Pruebaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-
-            console.log("OCR status:", respuesta.status);
-            console.log("OCR content-type:", respuesta.headers.get("content-type"));
-
-            let respuestaTexto = await respuesta.text();
-
-            console.log("OCR respuesta:", respuestaTexto);
-
-            let datos;
-
-            try {
-                datos = JSON.parse(respuestaTexto);
-            } catch (error) {
-                Swal.close();
-
-                Swal.fire({
-                    icon: "error",
-                    title: "Respuesta inválida del servidor",
-                    text: "El servidor no devolvió una respuesta JSON válida."
-                });
-
-                console.error("Error JSON:", error);
-                return;
-            }
-
-            let datos = await respuesta.json();
-
-            Swal.close();
-
-            if (datos.exito) {
-
-                let input = document.getElementById("horometroInicial");
-
-                input.value = datos.valor;
-
-                input.classList.remove("is-warning");
-                input.classList.add("is-valid");
-
-                Swal.fire({
-                    icon: "success",
-                    title: "Horómetro inicial detectado",
-                    html: `
-                            <h2 style="color:#0f2f44">${datos.valor}</h2>
-
-                            <p>
-                                Revise cuidadosamente el valor detectado.
-                                Si observa alguna diferencia puede editarlo
-                                antes de guardar el reporte.
-                            </p>
-                        `,
-                    confirmButtonText: "Entendido",
-                    confirmButtonColor: "#0f2f44"
-                });
-
-            } else {
-
-                Swal.fire({
-                    icon: "error",
-                    title: "No fue posible leer el horómetro",
-                    text: datos.mensaje
-                });
-
-            }
 
         });
+
+    // FOTO HORÓMETRO INICIAL
+    // document.getElementById("fotoInicial")
+    //     .addEventListener("change", async function () {
+
+    //         let archivo = this.files[0];
+
+    //         if (!archivo)
+    //             return;
+
+    //         Swal.fire({
+    //             title: "Leyendo horómetro...",
+    //             text: "La IA está analizando la imagen.",
+    //             allowOutsideClick: false,
+    //             didOpen: () => Swal.showLoading()
+    //         });
+
+    //         let formData = new FormData();
+
+    //         formData.append("imagen", archivo);
+
+    //         let respuesta = await fetch("/Reporte/LeerHorometro", {
+    //             method: "POST",
+    //             body: formData
+    //         });
+
+    //         // Pruebaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+    //         console.log("OCR status:", respuesta.status);
+    //         console.log("OCR content-type:", respuesta.headers.get("content-type"));
+
+    //         let respuestaTexto = await respuesta.text();
+
+    //         console.log("OCR respuesta:", respuestaTexto);
+
+    //         let datos;
+
+    //         try {
+    //             datos = JSON.parse(respuestaTexto);
+    //         } catch (error) {
+    //             Swal.close();
+
+    //             Swal.fire({
+    //                 icon: "error",
+    //                 title: "Respuesta inválida del servidor",
+    //                 text: "El servidor no devolvió una respuesta JSON válida."
+    //             });
+
+    //             console.error("Error JSON:", error);
+    //             return;
+    //         }
+
+    //         let datos = await respuesta.json();
+
+    //         Swal.close();
+
+    //         if (datos.exito) {
+
+    //             let input = document.getElementById("horometroInicial");
+
+    //             input.value = datos.valor;
+
+    //             input.classList.remove("is-warning");
+    //             input.classList.add("is-valid");
+
+    //             Swal.fire({
+    //                 icon: "success",
+    //                 title: "Horómetro inicial detectado",
+    //                 html: `
+    //                         <h2 style="color:#0f2f44">${datos.valor}</h2>
+
+    //                         <p>
+    //                             Revise cuidadosamente el valor detectado.
+    //                             Si observa alguna diferencia puede editarlo
+    //                             antes de guardar el reporte.
+    //                         </p>
+    //                     `,
+    //                 confirmButtonText: "Entendido",
+    //                 confirmButtonColor: "#0f2f44"
+    //             });
+
+    //         } else {
+
+    //             Swal.fire({
+    //                 icon: "error",
+    //                 title: "No fue posible leer el horómetro",
+    //                 text: datos.mensaje
+    //             });
+
+    //         }
+
+    //     });
 
     // SI EL OPERADOR MODIFICA EL VALOR
     document.getElementById("horometroInicial")
