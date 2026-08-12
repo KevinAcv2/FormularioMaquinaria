@@ -262,25 +262,84 @@ namespace Maquinarias.Controllers
         [HttpPost]
         public async Task<IActionResult> LeerHorometro(IFormFile imagen)
         {
-            if (imagen == null)
+            try
             {
-                return Json(new { exito = false, mensaje = "Imagen vacía" });
+                if (imagen == null)
+                {
+                    return Json(new
+                    {
+                        exito = false,
+                        mensaje = "Imagen vacía"
+                    });
+                }
+
+                Console.WriteLine("OCR: imagen recibida");
+                Console.WriteLine($"OCR: Nombre = {imagen.FileName}");
+                Console.WriteLine($"OCR: Tamaño = {imagen.Length}");
+                Console.WriteLine($"OCR: Tipo = {imagen.ContentType}");
+
+                var texto = await _ocrService.LeerTextoAsync(imagen);
+
+                Console.WriteLine("OCR: respuesta recibida");
+                Console.WriteLine($"OCR: {texto}");
+
+                var match = Regex.Match(
+                    texto,
+                    @"\d+([.,]\d+)?"
+                );
+
+                if (!match.Success)
+                {
+                    return Json(new
+                    {
+                        exito = false,
+                        mensaje = "No se detectó número",
+                        texto = texto
+                    });
+                }
+
+                return Json(new
+                {
+                    exito = true,
+                    valor = match.Value.Replace(",", ".")
+                });
             }
-
-            var texto = await _ocrService.LeerTextoAsync(imagen);
-            var match = Regex.Match(texto, @"\d+([.,]\d+)?");
-
-            if (!match.Success)
+            catch (Exception ex)
             {
-                return Json(new { exito = false, mensaje = "No se detectó número" });
+                Console.WriteLine("========== ERROR OCR ==========");
+                Console.WriteLine(ex.ToString());
+                Console.WriteLine("================================");
+
+                return StatusCode(500, new
+                {
+                    exito = false,
+                    mensaje = ex.Message,
+                    detalle = ex.InnerException?.Message
+                });
             }
-
-            return Json(new
-            {
-                exito = true,
-                valor = match.Value.Replace(",", ".")
-            });
         }
+        //[HttpPost]
+        //public async Task<IActionResult> LeerHorometro(IFormFile imagen)
+        //{
+        //    if (imagen == null)
+        //    {
+        //        return Json(new { exito = false, mensaje = "Imagen vacía" });
+        //    }
+
+        //    var texto = await _ocrService.LeerTextoAsync(imagen);
+        //    var match = Regex.Match(texto, @"\d+([.,]\d+)?");
+
+        //    if (!match.Success)
+        //    {
+        //        return Json(new { exito = false, mensaje = "No se detectó número" });
+        //    }
+
+        //    return Json(new
+        //    {
+        //        exito = true,
+        //        valor = match.Value.Replace(",", ".")
+        //    });
+        //}
 
         // MAQUINA POR OPERADOR
         [HttpGet]
