@@ -25,63 +25,93 @@ namespace Maquinarias.Services
             if (string.IsNullOrWhiteSpace(apiKey))
             {
                 throw new InvalidOperationException(
-                    "La API Key de OCR.space no está configurada.");
+                    "La API Key de OCR.space no está configurada."
+                );
             }
 
-            using var content = new MultipartFormDataContent();
+            using var formData = new MultipartFormDataContent();
 
             using var stream = imagen.OpenReadStream();
 
-            content.Add(
-                new StreamContent(stream),
+            var fileContent = new StreamContent(stream);
+
+            formData.Add(
+                fileContent,
                 "file",
-                imagen.FileName);
+                imagen.FileName
+            );
 
-            content.Add(
+            formData.Add(
                 new StringContent(apiKey),
-                "apikey");
+                "apikey"
+            );
 
-            content.Add(
+            formData.Add(
                 new StringContent("spa"),
-                "language");
+                "language"
+            );
 
-            content.Add(
-                new StringContent("true"),
-                "isOverlayRequired");
+            formData.Add(
+                new StringContent("2"),
+                "OCREngine"
+            );
 
             var response = await _httpClient.PostAsync(
                 "https://api.ocr.space/parse/image",
-                content);
+                formData
+            );
 
             var json = await response.Content.ReadAsStringAsync();
 
             if (!response.IsSuccessStatusCode)
             {
                 throw new Exception(
-                    $"OCR.space respondió HTTP {(int)response.StatusCode}: {json}");
+                    $"OCR.space respondió HTTP {(int)response.StatusCode}: {json}"
+                );
             }
 
             using var document = JsonDocument.Parse(json);
 
             var root = document.RootElement;
 
-            if (root.TryGetProperty("IsErroredOnProcessing", out var error))
+            // Revisar si OCR.space reportó error
+            if (root.TryGetProperty(
+                "IsErroredOnProcessing",
+                out var errorProperty))
             {
-                if (error.GetBoolean())
+                if (errorProperty.GetBoolean())
                 {
-                    return "";
+                    string mensaje = "Error desconocido de OCR.space";
+
+                    if (root.TryGetProperty(
+                        "ErrorMessage",
+                        out var errorMessage))
+                    {
+                        mensaje = errorMessage.ToString();
+                    }
+
+                    throw new Exception(
+                        $"OCR.space: {mensaje}"
+                    );
                 }
             }
 
-            if (!root.TryGetProperty("ParsedResults", out var resultados))
+            if (!root.TryGetProperty(
+                "ParsedResults",
+                out var resultados))
+            {
                 return "";
+            }
 
             if (resultados.GetArrayLength() == 0)
+            {
                 return "";
+            }
 
-            var texto = resultados[0]
-                .GetProperty("ParsedText")
-                .GetString();
+            var texto =
+                resultados[0]
+                    .GetProperty("ParsedText")
+                    .GetString();
 
             return texto ?? "";
         }
