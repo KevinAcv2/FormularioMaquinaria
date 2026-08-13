@@ -59,10 +59,17 @@ namespace Maquinarias.Controllers
                     ModelState.AddModelError("", "Las fotos son obligatorias.");
                 }
             }
-
-
             if (!ModelState.IsValid)
             {
+                var errores = ModelState
+                    .Where(x => x.Value != null && x.Value.Errors.Count > 0)
+                    .SelectMany(x => x.Value!.Errors.Select(e =>
+                        $"{x.Key}: {e.ErrorMessage} {e.Exception?.Message}"
+                    ))
+                    .ToList();
+
+                ViewBag.Error = string.Join(" | ", errores);
+
                 await CargarCombos();
                 return View(reporte);
             }
