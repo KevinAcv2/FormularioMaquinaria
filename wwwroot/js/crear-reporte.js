@@ -227,15 +227,116 @@ document.addEventListener("DOMContentLoaded", function () {
 
         });
 
+    async function comprimirImagen(file) {
+
+        return new Promise((resolve, reject) => {
+
+            const reader = new FileReader();
+
+            reader.onload = function (event) {
+
+                const img = new Image();
+
+                img.onload = function () {
+
+                    const canvas = document.createElement("canvas");
+
+                    const MAX_WIDTH = 1600;
+                    const MAX_HEIGHT = 1600;
+
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > MAX_WIDTH || height > MAX_HEIGHT) {
+
+                        if (width > height) {
+
+                            height = Math.round(
+                                height * (MAX_WIDTH / width)
+                            );
+
+                            width = MAX_WIDTH;
+
+                        } else {
+
+                            width = Math.round(
+                                width * (MAX_HEIGHT / height)
+                            );
+
+                            height = MAX_HEIGHT;
+                        }
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+
+                    const ctx = canvas.getContext("2d");
+
+                    ctx.drawImage(
+                        img,
+                        0,
+                        0,
+                        width,
+                        height
+                    );
+
+                    canvas.toBlob(
+                        function (blob) {
+
+                            if (!blob) {
+                                reject(
+                                    new Error("No se pudo comprimir la imagen.")
+                                );
+                                return;
+                            }
+
+                            const archivoComprimido = new File(
+                                [blob],
+                                "horometro.jpg",
+                                {
+                                    type: "image/jpeg",
+                                    lastModified: Date.now()
+                                }
+                            );
+
+                            resolve(archivoComprimido);
+
+                        },
+                        "image/jpeg",
+                        0.75
+                    );
+                };
+
+                img.onerror = function () {
+                    reject(
+                        new Error("No se pudo cargar la imagen.")
+                    );
+                };
+
+                img.src = event.target.result;
+            };
+
+            reader.onerror = function () {
+                reject(
+                    new Error("No se pudo leer la imagen.")
+                );
+            };
+
+            reader.readAsDataURL(file);
+        });
+    }
+
 
     // FOTO HORÓMETRO INICIAL
     document.getElementById("fotoInicial")
         .addEventListener("change", async function () {
 
-            let archivo = this.files[0];
+            let archivoOriginal = this.files[0];
 
-            if (!archivo)
+            if (!archivoOriginal)
                 return;
+
+            let archivo = await comprimirImagen(archivoOriginal);
 
             Swal.fire({
                 title: "Leyendo horómetro...",
