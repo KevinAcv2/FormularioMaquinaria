@@ -196,8 +196,8 @@ body {
 
 .navbar {
     height: 70px;
-    background: white !important;
-    border-bottom: 1px solid #e5e5e5;
+    background: var(--primary-dark) !important;
+    border-bottom: none;
     position: sticky !important;
     top: 0;
     z-index: 1000;
@@ -219,7 +219,7 @@ body {
     height: 45px;
     border: none;
     background: transparent;
-    color: var(--primary-dark);
+    color: white;
     font-size: 23px;
     cursor: pointer;
     border-radius: 10px;
@@ -227,7 +227,7 @@ body {
 }
 
     .btn-menu:hover {
-        background: var(--background);
+        background: rgba(255, 255, 255, 0.15);
     }
 
 
@@ -238,9 +238,10 @@ body {
 .mobile-brand {
     display: block;
     margin-left: 10px;
-    color: var(--primary-dark);
+    color: white;
     font-size: 18px;
     letter-spacing: .5px;
+    font-weight: 600;
 }
 
 
@@ -266,11 +267,11 @@ body {
 }
 
     .user-info strong {
-        color: #222;
+        color: white;
     }
 
     .user-info small {
-        color: #777;
+        color: #d7d7d7;
     }
 
 
