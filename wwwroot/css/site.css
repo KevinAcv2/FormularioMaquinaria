@@ -196,8 +196,8 @@ body {
 
 .navbar {
     height: 70px;
-    background: var(--primary-dark) !important;
-    border-bottom: none;
+    background: white !important;
+    border-bottom: 1px solid #e5e5e5;
     position: sticky !important;
     top: 0;
     z-index: 1000;
@@ -219,7 +219,7 @@ body {
     height: 45px;
     border: none;
     background: transparent;
-    color: white;
+    color: var(--primary-dark);
     font-size: 23px;
     cursor: pointer;
     border-radius: 10px;
@@ -227,7 +227,7 @@ body {
 }
 
     .btn-menu:hover {
-        background: rgba(255, 255, 255, 0.15);
+        background: var(--background);
     }
 
 
@@ -238,10 +238,9 @@ body {
 .mobile-brand {
     display: block;
     margin-left: 10px;
-    color: white;
+    color: var(--primary-dark);
     font-size: 18px;
     letter-spacing: .5px;
-    font-weight: 600;
 }
 
 
@@ -267,11 +266,11 @@ body {
 }
 
     .user-info strong {
-        color: white;
+        color: #222;
     }
 
     .user-info small {
-        color: #d7d7d7;
+        color: #777;
     }
 
 
