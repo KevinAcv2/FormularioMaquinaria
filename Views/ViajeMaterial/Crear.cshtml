@@ -1,0 +1,694 @@
+﻿@model FormularioMaquinaria.Models.ViajeMaterial
+
+@{
+    Layout = null;
+    ViewData["Title"] = "Registrar Viaje de Material";
+}
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>Registrar Viaje de Material</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="~/css/crear-viaje-material.css"
+          asp-append-version="true" />
+
+</head>
+
+<body>
+
+    <div class="container py-5">
+
+        <div class="row justify-content-center">
+
+            <div class="col-lg-9">
+
+                <div class="card shadow-lg card-industrial">
+
+                    <!-- ENCABEZADO -->
+
+                    <div class="header-industrial">
+
+                        <img src="/img/Logo.png"
+                             class="logo-empresa"
+                             alt="Logo Empresa" />
+
+                        <h1 class="titulo-principal">
+                            AVENIDA DEL RÍO
+                        </h1>
+
+                        <p class="subtitulo">
+                            Sistema de Control Operacional de Materiales
+                        </p>
+
+                        <div class="titulo-formulario">
+                            REGISTRO DE VIAJE DE MATERIAL
+                        </div>
+
+                    </div>
+
+
+                    <div class="card-body">
+
+                        @if (ViewBag.Error != null)
+                        {
+                            <div class="alert alert-danger">
+                                @ViewBag.Error
+                            </div>
+                        }
+
+
+                        <form asp-controller="ViajeMaterial"
+                              asp-action="Crear"
+                              method="post"
+                              enctype="multipart/form-data"
+                              id="formViajeMaterial">
+
+
+                            <!-- ============================= -->
+                            <!-- PERSONA QUE RECIBE EL MATERIAL -->
+                            <!-- ============================= -->
+
+                            <h5 class="seccion-titulo">
+                                <span>1</span>
+                                Persona que recibe el material
+                            </h5>
+
+                            <div class="mb-4">
+
+                                <label asp-for="Recibidor"
+                                       class="form-label">
+                                    Nombre del recibidor
+                                </label>
+
+                                <input asp-for="Recibidor"
+                                       class="form-control form-control-lg"
+                                       placeholder="Ingrese el nombre de la persona que recibe"
+                                       autocomplete="off"
+                                       required />
+
+                                <span asp-validation-for="Recibidor"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+
+                            <!-- ============================= -->
+                            <!-- UBICACIÓN -->
+                            <!-- ============================= -->
+
+                            <h5 class="seccion-titulo">
+                                <span>2</span>
+                                Ubicación operacional
+                            </h5>
+
+
+                            <div class="row">
+
+                                <div class="col-md-6 mb-4">
+
+                                    <label asp-for="FrenteOperacionalId"
+                                           class="form-label">
+                                        Frente Operacional
+                                    </label>
+
+                                    <select asp-for="FrenteOperacionalId"
+                                            asp-items="ViewBag.FrentesOperacionales"
+                                            class="form-select form-select-lg"
+                                            required>
+
+                                        <option value="">
+                                            Seleccione un frente operacional
+                                        </option>
+
+                                    </select>
+
+                                    <span asp-validation-for="FrenteOperacionalId"
+                                          class="text-danger">
+                                    </span>
+
+                                </div>
+
+
+                                <div class="col-md-3 mb-4">
+
+                                    <label asp-for="Zona"
+                                           class="form-label">
+                                        Zona
+                                    </label>
+
+                                    <input asp-for="Zona"
+                                           class="form-control form-control-lg"
+                                           placeholder="Ej: Zona 1"
+                                           autocomplete="off"
+                                           required />
+
+                                    <span asp-validation-for="Zona"
+                                          class="text-danger">
+                                    </span>
+
+                                </div>
+
+
+                                <div class="col-md-3 mb-4">
+
+                                    <label asp-for="Tramo"
+                                           class="form-label">
+                                        Tramo
+                                    </label>
+
+                                    <input asp-for="Tramo"
+                                           class="form-control form-control-lg"
+                                           placeholder="Ej: Tramo 01"
+                                           autocomplete="off"
+                                           required />
+
+                                    <span asp-validation-for="Tramo"
+                                          class="text-danger">
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- ============================= -->
+                            <!-- INFORMACIÓN DEL VIAJE -->
+                            <!-- ============================= -->
+
+                            <h5 class="seccion-titulo">
+                                <span>3</span>
+                                Información del viaje
+                            </h5>
+
+
+                            <div class="row">
+
+                                <div class="col-md-6 mb-4">
+
+                                    <label asp-for="NumeroRecibo"
+                                           class="form-label">
+                                        Número de recibo
+                                    </label>
+
+                                    <input asp-for="NumeroRecibo"
+                                           class="form-control form-control-lg"
+                                           placeholder="Ingrese el número de recibo"
+                                           autocomplete="off"
+                                           required />
+
+                                    <span asp-validation-for="NumeroRecibo"
+                                          class="text-danger">
+                                    </span>
+
+                                </div>
+
+
+                                <div class="col-md-6 mb-4">
+
+                                    <label asp-for="Placa"
+                                           class="form-label">
+                                        Placa del vehículo
+                                    </label>
+
+                                    <input asp-for="Placa"
+                                           class="form-control form-control-lg placa-input"
+                                           placeholder="Ej: ABC123"
+                                           maxlength="10"
+                                           autocomplete="off"
+                                           required />
+
+                                    <span asp-validation-for="Placa"
+                                          class="text-danger">
+                                    </span>
+
+                                </div>
+
+
+                                <div class="col-md-6 mb-4">
+
+                                    <label asp-for="VolumenM3"
+                                           class="form-label">
+                                        Volumen (m³)
+                                    </label>
+
+                                    <div class="input-group input-group-lg">
+
+                                        <input asp-for="VolumenM3"
+                                               type="number"
+                                               step="0.01"
+                                               min="0"
+                                               class="form-control"
+                                               placeholder="Ej: 15.50"
+                                               required />
+
+                                        <span class="input-group-text">
+                                            m³
+                                        </span>
+
+                                    </div>
+
+                                    <span asp-validation-for="VolumenM3"
+                                          class="text-danger">
+                                    </span>
+
+                                </div>
+
+
+                                <div class="col-md-6 mb-4">
+
+                                    <label asp-for="Material"
+                                           class="form-label">
+                                        Material
+                                    </label>
+
+                                    <input asp-for="Material"
+                                           class="form-control form-control-lg"
+                                           placeholder="Ej: Material seleccionado"
+                                           autocomplete="off"
+                                           required />
+
+                                    <span asp-validation-for="Material"
+                                          class="text-danger">
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- ============================= -->
+                            <!-- HORARIOS -->
+                            <!-- ============================= -->
+
+                            <h5 class="seccion-titulo">
+                                <span>4</span>
+                                Horarios del viaje
+                            </h5>
+
+
+                            <div class="row">
+
+                                <div class="col-md-6 mb-4">
+
+                                    <label asp-for="HoraSalida"
+                                           class="form-label">
+                                        Hora de salida
+                                    </label>
+
+                                    <input asp-for="HoraSalida"
+                                           type="time"
+                                           class="form-control form-control-lg"
+                                           required />
+
+                                    <span asp-validation-for="HoraSalida"
+                                          class="text-danger">
+                                    </span>
+
+                                </div>
+
+
+                                <div class="col-md-6 mb-4">
+
+                                    <label asp-for="HoraLlegada"
+                                           class="form-label">
+                                        Hora de llegada
+                                    </label>
+
+                                    <input asp-for="HoraLlegada"
+                                           type="time"
+                                           class="form-control form-control-lg"
+                                           required />
+
+                                    <span asp-validation-for="HoraLlegada"
+                                          class="text-danger">
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- ============================= -->
+                            <!-- ORIGEN Y DESTINO -->
+                            <!-- ============================= -->
+
+                            <h5 class="seccion-titulo">
+                                <span>5</span>
+                                Origen y destino
+                            </h5>
+
+
+                            <div class="mb-4">
+
+                                <label asp-for="Origen"
+                                       class="form-label">
+                                    Origen
+                                </label>
+
+                                <input asp-for="Origen"
+                                       class="form-control form-control-lg"
+                                       placeholder="Ingrese el lugar de origen"
+                                       autocomplete="off"
+                                       required />
+
+                                <span asp-validation-for="Origen"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+
+                            <div class="row">
+
+                                <div class="col-md-6 mb-4">
+
+                                    <label asp-for="AbscisaDescargue"
+                                           class="form-label">
+                                        Abscisa de descargue
+                                    </label>
+
+                                    <input asp-for="AbscisaDescargue"
+                                           class="form-control form-control-lg"
+                                           placeholder="Ej: K12+350"
+                                           autocomplete="off"
+                                           required />
+
+                                    <span asp-validation-for="AbscisaDescargue"
+                                          class="text-danger">
+                                    </span>
+
+                                </div>
+
+
+                                <div class="col-md-6 mb-4">
+
+                                    <label asp-for="Destino"
+                                           class="form-label">
+                                        Destino
+                                    </label>
+
+                                    <input asp-for="Destino"
+                                           class="form-control form-control-lg"
+                                           placeholder="Ingrese el lugar de destino"
+                                           autocomplete="off"
+                                           required />
+
+                                    <span asp-validation-for="Destino"
+                                          class="text-danger">
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- ============================= -->
+                            <!-- EVIDENCIA -->
+                            <!-- ============================= -->
+
+                            <h5 class="seccion-titulo">
+                                <span>6</span>
+                                Evidencia de descarga
+                            </h5>
+
+
+                            <div class="evidencia-container mb-4">
+
+                                <label asp-for="EvidenciaDescarga"
+                                       class="form-label">
+
+                                    Fotografía de evidencia
+
+                                </label>
+
+                                <input type="file"
+                                       id="evidenciaDescarga"
+                                       name="evidenciaDescarga"
+                                       class="form-control form-control-lg"
+                                       accept="image/*"
+                                       capture="environment"
+                                       required />
+
+                                <small class="text-muted">
+                                    Puede seleccionar una fotografía o tomarla
+                                    directamente desde el dispositivo.
+                                </small>
+
+
+                                <!-- PREVISUALIZACIÓN -->
+
+                                <div id="previewContainer"
+                                     class="preview-container mt-3"
+                                     style="display:none;">
+
+                                    <img id="previewImagen"
+                                         src=""
+                                         alt="Vista previa"
+                                         class="preview-imagen" />
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- ============================= -->
+                            <!-- FECHA -->
+                            <!-- ============================= -->
+
+                            <h5 class="seccion-titulo">
+                                <span>7</span>
+                                Fecha del viaje
+                            </h5>
+
+
+                            <div class="mb-4">
+
+                                <label asp-for="Fecha"
+                                       class="form-label">
+                                    Fecha
+                                </label>
+
+                                <input asp-for="Fecha"
+                                       type="date"
+                                       class="form-control form-control-lg"
+                                       required />
+
+                                <span asp-validation-for="Fecha"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+
+                            <hr class="my-4" />
+
+
+                            <!-- ============================= -->
+                            <!-- RESUMEN -->
+                            <!-- ============================= -->
+
+                            <div class="alert alert-light resumen-formulario">
+
+                                <strong>
+                                    <i class="fa-solid fa-circle-info"></i>
+                                    Verifique la información
+                                </strong>
+
+                                <p class="mb-0 mt-2">
+                                    Antes de registrar el viaje, verifique que
+                                    los datos del recibidor, vehículo, material,
+                                    volumen, horarios, origen y destino sean
+                                    correctos.
+                                </p>
+
+                            </div>
+
+
+                            <!-- ============================= -->
+                            <!-- BOTÓN -->
+                            <!-- ============================= -->
+
+                            <button type="submit"
+                                    class="btn btn-industrial w-100"
+                                    id="btnGuardar">
+
+                                <span id="textoBoton">
+                                    REGISTRAR VIAJE DE MATERIAL
+                                </span>
+
+                            </button>
+
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11">
+    </script>
+
+
+    <script>
+
+        // ================================
+        // PREVISUALIZACIÓN DE LA IMAGEN
+        // ================================
+
+        const evidenciaInput =
+            document.getElementById('evidenciaDescarga');
+
+        const previewContainer =
+            document.getElementById('previewContainer');
+
+        const previewImagen =
+            document.getElementById('previewImagen');
+
+
+        evidenciaInput.addEventListener('change', function () {
+
+            const archivo = this.files[0];
+
+            if (!archivo) {
+
+                previewContainer.style.display = 'none';
+
+                previewImagen.src = '';
+
+                return;
+            }
+
+
+            if (!archivo.type.startsWith('image/')) {
+
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Archivo no válido',
+                    text: 'Debe seleccionar una imagen.'
+                });
+
+                this.value = '';
+
+                previewContainer.style.display = 'none';
+
+                return;
+            }
+
+
+            const reader = new FileReader();
+
+
+            reader.onload = function (e) {
+
+                previewImagen.src = e.target.result;
+
+                previewContainer.style.display = 'block';
+
+            };
+
+
+            reader.readAsDataURL(archivo);
+
+        });
+
+
+        // ================================
+        // MAYÚSCULAS PARA PLACA
+        // ================================
+
+        const placaInput =
+            document.querySelector('.placa-input');
+
+        if (placaInput) {
+
+            placaInput.addEventListener('input', function () {
+
+                this.value =
+                    this.value.toUpperCase();
+
+            });
+
+        }
+
+
+        // ================================
+        // EVITAR DOBLE ENVÍO
+        // ================================
+
+        const form =
+            document.getElementById('formViajeMaterial');
+
+        const btnGuardar =
+            document.getElementById('btnGuardar');
+
+        const textoBoton =
+            document.getElementById('textoBoton');
+
+
+        form.addEventListener('submit', function () {
+
+            btnGuardar.disabled = true;
+
+            textoBoton.innerHTML =
+                'REGISTRANDO VIAJE...';
+
+        });
+
+    </script>
+
+
+    @if (TempData["Exito"] != null)
+    {
+        <script>
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Viaje registrado',
+                text: '@TempData["Exito"]',
+                confirmButtonText: 'Aceptar'
+            });
+
+        </script>
+    }
+
+
+    @if (TempData["Error"] != null)
+    {
+        <script>
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: '@TempData["Error"]',
+                confirmButtonText: 'Aceptar'
+            });
+
+        </script>
+    }
+
+</body>
+
+</html>

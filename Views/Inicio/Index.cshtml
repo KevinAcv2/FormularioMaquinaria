@@ -25,7 +25,7 @@
     }
 
     .header-industrial {
-        background: #0f2f44; 
+        background: #0f2f44;
         padding: 35px;
         text-align: center;
         color: white;
@@ -47,6 +47,7 @@
         border-radius: 12px;
         padding: 12px;
         border: none;
+        transition: .3s;
     }
 
         .btn-industrial:hover {
@@ -60,18 +61,37 @@
         padding: 12px;
         font-size: 16px;
     }
+
+    .btn-recibidor {
+        background: #198754;
+        color: white;
+        border: none;
+        transition: .3s;
+    }
+
+        .btn-recibidor:hover {
+            background: #157347;
+            color: white;
+            transform: scale(1.02);
+        }
 </style>
 
 <div class="container vh-100 d-flex align-items-center justify-content-center">
 
-    <div class="card shadow-lg card-industrial text-center" style="max-width:600px;width:100%;">
+    <div class="card shadow-lg card-industrial text-center"
+         style="max-width:600px;width:100%;">
 
-        <!-- HEADER AZUL IGUAL AL REPORTE -->
+        <!-- HEADER -->
+
         <div class="header-industrial">
 
-            <img src="~/img/Logo.png" class="logo-empresa" />
+            <img src="~/img/Logo.png"
+                 class="logo-empresa"
+                 alt="Logo Empresa" />
 
-            <h1 class="fw-bold">AVENIDA DEL RÍO</h1>
+            <h1 class="fw-bold">
+                AVENIDA DEL RÍO
+            </h1>
 
             <p class="mb-0">
                 Sistema Web de Gestión de Maquinaria
@@ -79,19 +99,49 @@
 
         </div>
 
+
         <!-- CUERPO -->
+
         <div class="p-5">
 
             <p class="text-muted mb-4">
                 Bienvenido al sistema de control operacional
             </p>
 
-            <a href="/Reporte/Crear" class="btn btn-industrial w-100 mb-3">
-                <i class="fas fa-file-alt"></i> Registrar Reporte
+
+            <!-- OPERADOR -->
+
+            <a href="/Reporte/Crear"
+               class="btn btn-industrial w-100 mb-3">
+
+                <i class="fas fa-file-alt"></i>
+
+                Registrar Reporte
+
             </a>
 
-            <a href="/Login/Index" class="btn btn-primary btn-menu w-100">
-                <i class="fas fa-user-shield"></i> Administración
+
+            <!-- RECIBIDOR -->
+
+            <a href="/ViajeMaterial/Crear"
+               class="btn btn-recibidor btn-menu w-100 mb-3">
+
+                <i class="fas fa-truck-loading"></i>
+
+                Registrar Viaje de Material
+
+            </a>
+
+
+            <!-- ADMINISTRACIÓN -->
+
+            <a href="/Login/Index"
+               class="btn btn-primary btn-menu w-100">
+
+                <i class="fas fa-user-shield"></i>
+
+                Administración
+
             </a>
 
         </div>

@@ -12,7 +12,7 @@ RUN dotnet restore
 
 COPY . .
 
-RUN dotnet publish "FormularioMaquinaria.csproj" \
+RUN dotnet publish "    FormularioMaquinaria.csproj" \
     -c Release \
     -o /app/publish \
     /p:UseAppHost=false
@@ -23,7 +23,7 @@ RUN dotnet publish "FormularioMaquinaria.csproj" \
 # ============================
 
 FROM mcr.microsoft.com/dotnet/aspnet:10.0-preview
-
+    
 WORKDIR /app
 
 COPY --from=build /app/publish .

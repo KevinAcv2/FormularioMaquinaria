@@ -6,11 +6,21 @@ namespace Maquinarias.Data
 {
     public class AppDbContext : DbContext
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options): base(options)
+        public AppDbContext(
+            DbContextOptions<AppDbContext> options)
+            : base(options)
         {
         }
 
+
+        // =====================================================
+        // DBSETS
+        // =====================================================
+
+        public DbSet<ViajeMaterial> ViajesMateriales { get; set; }
+
         public DbSet<ReporteMaquinaria> ReportesMaquinaria { get; set; }
+
         public DbSet<Operador> Operadores { get; set; }
 
         public DbSet<Maquina> Maquinas { get; set; }
@@ -20,10 +30,21 @@ namespace Maquinarias.Data
         public DbSet<FrenteOperacional> FrentesOperacionales { get; set; }
 
         public DbSet<NovedadOperacion> NovedadesOperacion { get; set; }
+
         public DbSet<Notificacion> Notificaciones { get; set; }
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+
+
+        // =====================================================
+        // CONFIGURACIÓN DE MODELOS
+        // =====================================================
+
+        protected override void OnModelCreating(
+            ModelBuilder modelBuilder)
         {
-            // Relación Operador -> Máquina
+            // =================================================
+            // RELACIÓN OPERADOR -> MÁQUINA
+            // =================================================
+
             modelBuilder.Entity<Operador>()
                 .HasOne(o => o.Maquina)
                 .WithMany()
@@ -31,7 +52,10 @@ namespace Maquinarias.Data
                 .OnDelete(DeleteBehavior.SetNull);
 
 
-            // Relación Operador -> Frente Operacional
+            // =================================================
+            // RELACIÓN OPERADOR -> FRENTE OPERACIONAL
+            // =================================================
+
             modelBuilder.Entity<Operador>()
                 .HasOne(o => o.FrenteOperacional)
                 .WithMany(f => f.Operadores)
@@ -39,14 +63,22 @@ namespace Maquinarias.Data
                 .OnDelete(DeleteBehavior.Restrict);
 
 
-            // Relación Evaluación -> Reporte
+            // =================================================
+            // RELACIÓN EVALUACIÓN -> REPORTE
+            // =================================================
+
             modelBuilder.Entity<EvaluacionOperador>()
                 .HasOne(e => e.Reporte)
                 .WithOne(r => r.Evaluacion)
-                .HasForeignKey<EvaluacionOperador>(e => e.ReporteMaquinariaId)
+                .HasForeignKey<EvaluacionOperador>(
+                    e => e.ReporteMaquinariaId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Relación Reporte -> Novedades
+
+            // =================================================
+            // RELACIÓN REPORTE -> NOVEDADES
+            // =================================================
+
             modelBuilder.Entity<NovedadOperacion>()
                 .HasOne(n => n.Reporte)
                 .WithMany(r => r.Novedades)
@@ -54,32 +86,64 @@ namespace Maquinarias.Data
                 .OnDelete(DeleteBehavior.Cascade);
 
 
-            // Datos iniciales de Frentes Operacionales
-            modelBuilder.Entity<FrenteOperacional>().HasData(
+            // =================================================
+            // RELACIÓN VIAJE MATERIAL -> FRENTE OPERACIONAL
+            // =================================================
 
-                new FrenteOperacional
-                {
-                    Id = 1,
-                    Nombre = "FRENTE PADEL"
-                },
+            modelBuilder.Entity<ViajeMaterial>()
+                .HasOne(v => v.FrenteOperacional)
+                .WithMany()
+                .HasForeignKey(v => v.FrenteOperacionalId)
+                .OnDelete(DeleteBehavior.Restrict);
 
-                new FrenteOperacional
-                {
-                    Id = 2,
-                    Nombre = "FRENTE PANAMÁ"
-                },
 
-                new FrenteOperacional
-                {
-                    Id = 3,
-                    Nombre = "CANTERA RIO SECO"
-                }
+            // =================================================
+            // CONFIGURACIÓN DE VIAJE MATERIAL
+            // =================================================
 
-            );
+            modelBuilder.Entity<ViajeMaterial>()
+                .Property(v => v.VolumenM3)
+                .HasColumnType("numeric(18,2)");
 
+
+            modelBuilder.Entity<ViajeMaterial>()
+                .Property(v => v.Fecha)
+                .HasColumnType("timestamp with time zone");
+
+
+            // =================================================
+            // DATOS INICIALES DE FRENTES OPERACIONALES
+            // =================================================
+
+            modelBuilder.Entity<FrenteOperacional>()
+                .HasData(
+
+                    new FrenteOperacional
+                    {
+                        Id = 1,
+                        Nombre = "FRENTE PADEL"
+                    },
+
+                    new FrenteOperacional
+                    {
+                        Id = 2,
+                        Nombre = "FRENTE PANAMÁ"
+                    },
+
+                    new FrenteOperacional
+                    {
+                        Id = 3,
+                        Nombre = "CANTERA RIO SECO"
+                    }
+
+                );
+
+
+            // =================================================
+            // BASE
+            // =================================================
 
             base.OnModelCreating(modelBuilder);
         }
-
     }
 }
