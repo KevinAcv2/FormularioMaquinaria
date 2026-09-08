@@ -5,6 +5,9 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 	</PropertyGroup>
 	<ItemGroup>
+	  <Content Remove="wwwroot\img\Logo.png %281%29.jpeg" />
+	</ItemGroup>
+	<ItemGroup>
 		<PackageReference Include="ClosedXML" Version="0.105.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.8" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.8">

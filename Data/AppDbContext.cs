@@ -12,39 +12,32 @@ namespace Maquinarias.Data
         {
         }
 
-
-        // =====================================================
-        // DBSETS
-        // =====================================================
-
         public DbSet<ViajeMaterial> ViajesMateriales { get; set; }
-
+        public DbSet<Recibidor> Recibidores { get; set; }
         public DbSet<ReporteMaquinaria> ReportesMaquinaria { get; set; }
-
         public DbSet<Operador> Operadores { get; set; }
-
         public DbSet<Maquina> Maquinas { get; set; }
-
         public DbSet<EvaluacionOperador> EvaluacionesOperadores { get; set; }
-
         public DbSet<FrenteOperacional> FrentesOperacionales { get; set; }
-
         public DbSet<NovedadOperacion> NovedadesOperacion { get; set; }
-
         public DbSet<Notificacion> Notificaciones { get; set; }
 
-
-        // =====================================================
-        // CONFIGURACIÓN DE MODELOS
-        // =====================================================
 
         protected override void OnModelCreating(
             ModelBuilder modelBuilder)
         {
-            // =================================================
-            // RELACIÓN OPERADOR -> MÁQUINA
-            // =================================================
+            ConfigurarOperador(modelBuilder);
+            ConfigurarEvaluacionOperador(modelBuilder);
+            ConfigurarNovedadOperacion(modelBuilder);
+            ConfigurarViajeMaterial(modelBuilder);
+            ConfigurarDatosIniciales(modelBuilder);
 
+            base.OnModelCreating(modelBuilder);
+        }
+
+        private static void ConfigurarOperador(
+            ModelBuilder modelBuilder)
+        {
             modelBuilder.Entity<Operador>()
                 .HasOne(o => o.Maquina)
                 .WithMany()
@@ -52,44 +45,37 @@ namespace Maquinarias.Data
                 .OnDelete(DeleteBehavior.SetNull);
 
 
-            // =================================================
-            // RELACIÓN OPERADOR -> FRENTE OPERACIONAL
-            // =================================================
-
             modelBuilder.Entity<Operador>()
                 .HasOne(o => o.FrenteOperacional)
                 .WithMany(f => f.Operadores)
                 .HasForeignKey(o => o.FrenteOperacionalId)
                 .OnDelete(DeleteBehavior.Restrict);
+        }
 
-
-            // =================================================
-            // RELACIÓN EVALUACIÓN -> REPORTE
-            // =================================================
-
+        private static void ConfigurarEvaluacionOperador(
+            ModelBuilder modelBuilder)
+        {
             modelBuilder.Entity<EvaluacionOperador>()
                 .HasOne(e => e.Reporte)
                 .WithOne(r => r.Evaluacion)
                 .HasForeignKey<EvaluacionOperador>(
                     e => e.ReporteMaquinariaId)
                 .OnDelete(DeleteBehavior.Cascade);
+        }
 
-
-            // =================================================
-            // RELACIÓN REPORTE -> NOVEDADES
-            // =================================================
-
+        private static void ConfigurarNovedadOperacion(
+            ModelBuilder modelBuilder)
+        {
             modelBuilder.Entity<NovedadOperacion>()
                 .HasOne(n => n.Reporte)
                 .WithMany(r => r.Novedades)
                 .HasForeignKey(n => n.ReporteMaquinariaId)
                 .OnDelete(DeleteBehavior.Cascade);
+        }
 
-
-            // =================================================
-            // RELACIÓN VIAJE MATERIAL -> FRENTE OPERACIONAL
-            // =================================================
-
+        private static void ConfigurarViajeMaterial(
+            ModelBuilder modelBuilder)
+        {
             modelBuilder.Entity<ViajeMaterial>()
                 .HasOne(v => v.FrenteOperacional)
                 .WithMany()
@@ -97,9 +83,12 @@ namespace Maquinarias.Data
                 .OnDelete(DeleteBehavior.Restrict);
 
 
-            // =================================================
-            // CONFIGURACIÓN DE VIAJE MATERIAL
-            // =================================================
+            modelBuilder.Entity<ViajeMaterial>()
+                .HasOne(v => v.Recibidor)
+                .WithMany(r => r.ViajesMaterial)
+                .HasForeignKey(v => v.RecibidorId)
+                .OnDelete(DeleteBehavior.Restrict);
+
 
             modelBuilder.Entity<ViajeMaterial>()
                 .Property(v => v.VolumenM3)
@@ -109,12 +98,12 @@ namespace Maquinarias.Data
             modelBuilder.Entity<ViajeMaterial>()
                 .Property(v => v.Fecha)
                 .HasColumnType("timestamp with time zone");
+        }
 
 
-            // =================================================
-            // DATOS INICIALES DE FRENTES OPERACIONALES
-            // =================================================
-
+        private static void ConfigurarDatosIniciales(
+            ModelBuilder modelBuilder)
+        {
             modelBuilder.Entity<FrenteOperacional>()
                 .HasData(
 
@@ -137,13 +126,6 @@ namespace Maquinarias.Data
                     }
 
                 );
-
-
-            // =================================================
-            // BASE
-            // =================================================
-
-            base.OnModelCreating(modelBuilder);
         }
     }
 }

@@ -1,6 +1,7 @@
 using Maquinarias.Data;
 using Microsoft.EntityFrameworkCore;
 using Maquinarias.Services;
+using FormularioMaquinaria.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -60,7 +61,26 @@ app.MapControllerRoute(
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
     db.Database.Migrate();
+
+    if (!db.Recibidores.Any())
+    {
+        db.Recibidores.AddRange(
+            new Recibidor
+            {
+                Nombre = "JORGE PEREZ",
+                Habilitado = true
+            },
+            new Recibidor
+            {
+                Nombre = "JAVIER FONTALVO",
+                Habilitado = true
+            }
+        );
+
+        db.SaveChanges();
+    }
 }
 
 app.Run();
