@@ -51,7 +51,7 @@ namespace Maquinarias.Controllers
             IFormFile? EvidenciaNovedad,
             string? NovedadesJson)
         {
-            // Solo exigir fotos si la máquina está operativa
+            // Solo exigir fotos si la máquina está operativa (1 = Operativa)
             if (reporte.EstadoMaquina == 1)
             {
                 if (fotoInicial == null || fotoFinal == null)
@@ -59,6 +59,7 @@ namespace Maquinarias.Controllers
                     ModelState.AddModelError("", "Las fotos son obligatorias.");
                 }
             }
+
             if (!ModelState.IsValid)
             {
                 var errores = ModelState
@@ -116,17 +117,15 @@ namespace Maquinarias.Controllers
                 await _context.SaveChangesAsync();
 
                 // Guardar novedades del reporte
-
                 if (!string.IsNullOrWhiteSpace(NovedadesJson))
                 {
                     var novedades = JsonSerializer.Deserialize<List<NovedadOperacion>>(NovedadesJson);
-                                     
+
                     if (novedades != null)
                     {
                         foreach (var novedad in novedades)
                         {
                             novedad.Id = 0;
-
                             novedad.ReporteMaquinariaId = reporte.Id;
 
                             // Guardar la ruta de la evidencia
@@ -139,32 +138,56 @@ namespace Maquinarias.Controllers
                     }
                 }
 
-                // Crear notificación si el reporte tiene novedades
-                if (!string.IsNullOrWhiteSpace(NovedadesJson))
+                // =========================================================
+                // CREAR NOTIFICACIÓN Y ALERTA PARA LA CAMPANA
+                // =========================================================
+                if (!string.IsNullOrWhiteSpace(NovedadesJson) || reporte.EstadoMaquina == 0)
                 {
+                    string tituloNotif = reporte.EstadoMaquina == 0 ? "⚠️ ¡Máquina No Operativa!" : "Nueva novedad registrada";
+                    string mensajeNotif = reporte.EstadoMaquina == 0
+                        ? $"El operador {reporte.NombreOperador} reportó el equipo {reporte.NombreMaquina} como NO OPERATIVO."
+                        : $"{reporte.NombreOperador} reportó una novedad en la máquina {reporte.NombreMaquina}.";
+
                     var notificacion = new Notificacion
                     {
-                        Titulo = "Nueva novedad registrada",
-                        Mensaje = $"{reporte.NombreOperador} reportó una novedad en la máquina {reporte.NombreMaquina}.",
+                        Titulo = tituloNotif,
+                        Mensaje = mensajeNotif,
                         ReporteMaquinariaId = reporte.Id,
                         Fecha = DateTime.UtcNow,
                         Leida = false
                     };
 
                     _context.Notificaciones.Add(notificacion);
-
                     await _context.SaveChangesAsync();
+
+                    // Guardamos en TempData para que la vista ejecute el sonido y vibración de la campana
+                    TempData["AlertaNotificacion"] = mensajeNotif;
+                    TempData["TituloAlerta"] = tituloNotif;
                 }
 
-                // Actualizar el estado actual de la máquina
-                var maquina = await _context.Maquinas
-                    .FirstOrDefaultAsync(m => m.Nombre == reporte.NombreMaquina);
-
-                if (maquina != null)
+                // =========================================================
+                // ACTUALIZACIÓN DE ESTADO DE LA MÁQUINA (CORREGIDA)
+                // =========================================================
+                if (!string.IsNullOrWhiteSpace(reporte.NombreMaquina))
                 {
-                    maquina.Estado = reporte.EstadoMaquina.ToString();
+                    string nombreReportado = reporte.NombreMaquina.Trim().ToLower();
 
-                    await _context.SaveChangesAsync();
+                    // Busca coincidencia exacta O parcial en caso de concatenación
+                    var maquina = await _context.Maquinas
+                        .FirstOrDefaultAsync(m => m.Nombre != null &&
+                            (m.Nombre.Trim().ToLower() == nombreReportado ||
+                             nombreReportado.Contains(m.Nombre.Trim().ToLower()) ||
+                             m.Nombre.Trim().ToLower().Contains(nombreReportado)));
+
+                    if (maquina != null)
+                    {
+                        // En MaquinasController tu regla de negocio es:
+                        // "1" = OPERATIVA | "0" = NO OPERATIVA
+                        maquina.Estado = reporte.EstadoMaquina == 1 ? "1" : "0";
+
+                        _context.Maquinas.Update(maquina);
+                        await _context.SaveChangesAsync();
+                    }
                 }
 
                 TempData["Exito"] = "Reporte enviado correctamente.";

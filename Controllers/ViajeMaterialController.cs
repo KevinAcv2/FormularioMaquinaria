@@ -1,9 +1,12 @@
-﻿using System.Text.RegularExpressions;
-using FormularioMaquinaria.Models;
+﻿using FormularioMaquinaria.Models;
+using FormularioMaquinaria.Pdf;
 using Maquinarias.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Text.RegularExpressions;
+using QuestPDF.Fluent;
+using QuestPDF.Infrastructure;
 
 namespace Maquinarias.Controllers
 {
@@ -18,6 +21,21 @@ namespace Maquinarias.Controllers
         {
             _context = context;
             _environment = environment;
+        }
+
+        // --- AQUÍ PEGAS TU MÉTODO DE EXPORTAR PDF ---
+        [HttpGet]
+        public async Task<IActionResult> ExportarPdf()
+        {
+            var viajes = await _context.ViajesMateriales
+                .Include(v => v.Recibidor)
+                .Include(v => v.FrenteOperacional)
+                .OrderByDescending(v => v.Fecha)
+                .ToListAsync();
+
+            var documento = ViajeMaterialPdf.Generar(viajes);
+
+            return File(documento.GeneratePdf(), "application/pdf", "ReporteViajesMaterial.pdf");
         }
 
         // ============================================================

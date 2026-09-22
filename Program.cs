@@ -2,6 +2,9 @@ using Maquinarias.Data;
 using Microsoft.EntityFrameworkCore;
 using Maquinarias.Services;
 using FormularioMaquinaria.Models;
+using QuestPDF.Infrastructure; 
+
+QuestPDF.Settings.License = LicenseType.Community;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,7 +40,6 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
 
 builder.Services.AddSession();
-
 builder.Services.AddHttpClient<OcrService>();
 
 var app = builder.Build();

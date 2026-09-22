@@ -281,25 +281,66 @@
                                 Hora del viaje
                             </h5>
 
-                            <div class="row">
+                            <div class="col-md-6 mb-4">
 
-                                <div class="col-md-6 mb-4">
+                                <label asp-for="HoraLlegada"
+                                       class="form-label">
 
-                                    <label asp-for="HoraLlegada"
-                                           class="form-label">
-                                        Hora de llegada
-                                    </label>
+                                    Hora de llegada
 
-                                    <input asp-for="HoraLlegada"
-                                           type="time"
-                                           class="form-control form-control-lg"
-                                           required />
+                                </label>
 
-                                    <span asp-validation-for="HoraLlegada"
-                                          class="text-danger">
-                                    </span>
+                                <div class="row g-2">
+
+                                    <!-- HORA -->
+
+                                    <div class="col-8">
+
+                                        <input type="time"
+                                               id="HoraLlegada"
+                                               class="form-control form-control-lg"
+                                               required />
+
+                                    </div>
+
+
+                                    <!-- AM / PM -->
+
+                                    <div class="col-4">
+
+                                        <select id="PeriodoHora"
+                                                class="form-select form-select-lg"
+                                                required>
+
+                                            <option value="">
+                                                AM/PM
+                                            </option>
+
+                                            <option value="AM">
+                                                AM
+                                            </option>
+
+                                            <option value="PM">
+                                                PM
+                                            </option>
+
+                                        </select>
+
+                                    </div>
 
                                 </div>
+
+
+                                <!-- CAMPO QUE SE ENVÍA AL MODELO -->
+
+                                <input asp-for="HoraLlegada"
+                                       type="hidden"
+                                       id="HoraLlegadaFinal" />
+
+
+                                <span asp-validation-for="HoraLlegada"
+                                      class="text-danger">
+                                </span>
 
                             </div>
 
@@ -458,96 +499,241 @@
 
     <script>
 
-        const evidenciaInput =
-            document.getElementById('evidenciaDescarga');
+            // =========================================================
+            // VISTA PREVIA DE LA EVIDENCIA
+            // =========================================================
 
-        const previewContainer =
-            document.getElementById('previewContainer');
+            const evidenciaInput =
+                document.getElementById('evidenciaDescarga');
 
-        const previewImagen =
-            document.getElementById('previewImagen');
+            const previewContainer =
+                document.getElementById('previewContainer');
 
-
-        evidenciaInput.addEventListener('change', function () {
-
-            const archivo = this.files[0];
-
-            if (!archivo) {
-
-                previewContainer.style.display = 'none';
-                previewImagen.src = '';
-
-                return;
-            }
+            const previewImagen =
+                document.getElementById('previewImagen');
 
 
-            if (!archivo.type.startsWith('image/')) {
+            if (evidenciaInput) {
 
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Archivo no válido',
-                    text: 'Debe seleccionar una imagen.'
+                evidenciaInput.addEventListener('change', function() {
+
+                    const archivo = this.files[0];
+
+                    if (!archivo) {
+
+                        previewContainer.style.display = 'none';
+                        previewImagen.src = '';
+
+                        return;
+                    }
+
+
+                    if (!archivo.type.startsWith('image/')) {
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Archivo no válido',
+                            text: 'Debe seleccionar una imagen.'
+                        });
+
+                        this.value = '';
+
+                        previewContainer.style.display = 'none';
+
+                        return;
+                    }
+
+
+                    const reader = new FileReader();
+
+                    reader.onload = function(e) {
+
+                        previewImagen.src = e.target.result;
+
+                        previewContainer.style.display = 'block';
+
+                    };
+
+                    reader.readAsDataURL(archivo);
+
                 });
 
-                this.value = '';
-                previewContainer.style.display = 'none';
-
-                return;
             }
 
 
-            const reader = new FileReader();
+            // =========================================================
+            // CONVERTIR PLACA A MAYÚSCULAS
+            // =========================================================
 
-            reader.onload = function (e) {
+            const placaInput =
+                document.getElementById('placa');
 
-                previewImagen.src = e.target.result;
-                previewContainer.style.display = 'block';
+            if (placaInput) {
 
-            };
+                placaInput.addEventListener('input', function() {
 
-            reader.readAsDataURL(archivo);
+                    this.value = this.value.toUpperCase();
 
-        });
+                });
 
-
-        const placaInput =
-            document.getElementById('placa');
-
-        placaInput.addEventListener('input', function () {
-
-            this.value = this.value.toUpperCase();
-
-        });
+            }
 
 
-        const numeroReciboInput =
-            document.getElementById('numeroRecibo');
+            // =========================================================
+            // NÚMERO DE RECIBO - SOLO NÚMEROS
+            // =========================================================
 
-        numeroReciboInput.addEventListener('input', function () {
+            const numeroReciboInput =
+                document.getElementById('numeroRecibo');
 
-            this.value = this.value.replace(/\D/g, '');
+            if (numeroReciboInput) {
 
-        });
+                numeroReciboInput.addEventListener('input', function() {
 
+                    this.value = this.value.replace(/\D/g, '');
 
-        const form =
-            document.getElementById('formViajeMaterial');
+                });
 
-        const btnGuardar =
-            document.getElementById('btnGuardar');
-
-        const textoBoton =
-            document.getElementById('textoBoton');
+            }
 
 
-        form.addEventListener('submit', function () {
+            // =========================================================
+            // HORA DE LLEGADA - AM / PM
+            // =========================================================
 
-            btnGuardar.disabled = true;
+            const horaLlegadaInput =
+                document.getElementById('HoraLlegada');
 
-            textoBoton.textContent =
-                'REGISTRANDO VIAJE...';
+            const periodoHoraInput =
+                document.getElementById('PeriodoHora');
 
-        });
+            const horaLlegadaFinal =
+                document.getElementById('HoraLlegadaFinal');
+
+
+            // =========================================================
+            // FORMULARIO
+            // =========================================================
+
+            const form =
+                document.getElementById('formViajeMaterial');
+
+            const btnGuardar =
+                document.getElementById('btnGuardar');
+
+            const textoBoton =
+                document.getElementById('textoBoton');
+
+
+            if (form) {
+
+                form.addEventListener('submit', function(event) {
+
+
+                    // =================================================
+                    // VALIDAR Y CONVERTIR HORA AM / PM
+                    // =================================================
+
+                    if (
+                        horaLlegadaInput &&
+                        periodoHoraInput &&
+                        horaLlegadaFinal
+                    ) {
+
+                        const hora =
+                            horaLlegadaInput.value;
+
+                        const periodo =
+                            periodoHoraInput.value;
+
+
+                        if (!hora || !periodo) {
+
+                            event.preventDefault();
+
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Hora incompleta',
+                                text: 'Debe seleccionar la hora y especificar si es AM o PM.'
+                            });
+
+                            return;
+                        }
+
+
+                        const partes =
+                            hora.split(':');
+
+
+                        let horas =
+                            parseInt(partes[0]);
+
+                        const minutos =
+                            partes[1];
+
+
+                        // =============================================
+                        // CONVERSIÓN DE AM
+                        // =============================================
+
+                        if (periodo === 'AM') {
+
+                            if (horas === 12) {
+
+                                horas = 0;
+
+                            }
+
+                        }
+
+
+                        // =============================================
+                        // CONVERSIÓN DE PM
+                        // =============================================
+
+                        if (periodo === 'PM') {
+
+                            if (horas !== 12) {
+
+                                horas += 12;
+
+                            }
+
+                        }
+
+
+                        // =============================================
+                        // GUARDAR EN FORMATO DE 24 HORAS
+                        // =============================================
+
+                        const horaConvertida =
+                            String(horas).padStart(2, '0')
+                            + ':'
+                            + minutos;
+
+
+                        horaLlegadaFinal.value =
+                            horaConvertida;
+
+                    }
+
+
+                    // =================================================
+                    // DESHABILITAR BOTÓN AL GUARDAR
+                    // =================================================
+
+                    if (btnGuardar && textoBoton) {
+
+                        btnGuardar.disabled = true;
+
+                        textoBoton.textContent =
+                            'REGISTRANDO VIAJE...';
+
+                    }
+
+                });
+
+            }
 
     </script>
 

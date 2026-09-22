@@ -6,11 +6,11 @@ namespace FormularioMaquinaria.Pdf
 {
     public static class PdfTemplate
     {
-    public static Document Crear(
-        string titulo,
-        string subtitulo,
-        string logoPath,
-        Action<IContainer> contenido)
+    public static IDocument Crear(
+            string titulo,
+            string subtitulo,
+            string logoPath,
+            Action<IContainer> contenido)
         {
             var encabezado = Path.Combine(
                 Directory.GetCurrentDirectory(),

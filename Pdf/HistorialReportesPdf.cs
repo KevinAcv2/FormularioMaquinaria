@@ -8,7 +8,7 @@ namespace FormularioMaquinaria.Pdf
 {
     public static class HistorialReportesPdf
     {
-        public static Document Generar(
+        public static IDocument Generar(
             List<ReporteMaquinaria> reportes,
             string logoPath)
         {

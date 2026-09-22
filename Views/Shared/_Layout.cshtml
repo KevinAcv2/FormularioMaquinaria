@@ -35,27 +35,19 @@
                     type="button"
                     class="btn-cerrar-sidebar"
                     aria-label="Cerrar menú">
-
                 <i class="fa-solid fa-xmark"></i>
-
             </button>
 
             <!-- LOGO -->
             <div class="sidebar-header">
-
                 <div class="sidebar-logo">
                     <i class="fa-solid fa-truck-monster"></i>
                 </div>
-
                 <h4>MAQUINARIAS</h4>
-
-                <small>
-                    Sistema de Gestión
-                </small>
-
+                <small>Sistema de Gestión</small>
             </div>
 
-            <hr/>
+            <hr />
 
             <!-- MENÚ -->
             <ul class="nav flex-column">
@@ -64,10 +56,8 @@
                     <a asp-controller="Admin"
                        asp-action="Index"
                        class="nav-link">
-
                         <i class="fa-solid fa-house"></i>
                         <span>Dashboard</span>
-
                     </a>
                 </li>
 
@@ -75,10 +65,8 @@
                     <a asp-controller="Operadores"
                        asp-action="Index"
                        class="nav-link">
-
                         <i class="fa-solid fa-user-gear"></i>
                         <span>Operadores</span>
-
                     </a>
                 </li>
 
@@ -86,10 +74,8 @@
                     <a asp-controller="Maquinas"
                        asp-action="Index"
                        class="nav-link">
-
                         <i class="fa-solid fa-truck-monster"></i>
-                        <span>Maquinaria</span>
-
+                        <span>Equipos</span>
                     </a>
                 </li>
 
@@ -97,10 +83,8 @@
                     <a asp-controller="Reporte"
                        asp-action="Historial"
                        class="nav-link">
-
                         <i class="fa-solid fa-folder-open"></i>
-                        <span>Historial</span>
-
+                        <span>Reporte Maquinaria</span>
                     </a>
                 </li>
 
@@ -108,10 +92,8 @@
                     <a asp-controller="ViajeMaterial"
                        asp-action="Reporte"
                        class="nav-link">
-
                         <i class="fa-solid fa-truck"></i>
-                        <span>Viajes de Material</span>
-
+                        <span>Reporte de Viajes</span>
                     </a>
                 </li>
 
@@ -119,10 +101,8 @@
                     <a asp-controller="Estadisticas"
                        asp-action="Index"
                        class="nav-link">
-
                         <i class="fa-solid fa-chart-column"></i>
                         <span>Estadísticas</span>
-
                     </a>
                 </li>
 
@@ -130,10 +110,8 @@
                     <a asp-controller="Login"
                        asp-action="Index"
                        class="nav-link">
-
                         <i class="fa-solid fa-right-from-bracket"></i>
                         <span>Cerrar sesión</span>
-
                     </a>
                 </li>
 
@@ -151,48 +129,91 @@
                         class="btn-menu"
                         type="button"
                         aria-label="Abrir menú">
-
                     <i class="fa-solid fa-bars"></i>
-
                 </button>
 
                 <!-- NOMBRE -->
                 <div class="mobile-brand">
-                    <strong>MAQUINARIAS</strong>
+                    <strong>DASHBOARD</strong>
                 </div>
 
                 <!-- PARTE DERECHA -->
-                <div class="navbar-right">
+                <div class="navbar-right d-flex align-items-center gap-3">
 
-                    @await Component.InvokeAsync("Alertas")
+                    <!-- CAMPANA DE NOTIFICACIONES INTERACTIVA -->
+                    <div class="dropdown" id="contenedorCampana">
+                        <button class="btn btn-light rounded-circle shadow-sm position-relative d-flex align-items-center justify-content-center"
+                                type="button"
+                                id="dropdownCampana"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                                style="width: 42px; height: 42px; border: 1px solid #eaeaea;"
+                                title="Notificaciones">
+                            <i class="fa-solid fa-bell text-secondary" id="iconoCampana" style="font-size: 18px;"></i>
+                            
+                            <!-- Badge contador flotante -->
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                                  id="contadorNotificaciones"
+                                  style="display: none; font-size: 10px; border: 2px solid #fff;">
+                                0
+                            </span>
+                        </button>
 
-                    <img src="https://ui-avatars.com/api/?name=Administrador&background=0f2f44&color=fff"
-                         class="rounded-circle shadow"
-                         width="38"
-                         alt="Administrador">
+                        <!-- Menú desplegable de notificaciones -->
+                        <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 mt-2 p-0"
+                            aria-labelledby="dropdownCampana"
+                            style="width: 320px; border-radius: 14px; overflow: hidden;">
+                            
+                            <li class="p-3 bg-light border-bottom d-flex justify-content-between align-items-center">
+                                <span class="fw-bold text-dark m-0" style="font-size: 14px;">
+                                    <i class="fa-solid fa-bell text-primary me-1"></i> Notificaciones
+                                </span>
+                                <span class="badge bg-primary rounded-pill" id="badgeTotalNotif" style="font-size: 11px;">0 nuevas</span>
+                            </li>
 
-                    <div class="user-info">
+                            <div id="listaNotificaciones" style="max-height: 280px; overflow-y: auto;">
+                                <li class="p-4 text-center text-muted small">
+                                    <i class="fa-solid fa-check-circle fa-2x mb-2 text-success opacity-50"></i>
+                                    <p class="mb-0">No hay notificaciones pendientes</p>
+                                </li>
+                            </div>
+                            
+                            <li class="p-2 bg-light text-center border-top">
+                                <a href="javascript:void(0);" class="text-decoration-none small fw-semibold text-primary" onclick="marcarTodasLeidas()">
+                                    Marcar todo como leído
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
 
-                        <strong>
-                            Administrador
-                        </strong>
+                    <!-- AUDIO OCULTO PARA ALERTA -->
+                    <audio id="audioNotificacion" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
 
-                        <small>
-                            En línea
-                        </small>
+                    <!-- AVATAR Y DATOS DEL ADMINISTRADOR -->
+                    <div class="d-flex align-items-center gap-2 border-start ps-3">
+                        <img src="https://ui-avatars.com/api/?name=Administrador&background=0f2f44&color=fff"
+                             class="rounded-circle shadow-sm"
+                             width="38"
+                             height="38"
+                             alt="Administrador">
 
+                        <div class="user-info d-none d-sm-block">
+                            <strong class="d-block text-dark" style="font-size: 14px; line-height: 1.2;">
+                                Administrador
+                            </strong>
+                            <small class="text-success fw-semibold" style="font-size: 11px;">
+                                ● En línea
+                            </small>
+                        </div>
                     </div>
 
                 </div>
 
             </nav>
 
-
             <!-- CONTENIDO DE LA VISTA -->
             <main id="contenidoPrincipal">
-
                 @RenderBody()
-
             </main>
 
         </div>
@@ -200,50 +221,33 @@
     </div>
 
     <!-- MODAL DETALLE NOTIFICACIÓN -->
-
     <div class="modal fade"
          id="modalNotificacion"
          tabindex="-1">
-
         <div class="modal-dialog modal-xl modal-dialog-centered">
-
             <div class="modal-content">
-
                 <div class="modal-header">
-
                     <h5 class="modal-title"
                         id="tituloModalNotificacion">
                     </h5>
-
                     <button class="btn-close"
                             data-bs-dismiss="modal">
                     </button>
-
                 </div>
-
                 <div class="modal-body">
-
                     <div id="contenidoNotificacion">
                     </div>
-
                 </div>
-
             </div>
-
         </div>
-
     </div>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
     <script src="~/js/site.js"
             asp-append-version="true"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
-
 </body>
 </html>

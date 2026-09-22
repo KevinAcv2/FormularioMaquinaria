@@ -6,7 +6,7 @@ namespace FormularioMaquinaria.Pdf
 {
     public static class ReporteDetallePdf
     {
-        public static Document Generar(
+        public static IDocument Generar(
             ReporteMaquinaria reporte,
             string logoPath)
         {

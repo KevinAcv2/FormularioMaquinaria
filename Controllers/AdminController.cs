@@ -978,5 +978,35 @@ namespace Maquinarias.Controllers
                             novedad.EvidenciaFin)
             });
         }
+
+        [HttpGet]
+        public async Task<IActionResult> ObtenerNotificacionesPendientes()
+        {
+            var notificaciones = await _context.Notificaciones
+                .Where(n => !n.Leida)
+                .OrderByDescending(n => n.Fecha)
+                .Select(n => new {
+                    n.Id,
+                    n.Titulo,
+                    n.Mensaje,
+                    n.ReporteMaquinariaId,
+                    Fecha = n.Fecha.ToLocalTime().ToString("dd/MM/yyyy hh:mm tt")
+                })
+                .ToListAsync();
+
+            return Json(notificaciones);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> MarcarNotificacionesLeidas()
+        {
+            var noLeidas = await _context.Notificaciones.Where(n => !n.Leida).ToListAsync();
+            foreach (var n in noLeidas)
+            {
+                n.Leida = true;
+            }
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
     }
 }

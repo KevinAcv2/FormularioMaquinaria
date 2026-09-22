@@ -426,3 +426,165 @@ main {
         color: white;
     }
 
+
+/* =========================================================
+   FILTROS - REPORTE DE VIAJES DE MATERIAL
+========================================================= */
+
+.viajes-filtros {
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   GRID DE FILTROS
+========================================================= */
+
+.viajes-filtros-grid {
+    display: grid;
+    grid-template-columns: minmax(260px, 2fr) minmax(180px, 1fr) minmax(180px, 1fr) minmax(160px, 1fr) minmax(160px, 1fr);
+    gap: 15px;
+    align-items: end;
+}
+
+
+/* =========================================================
+   LABELS
+========================================================= */
+
+.viajes-filtros .form-label {
+    display: block;
+    margin-bottom: 7px;
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   CONTROLES
+========================================================= */
+
+.viajes-filtros .form-control,
+.viajes-filtros .form-select {
+    width: 100%;
+    min-width: 0;
+    height: 48px;
+}
+
+
+/* =========================================================
+   CAMPOS DE FECHA
+========================================================= */
+
+.fecha-viaje {
+    min-width: 0 !important;
+    padding-left: 12px !important;
+    padding-right: 10px !important;
+}
+
+
+/* =========================================================
+   BOTONES
+========================================================= */
+
+.viajes-botones {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+
+    .viajes-botones .btn {
+        min-width: 115px;
+        height: 44px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+
+/* =========================================================
+   PANTALLAS MEDIANAS
+========================================================= */
+
+@media (max-width: 1400px) {
+
+    .viajes-filtros-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+
+/* =========================================================
+   TABLETS
+========================================================= */
+
+@media (max-width: 992px) {
+
+    .viajes-filtros-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+
+/* =========================================================
+   CELULARES
+========================================================= */
+
+@media (max-width: 576px) {
+
+    .viajes-filtros-grid {
+        grid-template-columns: 1fr;
+    }
+
+
+    .viajes-botones {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+
+        .viajes-botones .btn {
+            width: 100%;
+        }
+}
+
+/* ========================================================= */
+/* ANIMACIÓN DE VIBRACIÓN PARA LA CAMPANA */
+/* ========================================================= */
+@keyframes campanaVibrar {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    20% {
+        transform: rotate(15deg);
+    }
+
+    40% {
+        transform: rotate(-15deg);
+    }
+
+    60% {
+        transform: rotate(10deg);
+    }
+
+    80% {
+        transform: rotate(-10deg);
+    }
+
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+.animar-campana {
+    animation: campanaVibrar 0.5s ease infinite;
+    color: #f4b400 !important; /* Cambia a tono dorado de alerta */
+}
+
+/* Efecto hover suave en los items del dropdown de notificaciones */
+#listaNotificaciones .dropdown-item:hover {
+    background-color: #f8f9fa;
+}

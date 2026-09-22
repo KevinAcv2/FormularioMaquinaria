@@ -21,6 +21,7 @@ namespace Maquinarias.Data
         public DbSet<FrenteOperacional> FrentesOperacionales { get; set; }
         public DbSet<NovedadOperacion> NovedadesOperacion { get; set; }
         public DbSet<Notificacion> Notificaciones { get; set; }
+        public DbSet<Volqueta> Volquetas { get; set; }
 
 
         protected override void OnModelCreating(

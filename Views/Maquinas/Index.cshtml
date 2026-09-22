@@ -2,6 +2,9 @@
 
 @{
     ViewData["Title"] = "Gestión de Maquinaria";
+
+    var volquetas = ViewBag.Volquetas as IEnumerable<FormularioMaquinaria.Models.Volqueta>
+                     ?? Enumerable.Empty<FormularioMaquinaria.Models.Volqueta>();
 }
 
 <link rel="stylesheet"
@@ -26,11 +29,11 @@
             <div>
 
                 <h1 class="titulo-reporte">
-                    🚜 Gestión de Maquinaria
+                    ⚙️ Gestión de Equipos
                 </h1>
 
                 <p class="subtitulo-reporte">
-                    Administración de maquinaria registrada.
+                    Administración de equipos registrados.
                 </p>
 
             </div>
@@ -67,14 +70,13 @@
 
         </div>
 
-
         <!-- ================================================= -->
-        <!-- TOTAL MAQUINARIA -->
+        <!-- TOTAL DE EQUIPOS -->
         <!-- ================================================= -->
 
-        <div class="row mb-3">
+        <div class="row mb-3 g-3">
 
-            <div class="col-md-4">
+            <div class="col-md-6">
 
                 <div class="card-custom text-center">
 
@@ -90,137 +92,102 @@
 
             </div>
 
+            <div class="col-md-6">
+
+                <div class="card-custom text-center">
+
+                    <h5>
+                        Total Volquetas
+                    </h5>
+
+                    <h2>
+                        @volquetas.Count()
+                    </h2>
+
+                </div>
+
+            </div>
+
         </div>
-
-
-        <!-- ================================================= -->
-        <!-- TARJETA PRINCIPAL -->
-        <!-- ================================================= -->
 
         <div class="maquinaria-card card shadow-sm border-0">
 
             <div class="card-body">
 
+                <!-- ================================================= -->
+                <!-- ENCABEZADO DE LA TARJETA -->
+                <!-- ================================================= -->
+
+                <div class="d-flex justify-content-between align-items-center mb-3">
+
+                    <div>
+                        <h4 class="fw-bold mb-1">
+                            🚜 Gestión de Máquinas
+                        </h4>
+                        <p class="text-muted mb-0">
+                            Administración de máquinas registradas.
+                        </p>
+                    </div>
+
+                    <button type="button"
+                            class="btn btn-success"
+                            id="btnNuevaMaquina"
+                            data-bs-toggle="modal"
+                            data-bs-target="#modalNuevaMaquina">
+
+                        <i class="fa-solid fa-plus me-2"></i>
+                        Nueva Máquina
+
+                    </button>
+
+                </div>
 
                 <!-- ================================================= -->
-                <!-- TOOLBAR -->
+                <!-- FILTROS DE MÁQUINAS -->
                 <!-- ================================================= -->
 
-                <form asp-action="Index"
-                      method="get">
+                <div class="row g-2 align-items-end mb-3">
 
-                    <div class="maquinaria-toolbar no-print">
+                    <div class="col-md-8">
 
+                        <label class="form-label fw-bold">
+                            Buscar por nombre
+                        </label>
 
-                        <!-- ================================================= -->
-                        <!-- BUSCADOR -->
-                        <!-- ================================================= -->
-
-                        <div class="maquinaria-search">
-
-                            <div class="input-group">
-
-                                <span class="input-group-text">
-
-                                    <i class="fa-solid fa-magnifying-glass"></i>
-
-                                </span>
-
-                                <input type="text"
-                                       name="buscar"
-                                       class="form-control"
-                                       placeholder="Buscar maquinaria..."
-                                       value="@ViewBag.Buscar" />
-
-                            </div>
-
-                        </div>
-
-
-                        <!-- ================================================= -->
-                        <!-- FILTRO ESTADO -->
-                        <!-- ================================================= -->
-
-                        <div class="maquinaria-filtro">
-
-                            <select name="estado"
-                                    class="form-select">
-
-                                <option value="">
-                                    Estado
-                                </option>
-
-                                <option value="1"
-                                        selected="@(ViewBag.Estado?.ToString() == "1" ? "selected" : null)">
-                                    OPERATIVA
-                                </option>
-
-                                <option value="0"
-                                        selected="@(ViewBag.Estado?.ToString() == "0" ? "selected" : null)">
-                                    NO OPERATIVA
-                                </option>
-
-                            </select>
-
-                        </div>
-
-
-                        <!-- ================================================= -->
-                        <!-- ACCIONES -->
-                        <!-- ================================================= -->
-
-                        <div class="maquinaria-acciones">
-
-
-                            <!-- BUSCAR -->
-
-                            <button type="submit"
-                                    class="btn btn-primary btn-toolbar-custom">
-
-                                <i class="fa-solid fa-magnifying-glass"></i>
-
-                                <span>
-                                    Buscar
-                                </span>
-
-                            </button>
-
-
-                            <!-- LIMPIAR -->
-
-                            <a asp-action="Index"
-                               class="btn btn-secondary btn-toolbar-custom">
-
-                                <i class="fa-solid fa-rotate"></i>
-
-                                <span>
-                                    Limpiar
-                                </span>
-
-                            </a>
-
-
-                            <!-- NUEVA -->
-
-                            <button type="button"
-                                    class="btn btn-success btn-toolbar-custom"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#modalNuevaMaquina">
-
-                                <i class="fa-solid fa-plus"></i>
-
-                                <span>
-                                    Nueva
-                                </span>
-
-                            </button>
-
-                        </div>
+                        <input type="text"
+                               id="buscarMaquina"
+                               class="form-control"
+                               placeholder="Ej: RetroExcavadora"
+                               autocomplete="off" />
 
                     </div>
 
-                </form>
+                    <div class="col-md-3">
 
+                        <label class="form-label fw-bold">
+                            Estado
+                        </label>
+
+                        <select id="estadoMaquina" class="form-select">
+                            <option value="">Todas</option>
+                            <option value="1">Operativas</option>
+                            <option value="0">No operativas</option>
+                        </select>
+
+                    </div>
+
+                    <div class="col-md-1">
+
+                        <button type="button"
+                                id="limpiarFiltrosMaquina"
+                                class="btn btn-secondary w-100"
+                                title="Limpiar filtros">
+                            <i class="fa-solid fa-rotate-left"></i>
+                        </button>
+
+                    </div>
+
+                </div>
 
                 <!-- ================================================= -->
                 <!-- TABLA -->
@@ -230,96 +197,36 @@
 
                     <table class="table table-hover align-middle">
 
-
-                        <!-- ENCABEZADO -->
-
                         <thead>
-
                             <tr>
-
-                                <th>
-                                    ID
-                                </th>
-
-                                <th>
-                                    Máquina
-                                </th>
-
-                                <th>
-                                    Estado
-                                </th>
-
-                                <th class="no-print text-center">
-                                    Acciones
-                                </th>
-
+                                <th>Máquina</th>
+                                <th>Estado</th>
+                                <th class="no-print text-center">Acciones</th>
                             </tr>
-
                         </thead>
-
-
-                        <!-- CUERPO -->
 
                         <tbody>
 
                             @foreach (var item in Model)
                             {
+                                <tr class="filaMaquina"
+                                    data-nombre="@item.Nombre"
+                                    data-estado="@item.Estado">
 
-                                <tr>
-
-
-                                    <!-- ================================================= -->
-                                    <!-- ID -->
-                                    <!-- ================================================= -->
+                                    <td>@item.Nombre</td>
 
                                     <td>
-                                        @item.Id
-                                    </td>
-
-
-                                    <!-- ================================================= -->
-                                    <!-- MÁQUINA -->
-                                    <!-- ================================================= -->
-
-                                    <td>
-                                        @item.Nombre
-                                    </td>
-
-
-                                    <!-- ================================================= -->
-                                    <!-- ESTADO -->
-                                    <!-- ================================================= -->
-
-                                    <td>
-
                                         @if (item.Estado == "1")
                                         {
-
-                                            <span class="badge bg-success">
-                                                OPERATIVA
-                                            </span>
-
+                                            <span class="badge bg-success">OPERATIVA</span>
                                         }
                                         else
                                         {
-
-                                            <span class="badge bg-danger">
-                                                NO OPERATIVA
-                                            </span>
-
+                                            <span class="badge bg-danger">NO OPERATIVA</span>
                                         }
-
                                     </td>
 
-
-                                    <!-- ================================================= -->
-                                    <!-- ACCIONES -->
-                                    <!-- ================================================= -->
-
                                     <td class="text-center no-print">
-
-
-                                        <!-- EDITAR -->
 
                                         <button type="button"
                                                 class="btn btn-warning btn-sm btnEditar"
@@ -327,27 +234,19 @@
                                                 data-nombre="@item.Nombre"
                                                 data-estado="@item.Estado"
                                                 title="Editar">
-
                                             <i class="fa-solid fa-pencil"></i>
-
                                         </button>
-
-
-                                        <!-- ELIMINAR -->
 
                                         <a href="#"
                                            class="btn btn-danger btn-sm btnEliminar"
                                            data-id="@item.Id"
                                            title="Eliminar">
-
                                             <i class="fa-solid fa-trash"></i>
-
                                         </a>
 
                                     </td>
 
                                 </tr>
-
                             }
 
                         </tbody>
@@ -364,7 +263,317 @@
 
 </div>
 
+<!-- ========================================================= -->
+<!-- SECCIÓN VOLQUETAS -->
+<!-- ========================================================= -->
 
+<div class="maquinaria-card card shadow-sm border-0 mt-4">
+
+    <div class="card-body">
+
+        <!-- ENCABEZADO -->
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+
+            <div>
+
+                <h4 class="fw-bold mb-1">
+                    🚛 Gestión de Volquetas
+                </h4>
+
+                <p class="text-muted mb-0">
+                    Administración de volquetas propias y alquiladas.
+                </p>
+
+            </div>
+
+            <button type="button"
+                    class="btn btn-success"
+                    id="btnNuevaVolqueta"
+                    data-bs-toggle="modal"
+                    data-bs-target="#modalNuevaVolqueta">
+
+                <i class="fa-solid fa-plus me-2"></i>
+
+                Nueva Volqueta
+
+            </button>
+
+        </div>
+
+
+        <!-- TABLA -->
+        <!-- ===================================================== -->
+        <!-- FILTROS DE VOLQUETAS -->
+        <!-- ===================================================== -->
+
+        <div class="row g-2 align-items-end mb-3">
+
+            <!-- BUSCAR POR PLACA -->
+
+            <div class="col-md-5">
+
+                <label class="form-label fw-bold">
+                    Buscar por placa
+                </label>
+
+                <input type="text"
+                       id="buscarVolqueta"
+                       class="form-control"
+                       placeholder="Ej: ABC123"
+                       autocomplete="off" />
+
+            </div>
+
+
+            <!-- FILTRO ESTADO -->
+
+            <div class="col-md-3">
+
+                <label class="form-label fw-bold">
+                    Estado
+                </label>
+
+                <select id="estadoVolqueta"
+                        class="form-select">
+
+                    <option value="">
+                        Todas
+                    </option>
+
+                    <option value="1">
+                        Activas
+                    </option>
+
+                    <option value="0">
+                        Inactivas
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- FILTRO PROPIEDAD -->
+
+            <div class="col-md-3">
+
+                <label class="form-label fw-bold">
+                    Propiedad
+                </label>
+
+                <select id="propiedadVolqueta"
+                        class="form-select">
+
+                    <option value="">
+                        Todas
+                    </option>
+
+                    <option value="PROPIA">
+                        Propias
+                    </option>
+
+                    <option value="ALQUILADA">
+                        Alquiladas
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- LIMPIAR -->
+
+            <div class="col-md-1">
+
+                <button type="button"
+                        id="limpiarFiltrosVolqueta"
+                        class="btn btn-secondary w-100"
+                        title="Limpiar filtros">
+
+                    <i class="fa-solid fa-rotate-left"></i>
+
+                </button>
+
+            </div>
+
+        </div>
+
+        <div class="maquinaria-table-container">
+
+            <table class="table table-hover align-middle">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Placa
+                        </th>
+
+                        <th>
+                            Propiedad
+                        </th>
+
+                        <th>
+                            Empresa Propietaria
+                        </th>
+
+                        <th>
+                            Estado
+                        </th>
+
+                        <th class="text-center no-print">
+                            Acciones
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    @if (!volquetas.Any())
+                    {
+                        <tr>
+
+                            <td colspan="6"
+                                class="text-center text-muted py-4">
+
+                                <i class="fa-solid fa-truck-ramp-box fa-2x mb-2"></i>
+
+                                <br />
+
+                                No hay volquetas registradas.
+
+                            </td>
+
+                        </tr>
+                    }
+                    else
+                    {
+                        foreach (var volqueta in volquetas)
+                        {
+                            <tr class="filaVolqueta"
+                                data-placa="@volqueta.Placa"
+                                data-estado="@volqueta.Estado"
+                                data-propiedad="@volqueta.Propiedad">
+
+
+                                <!-- PLACA -->
+
+                                <td>
+
+                                    <strong>
+                                        @volqueta.Placa
+                                    </strong>
+
+                                </td>
+
+                                <!-- PROPIEDAD -->
+
+                                <td>
+
+                                    @if (volqueta.Propiedad == "PROPIA")
+                                    {
+                                        <span class="badge bg-primary">
+                                            PROPIA
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-warning text-dark">
+                                            ALQUILADA
+                                        </span>
+                                    }
+
+                                </td>
+
+
+                                <!-- EMPRESA -->
+
+                                <td>
+
+                                    @if (!string.IsNullOrWhiteSpace(volqueta.EmpresaPropietaria))
+                                    {
+                                        @volqueta.EmpresaPropietaria
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">
+                                            —
+                                        </span>
+                                    }
+
+                                </td>
+
+
+                                <!-- ESTADO -->
+
+                                <td>
+
+                                    @if (volqueta.Estado == "1")
+                                    {
+                                        <span class="badge bg-success">
+                                            ACTIVA
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger">
+                                            INACTIVA
+                                        </span>
+                                    }
+
+                                </td>
+
+
+                                <!-- ACCIONES -->
+
+                                <td class="text-center no-print">
+
+                                    <button type="button"
+                                            class="btn btn-warning btn-sm btnEditarVolqueta"
+                                            data-id="@volqueta.Id"
+                                            data-placa="@volqueta.Placa"
+                                            data-propiedad="@volqueta.Propiedad"
+                                            data-empresa="@volqueta.EmpresaPropietaria"
+                                            data-estado="@volqueta.Estado"
+                                            data-observaciones="@volqueta.Observaciones"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#modalEditarVolqueta"
+                                            title="Editar">
+
+                                        <i class="fa-solid fa-pencil"></i>
+
+                                    </button>
+
+
+                                    <button type="button"
+                                            class="btn btn-secondary btn-sm btnEstadoVolqueta"
+                                            data-id="@volqueta.Id"
+                                            title="Cambiar estado">
+
+                                        <i class="fa-solid fa-power-off"></i>
+
+                                    </button>
+
+                                </td>
+
+                            </tr>
+                        }
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
 
 <!-- ========================================================= -->
 <!-- MODAL NUEVA MÁQUINA -->
@@ -491,7 +700,203 @@
 
 </div>
 
+<!-- ========================================================= -->
+<!-- MODAL EDITAR VOLQUETA -->
+<!-- ========================================================= -->
 
+<div class="modal fade"
+     id="modalEditarVolqueta"
+     tabindex="-1"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+
+        <div class="modal-content">
+
+
+            <!-- HEADER -->
+
+            <div class="modal-header">
+
+                <h5 class="modal-title fw-bold">
+
+                    <i class="fa-solid fa-pen-to-square text-warning me-2"></i>
+
+                    Editar Volqueta
+
+                </h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+
+            <!-- FORMULARIO -->
+
+            <form id="formEditarVolqueta">
+
+                <input type="hidden"
+                       id="EditarVolquetaId" />
+
+
+                <div class="modal-body">
+
+                    <div class="row">
+
+
+                        <!-- PLACA -->
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label fw-bold">
+
+                                Placa
+
+                            </label>
+
+                            <input type="text"
+                                   id="EditarPlacaVolqueta"
+                                   class="form-control"
+                                   maxlength="20"
+                                   required />
+
+                        </div>
+
+
+                        <!-- PROPIEDAD -->
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label fw-bold">
+
+                                Tipo de Propiedad
+
+                            </label>
+
+                            <select id="EditarPropiedadVolqueta"
+                                    class="form-select"
+                                    required>
+
+                                <option value="PROPIA">
+                                    PROPIA
+                                </option>
+
+                                <option value="ALQUILADA">
+                                    ALQUILADA
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- EMPRESA PROPIETARIA -->
+
+                        <div class="col-md-12 mb-3">
+
+                            <label class="form-label fw-bold">
+
+                                Empresa Propietaria
+
+                            </label>
+
+                            <input type="text"
+                                   id="EditarEmpresaPropietariaVolqueta"
+                                   class="form-control"
+                                   maxlength="150" />
+
+                            <small class="text-muted">
+
+                                Si la volqueta es propia, este campo puede quedar vacío.
+
+                            </small>
+
+                        </div>
+
+
+                        <!-- ESTADO -->
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label fw-bold">
+
+                                Estado
+
+                            </label>
+
+                            <select id="EditarEstadoVolqueta"
+                                    class="form-select"
+                                    required>
+
+                                <option value="1">
+                                    ACTIVA
+                                </option>
+
+                                <option value="0">
+                                    INACTIVA
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- OBSERVACIONES -->
+
+                        <div class="col-md-12 mb-3">
+
+                            <label class="form-label fw-bold">
+
+                                Observaciones
+
+                            </label>
+
+                            <textarea id="EditarObservacionesVolqueta"
+                                      class="form-control"
+                                      rows="3"
+                                      maxlength="500"></textarea>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- FOOTER -->
+
+                <div class="modal-footer">
+
+                    <button type="button"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal">
+
+                        Cancelar
+
+                    </button>
+
+
+                    <button type="submit"
+                            class="btn btn-warning">
+
+                        <i class="fa-solid fa-floppy-disk me-2"></i>
+
+                        Guardar Cambios
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
 
 <!-- ========================================================= -->
 <!-- MODAL EDITAR MÁQUINA -->
@@ -603,6 +1008,180 @@
                         <i class="fa-solid fa-floppy-disk me-2"></i>
 
                         Guardar Cambios
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ========================================================= -->
+<!-- MODAL NUEVA VOLQUETA -->
+<!-- ========================================================= -->
+
+<div class="modal fade"
+     id="modalNuevaVolqueta"
+     tabindex="-1"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+
+        <div class="modal-content">
+
+
+            <!-- HEADER -->
+
+            <div class="modal-header">
+
+                <h5 class="modal-title fw-bold">
+
+                    <i class="fa-solid fa-truck text-success me-2"></i>
+
+                    Nueva Volqueta
+
+                </h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+
+            <!-- FORMULARIO -->
+
+            <form id="formNuevaVolqueta">
+
+                <div class="modal-body">
+
+                    <div class="row">
+
+
+                        <!-- PLACA -->
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label fw-bold">
+
+                                Placa
+
+                            </label>
+
+                            <input type="text"
+                                   id="PlacaVolqueta"
+                                   class="form-control"
+                                   placeholder="Ej: ABC123"
+                                   maxlength="20"
+                                   required />
+
+                        </div>
+
+
+                        <!-- PROPIEDAD -->
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label fw-bold">
+
+                                Tipo de Propiedad
+
+                            </label>
+
+                            <select id="PropiedadVolqueta"
+                                    class="form-select"
+                                    required>
+
+                                <option value="">
+                                    Seleccione...
+                                </option>
+
+                                <option value="PROPIA">
+                                    PROPIA
+                                </option>
+
+                                <option value="ALQUILADA">
+                                    ALQUILADA
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- EMPRESA PROPIETARIA -->
+
+                        <div class="col-md-12 mb-3">
+
+                            <label class="form-label fw-bold">
+
+                                Empresa Propietaria
+
+                            </label>
+
+                            <input type="text"
+                                   id="EmpresaPropietariaVolqueta"
+                                   class="form-control"
+                                   placeholder="Solo si la volqueta es alquilada"
+                                   maxlength="150" />
+
+                            <small class="text-muted">
+
+                                Si la volqueta es propia, este campo puede quedar vacío.
+
+                            </small>
+
+                        </div>
+
+
+                        <!-- OBSERVACIONES -->
+
+                        <div class="col-md-12 mb-3">
+
+                            <label class="form-label fw-bold">
+
+                                Observaciones
+
+                            </label>
+
+                            <textarea id="ObservacionesVolqueta"
+                                      class="form-control"
+                                      rows="3"
+                                      maxlength="500"
+                                      placeholder="Observaciones adicionales..."></textarea>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- FOOTER -->
+
+                <div class="modal-footer">
+
+                    <button type="button"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal">
+
+                        Cancelar
+
+                    </button>
+
+
+                    <button type="submit"
+                            class="btn btn-success">
+
+                        <i class="fa-solid fa-floppy-disk me-2"></i>
+
+                        Guardar Volqueta
 
                     </button>
 

@@ -514,38 +514,164 @@
             });
 
         });
-        // =====================================================
-        // FECHAS
-        // =====================================================
 
-        document.addEventListener("DOMContentLoaded", function () {
+    });
 
-            document.querySelectorAll(".date-input-wrapper").forEach(wrapper => {
 
-                const input = wrapper.querySelector(".date-control");
-                const placeholder = wrapper.querySelector(".date-placeholder");
+    // =====================================================
+    // FILTRADO AUTOMÁTICO DEL HISTORIAL
+    // =====================================================
 
-                function actualizarFecha() {
+    const inputBuscar =
+        document.getElementById("inputBuscar");
 
-                    if (input.value) {
-                        placeholder.classList.add("oculto");
-                    }
-                    else {
-                        placeholder.classList.remove("oculto");
-                    }
+    const inputDesde =
+        document.getElementById("inputDesde");
 
+    const inputHasta =
+        document.getElementById("inputHasta");
+
+    const selectEstado =
+        document.getElementById("selectEstado");
+
+    const btnLimpiarFiltros =
+        document.getElementById("btnLimpiarFiltros");
+
+    const filaSinResultados =
+        document.getElementById("filaSinResultados");
+
+
+    function filtrarHistorial() {
+
+        const texto =
+            inputBuscar
+                ? inputBuscar.value.trim().toUpperCase()
+                : "";
+
+        const desde =
+            inputDesde
+                ? inputDesde.value
+                : "";
+
+        const hasta =
+            inputHasta
+                ? inputHasta.value
+                : "";
+
+        const estado =
+            selectEstado
+                ? selectEstado.value
+                : "";
+
+
+        let visibles = 0;
+
+        document.querySelectorAll(".filaHistorial")
+            .forEach(function (fila) {
+
+                const fecha =
+                    fila.dataset.fecha || "";
+
+                const operador =
+                    (fila.dataset.operador || "")
+                        .toUpperCase();
+
+                const maquina =
+                    (fila.dataset.maquina || "")
+                        .toUpperCase();
+
+                const estadoFila =
+                    fila.dataset.estado || "";
+
+
+                const coincideTexto =
+                    texto === "" ||
+                    operador.includes(texto) ||
+                    maquina.includes(texto);
+
+                const coincideDesde =
+                    desde === "" ||
+                    fecha >= desde;
+
+                const coincideHasta =
+                    hasta === "" ||
+                    fecha <= hasta;
+
+                const coincideEstado =
+                    estado === "" ||
+                    estadoFila === estado;
+
+
+                const coincide =
+                    coincideTexto &&
+                    coincideDesde &&
+                    coincideHasta &&
+                    coincideEstado;
+
+
+                fila.style.display =
+                    coincide ? "" : "none";
+
+                if (coincide) {
+                    visibles++;
                 }
-
-                actualizarFecha();
-
-                input.addEventListener("change", actualizarFecha);
-
-                input.addEventListener("input", actualizarFecha);
 
             });
 
+
+        if (filaSinResultados) {
+
+            const hayFilas =
+                document.querySelectorAll(".filaHistorial").length > 0;
+
+            filaSinResultados.style.display =
+                (hayFilas && visibles === 0) ? "" : "none";
+
+        }
+
+    }
+
+
+    if (inputBuscar) {
+        inputBuscar.addEventListener("input", filtrarHistorial);
+    }
+
+    if (inputDesde) {
+        inputDesde.addEventListener("change", filtrarHistorial);
+    }
+
+    if (inputHasta) {
+        inputHasta.addEventListener("change", filtrarHistorial);
+    }
+
+    if (selectEstado) {
+        selectEstado.addEventListener("change", filtrarHistorial);
+    }
+
+    if (btnLimpiarFiltros) {
+
+        btnLimpiarFiltros.addEventListener("click", function () {
+
+            if (inputBuscar) {
+                inputBuscar.value = "";
+            }
+
+            if (inputDesde) {
+                inputDesde.value = "";
+            }
+
+            if (inputHasta) {
+                inputHasta.value = "";
+            }
+
+            if (selectEstado) {
+                selectEstado.value = "";
+            }
+
+            filtrarHistorial();
+
         });
 
-    });
+    }
 
 });
